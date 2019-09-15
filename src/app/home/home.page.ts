@@ -1,6 +1,7 @@
 import { Component, NgZone } from "@angular/core";
+import { Router } from '@angular/router';
 import { BLE } from "@ionic-native/ble/ngx";
-import { AlertController, ToastController } from "@ionic/angular";
+import { AlertController, ToastController, NavController } from "@ionic/angular";
 
 @Component({
   selector: "app-home",
@@ -12,6 +13,8 @@ export class HomePage {
   statusMessage: string;
 
   constructor(
+    private router: Router,
+    public navCtrl: NavController,
     private ble: BLE,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
@@ -27,7 +30,7 @@ export class HomePage {
         this.listDevices();
       },
       error => {
-        this.showError("Bluetooth is *not* enabled");
+        this.showError("Bluetooth is not enabled");
         this.enableBluetooth();
       }
     );
@@ -37,15 +40,16 @@ export class HomePage {
     this.ble.enable().then(
       success => {
         this.showToast("Bluetooth is enabled");
+        this.listDevices();
       },
       error => {
-        this.showError("The user did *not* enable Bluetooth");
+        this.showError("The user did not enable Bluetooth");
       }
     );
   }
 
   listDevices() {
-    this.setStatus("Scanning for bluetooth LE devices");
+    this.showToast("Scanning");
     this.devices = [];
 
     this.ble
@@ -54,7 +58,7 @@ export class HomePage {
         device => this.onDeviceDiscovered(device),
         error => this.showError("No devices because " + error)
       );
-    setTimeout(this.setStatus.bind(this), 5000, "Scan complete");
+    setTimeout(this.showToast.bind(this), 5000, "Scan complete");
   }
 
   onDeviceDiscovered(device) {
@@ -64,11 +68,27 @@ export class HomePage {
     });
   }
 
-  setStatus(message) {
-    this.showToast(message);
-    this.ngZone.run(() => {
-      this.statusMessage = message;
-    });
+  scan() {
+    this.showToast('Scanning for Bluetooth LE Devices');
+    this.devices = [];  // clear list
+
+    this.ble.scan([], 5).subscribe(
+      device => this.onDeviceDiscovered(device), 
+      error => this.scanError(error)
+    );
+
+    setTimeout(this.showToast.bind(this), 5000, 'Scan complete');
+  }
+
+    // If location permission is denied, you'll end up here
+    scanError(error) {
+      //this.setStatus('Error ' + error);
+      this.showToast("Error scanning for Bluetooth low energy devices: "+error.message)
+    }
+
+  deviceSelected(device) {
+    console.log(JSON.stringify(device) + ' selected');
+    this.router.navigateByUrl("detail?dev="+JSON.stringify(device));
   }
 
   async showError(error) {
