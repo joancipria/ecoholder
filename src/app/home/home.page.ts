@@ -9,8 +9,10 @@ import { AlertController, ToastController, NavController } from "@ionic/angular"
   styleUrls: ["home.page.scss"]
 })
 export class HomePage {
-  devices: any[] = [];
-  statusMessage: string;
+  deviceId = "24:0A:C4:9E:0A:BE";
+  peripheral: any = {};
+  airValue: String;
+
 
   constructor(
     private router: Router,
@@ -27,8 +29,11 @@ export class HomePage {
     this.ble.isEnabled().then(
       success => {
         this.showToast("Bluetooth is enabled");
-        this.listDevices();
         //this.ble.autoConnect("24:0A:C4:9E:0A:BE", this.showToast("Connected"), this.showToast("Disconnected"));
+        this.ble.connect(this.deviceId).subscribe(
+          peripheral => this.onConnected(peripheral),
+          peripheral => this.onDeviceDisconnected(peripheral)
+        );
       },
       error => {
         this.showError("Bluetooth is not enabled");
@@ -41,7 +46,6 @@ export class HomePage {
     this.ble.enable().then(
       success => {
         this.showToast("Bluetooth is enabled");
-        this.listDevices();
       },
       error => {
         this.showError("The user did not enable Bluetooth");
@@ -49,47 +53,34 @@ export class HomePage {
     );
   }
 
-  listDevices() {
-    this.showToast("Scanning");
-    this.devices = [];
-
-    this.ble
-      .scan([], 5)
-      .subscribe(
-        device => this.onDeviceDiscovered(device),
-        error => this.showError("No devices because " + error)
-      );
-    setTimeout(this.showToast.bind(this), 5000, "Scan complete");
-  }
-
-  onDeviceDiscovered(device) {
-    //this.showToast("Discovered " + JSON.stringify(device, null, 2));
+  onConnected(peripheral) {
     this.ngZone.run(() => {
-      this.devices.push(device);
+      this.peripheral = peripheral;
+      this.ble.startNotification(peripheral.id, "bd7765d0-82dd-4f94-b1eb-e8b2c3036710", "4687a689-518f-469d-8710-29875142f531").subscribe(buffer => {
+        console.log(this.bytesToString(buffer));
+        this.ngZone.run(() => {
+          this.airValue = this.bytesToString(buffer);
+        });
+      })
     });
   }
 
-  scan() {
-    this.showToast('Scanning for Bluetooth LE Devices');
-    this.devices = [];  // clear list
-
-    this.ble.scan([], 5).subscribe(
-      device => this.onDeviceDiscovered(device), 
-      error => this.scanError(error)
-    );
-
-    setTimeout(this.showToast.bind(this), 5000, 'Scan complete');
+  onDeviceDisconnected(peripheral) {
+    this.showToast("The peripheral unexpectedly disconnected");
   }
 
-    // If location permission is denied, you'll end up here
-    scanError(error) {
-      //this.setStatus('Error ' + error);
-      this.showToast("Error scanning for Bluetooth low energy devices: "+error.message)
-    }
+  // Disconnect peripheral when leaving the page
+  ionViewWillLeave() {
+    console.log('ionViewWillLeave disconnecting Bluetooth');
+    this.ble.disconnect(this.peripheral.id).then(
+      () => console.log('Disconnected ' + JSON.stringify(this.peripheral)),
+      () => console.log('ERROR disconnecting ' + JSON.stringify(this.peripheral))
+    )
+  }
 
-  deviceSelected(device) {
-    console.log(JSON.stringify(device) + ' selected');
-    this.router.navigateByUrl("detail?dev="+JSON.stringify(device));
+  // ASCII only
+  bytesToString(buffer) {
+    return String.fromCharCode.apply(null, new Uint8Array(buffer));
   }
 
   async showError(error) {

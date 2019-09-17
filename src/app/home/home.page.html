@@ -11,19 +11,10 @@
   
 
 <ion-content>
-  <ion-list> 
-  
-   <ion-card ion-item *ngFor="let device of devices">
+  <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>{{ device.id }}</ion-card-subtitle>
-      <ion-card-title>{{ device.name || 'Unnamed' }}</ion-card-title>
+        <ion-card-subtitle>Air value</ion-card-subtitle>
+        <ion-card-title>{{ airValue || 'No data' }}</ion-card-title>
     </ion-card-header>
-  
-    <ion-card-content>
-        <p>RSSI: {{ device.rssi }}</p>
-        <ion-button (click)="deviceSelected(device)">Connect</ion-button>
-    </ion-card-content>
   </ion-card>
-  
-  </ion-list> 
 </ion-content>
