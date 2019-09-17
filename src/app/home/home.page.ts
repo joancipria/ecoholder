@@ -28,6 +28,7 @@ export class HomePage {
       success => {
         this.showToast("Bluetooth is enabled");
         this.listDevices();
+        //this.ble.autoConnect("24:0A:C4:9E:0A:BE", this.showToast("Connected"), this.showToast("Disconnected"));
       },
       error => {
         this.showError("Bluetooth is not enabled");
@@ -62,7 +63,7 @@ export class HomePage {
   }
 
   onDeviceDiscovered(device) {
-    this.showToast("Discovered " + JSON.stringify(device, null, 2));
+    //this.showToast("Discovered " + JSON.stringify(device, null, 2));
     this.ngZone.run(() => {
       this.devices.push(device);
     });

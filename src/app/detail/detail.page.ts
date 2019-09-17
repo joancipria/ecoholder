@@ -14,6 +14,7 @@ export class DetailPage {
 
   peripheral: any = {};
   statusMessage: string;
+  airValue: String;
 
   constructor(
     private platform: Platform,
@@ -38,10 +39,11 @@ export class DetailPage {
     this.ngZone.run(() => {
       //this.setStatus('');
       this.peripheral = peripheral;
-      console.log("UUID: "+peripheral.services[2]);
-      console.log("ID: "+peripheral.id);
       this.ble.startNotification(peripheral.id, "bd7765d0-82dd-4f94-b1eb-e8b2c3036710","4687a689-518f-469d-8710-29875142f531").subscribe(buffer=>{
-        console.log(String.fromCharCode.apply(null, new Uint8Array(buffer)));
+        console.log(this.bytesToString(buffer));
+        this.ngZone.run(() => {
+          this.airValue = this.bytesToString(buffer);
+        });
       })
     });
   }

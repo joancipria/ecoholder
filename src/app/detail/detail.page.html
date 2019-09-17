@@ -8,6 +8,12 @@
 
   <ion-card>
     <ion-card-header>
+        <ion-card-subtitle>Air value</ion-card-subtitle>
+        <ion-card-title>{{ airValue || 'No data' }}</ion-card-title>
+    </ion-card-header>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
       {{ peripheral.name || 'Unnamed' }}
     </ion-card-header>
     <ion-card-content>
@@ -37,8 +43,3 @@
   </ion-card>
 </ion-content>
 
-<ion-footer>
-  <ion-toolbar>
-    <p>{{ statusMessage }}</p>
-  </ion-toolbar>
-</ion-footer>
