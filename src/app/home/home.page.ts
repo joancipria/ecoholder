@@ -2,6 +2,7 @@ import { Component, NgZone } from "@angular/core";
 import { Router } from '@angular/router';
 import { BLE } from "@ionic-native/ble/ngx";
 import { AlertController, ToastController, NavController } from "@ionic/angular";
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @Component({
   selector: "app-home",
@@ -21,10 +22,17 @@ export class HomePage {
     private ble: BLE,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private geolocation: Geolocation
   ) {
     this.checkBluetooth();
-  }
+
+    this.geolocation.getCurrentPosition().then((resp) => {
+      console.log(resp.coords.latitude);
+      console.log(resp.coords.longitude);
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });  }
 
   checkBluetooth() {
     this.ble.isEnabled().then(
@@ -93,6 +101,17 @@ export class HomePage {
       )
     }
   }
+
+  showPos(position) {
+    alert('Latitude: '          + position.coords.latitude          + '\n' +
+          'Longitude: '         + position.coords.longitude         + '\n' +
+          'Altitude: '          + position.coords.altitude          + '\n' +
+          'Accuracy: '          + position.coords.accuracy          + '\n' +
+          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+          'Heading: '           + position.coords.heading           + '\n' +
+          'Speed: '             + position.coords.speed             + '\n' +
+          'Timestamp: '         + position.timestamp                + '\n');
+  };
 
   // ASCII only
   bytesToString(buffer) {

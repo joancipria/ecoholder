@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { BLE } from "@ionic-native/ble/ngx";
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { BLE } from "@ionic-native/ble/ngx";
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    BLE
+    BLE,
+    Geolocation
   ],
   bootstrap: [AppComponent]
 })
