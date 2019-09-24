@@ -10,6 +10,7 @@ import { AlertController, ToastController, NavController } from "@ionic/angular"
 })
 export class HomePage {
   deviceId = "24:0A:C4:9E:0A:BE";
+  toggleSwitch: boolean;
   peripheral: any = {};
   airValue: String;
 
@@ -56,6 +57,7 @@ export class HomePage {
   onConnected(peripheral) {
     this.ngZone.run(() => {
       this.peripheral = peripheral;
+      this.toggleSwitch = true;
       this.ble.startNotification(peripheral.id, "bd7765d0-82dd-4f94-b1eb-e8b2c3036710", "4687a689-518f-469d-8710-29875142f531").subscribe(buffer => {
         console.log(this.bytesToString(buffer));
         this.ngZone.run(() => {
@@ -76,6 +78,20 @@ export class HomePage {
       () => console.log('Disconnected ' + JSON.stringify(this.peripheral)),
       () => console.log('ERROR disconnecting ' + JSON.stringify(this.peripheral))
     )
+  }
+
+  switchConnect(){
+    if(this.toggleSwitch){
+      this.ble.connect(this.deviceId).subscribe(
+        peripheral => this.onConnected(peripheral),
+        peripheral => this.onDeviceDisconnected(peripheral)
+      );
+    }else{
+      this.ble.disconnect(this.peripheral.id).then(
+        () => console.log('Disconnected ' + JSON.stringify(this.peripheral)),
+        () => console.log('ERROR disconnecting ' + JSON.stringify(this.peripheral))
+      )
+    }
   }
 
   // ASCII only

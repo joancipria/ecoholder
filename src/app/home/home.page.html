@@ -2,9 +2,7 @@
     <ion-toolbar>
       <ion-title>Proyecto 3A</ion-title>
       <ion-buttons slot="primary">
-        <ion-button (click)="scan()">
-          <ion-icon slot="icon-only" name="md-refresh"></ion-icon>
-        </ion-button>
+        <ion-toggle [(ngModel)]="toggleSwitch" (ionChange)="switchConnect()"></ion-toggle>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
