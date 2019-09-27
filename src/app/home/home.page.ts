@@ -28,8 +28,7 @@ export class HomePage {
     this.checkBluetooth();
 
     this.geolocation.getCurrentPosition().then((resp) => {
-      console.log(resp.coords.latitude);
-      console.log(resp.coords.longitude);
+      console.log("https://www.google.com/maps/place/"+resp.coords.latitude+","+resp.coords.longitude);
      }).catch((error) => {
        console.log('Error getting location', error);
      });  }
@@ -101,17 +100,6 @@ export class HomePage {
       )
     }
   }
-
-  showPos(position) {
-    alert('Latitude: '          + position.coords.latitude          + '\n' +
-          'Longitude: '         + position.coords.longitude         + '\n' +
-          'Altitude: '          + position.coords.altitude          + '\n' +
-          'Accuracy: '          + position.coords.accuracy          + '\n' +
-          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-          'Heading: '           + position.coords.heading           + '\n' +
-          'Speed: '             + position.coords.speed             + '\n' +
-          'Timestamp: '         + position.timestamp                + '\n');
-  };
 
   // ASCII only
   bytesToString(buffer) {
