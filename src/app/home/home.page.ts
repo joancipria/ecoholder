@@ -2,7 +2,10 @@ import { Component, NgZone } from "@angular/core";
 import { Router } from '@angular/router';
 import { BLE } from "@ionic-native/ble/ngx";
 import { AlertController, ToastController, NavController } from "@ionic/angular";
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+
+// Services
+import { LocalizadorGPS } from "../core/services/LocalizadorGPS.service";
+import { ReceptorBLE } from "../core/services/receptorBLE.service";
 
 @Component({
   selector: "app-home",
@@ -11,99 +14,20 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 })
 export class HomePage {
   deviceId = "24:0A:C4:9E:0A:BE";
-  toggleSwitch: boolean;
-  peripheral: any = {};
   airValue: String;
 
 
   constructor(
     private router: Router,
     public navCtrl: NavController,
-    private ble: BLE,
+    private ble: ReceptorBLE,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private ngZone: NgZone,
-    private geolocation: Geolocation
+    private localizador: LocalizadorGPS
   ) {
-    this.checkBluetooth();
-
-    this.geolocation.getCurrentPosition().then((resp) => {
-      console.log("https://www.google.com/maps/place/"+resp.coords.latitude+","+resp.coords.longitude);
-     }).catch((error) => {
-       console.log('Error getting location', error);
-     });  }
-
-  checkBluetooth() {
-    this.ble.isEnabled().then(
-      success => {
-        this.showToast("Bluetooth is enabled");
-        //this.ble.autoConnect("24:0A:C4:9E:0A:BE", this.showToast("Connected"), this.showToast("Disconnected"));
-        this.ble.connect(this.deviceId).subscribe(
-          peripheral => this.onConnected(peripheral),
-          peripheral => this.onDeviceDisconnected(peripheral)
-        );
-      },
-      error => {
-        this.showError("Bluetooth is not enabled");
-        this.enableBluetooth();
-      }
-    );
-  }
-
-  enableBluetooth() {
-    this.ble.enable().then(
-      success => {
-        this.showToast("Bluetooth is enabled");
-      },
-      error => {
-        this.showError("The user did not enable Bluetooth");
-      }
-    );
-  }
-
-  onConnected(peripheral) {
-    this.ngZone.run(() => {
-      this.peripheral = peripheral;
-      this.toggleSwitch = true;
-      this.ble.startNotification(peripheral.id, "bd7765d0-82dd-4f94-b1eb-e8b2c3036710", "4687a689-518f-469d-8710-29875142f531").subscribe(buffer => {
-        console.log(this.bytesToString(buffer));
-        this.ngZone.run(() => {
-          this.airValue = this.bytesToString(buffer);
-        });
-      })
-    });
-  }
-
-  onDeviceDisconnected(peripheral) {
-    this.showToast("The peripheral unexpectedly disconnected");
-  }
-
-  // Disconnect peripheral when leaving the page
-  ionViewWillLeave() {
-    console.log('ionViewWillLeave disconnecting Bluetooth');
-    this.ble.disconnect(this.peripheral.id).then(
-      () => console.log('Disconnected ' + JSON.stringify(this.peripheral)),
-      () => console.log('ERROR disconnecting ' + JSON.stringify(this.peripheral))
-    )
-  }
-
-  switchConnect(){
-    if(this.toggleSwitch){
-      this.ble.connect(this.deviceId).subscribe(
-        peripheral => this.onConnected(peripheral),
-        peripheral => this.onDeviceDisconnected(peripheral)
-      );
-    }else{
-      this.ble.disconnect(this.peripheral.id).then(
-        () => console.log('Disconnected ' + JSON.stringify(this.peripheral)),
-        () => console.log('ERROR disconnecting ' + JSON.stringify(this.peripheral))
-      )
-    }
-  }
-
-  // ASCII only
-  bytesToString(buffer) {
-    return String.fromCharCode.apply(null, new Uint8Array(buffer));
+    this.ble.inizializar();
+    this.localizador.obtenerMiPosicionGPS();
   }
 
   async showError(error) {
