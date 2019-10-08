@@ -17,6 +17,8 @@ import { ReceptorBLE } from "./core/services/receptorBLE.service";
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { LocalizadorGPS } from "./core/services/LocalizadorGPS.service";
 
+// Servidor Fake
+import { ServidorFake } from "./core/services/servidorFake.service";
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,7 +31,8 @@ import { LocalizadorGPS } from "./core/services/LocalizadorGPS.service";
     BLE,
     Geolocation,
     LocalizadorGPS,
-    ReceptorBLE
+    ReceptorBLE,
+    ServidorFake
   ],
   bootstrap: [AppComponent]
 })
