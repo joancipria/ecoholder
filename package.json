@@ -11,6 +11,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "run-mobile": "ionic cordova run android --device",
+    "ionic-lab": "ionic serve --lab",
     "build-web": "ionic build --prod"
   },
   "private": true,
