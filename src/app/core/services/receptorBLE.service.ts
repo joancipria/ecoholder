@@ -3,6 +3,9 @@ import { Injectable } from "@angular/core";
 // Cordova BLE plugin
 import { BLE } from "@ionic-native/ble/ngx";
 
+// Fake server
+import { ServidorFake } from "../../core/services/servidorFake.service";
+
 
 @Injectable()
 export class ReceptorBLE {
@@ -13,6 +16,7 @@ export class ReceptorBLE {
 
     constructor(
         private ble: BLE,
+        private servidor: ServidorFake
     ) {
 
     }
@@ -58,7 +62,9 @@ export class ReceptorBLE {
         this.peripheral = peripheral;
         console.log(this.peripheral);
         this.ble.startNotification(peripheral.id, this.serviceUUID, this.charUUID).subscribe(buffer => {
-            console.log(this.bytesToString(buffer));
+            let data = this.bytesToString(buffer);
+            console.log(data);
+            this.servidor.guardarSo2(data);
         })
     }
 
