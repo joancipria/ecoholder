@@ -10,10 +10,13 @@ export class ServidorFake {
    }
 
    guardarSo2(so2) {
-      let payload = new HttpParams()
-         .set('value', so2);
+      let body = new HttpParams()
+         .set('value', so2.value)
+         .set('date', so2.date)
+         .set('latitude', so2.latitude)
+         .set('longitude', so2.longitude)
 
-      this.http.post('http://192.168.43.141:3000/api/measure', payload)
+      this.http.post('http://192.168.43.141:3000/api/measure', body)
          .subscribe(
             res => {
                console.log(res);
