@@ -6,6 +6,10 @@ import { BLE } from "@ionic-native/ble/ngx";
 // Fake server
 import { ServidorFake } from "../../core/services/servidorFake.service";
 
+// GPS
+import { LocalizadorGPS } from "../../core/services/LocalizadorGPS.service";
+
+
 
 @Injectable()
 export class ReceptorBLE {
@@ -13,10 +17,13 @@ export class ReceptorBLE {
     deviceMAC = "C4:17:3F:A1:4A:1B";
     serviceUUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
     charUUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
+    so2: Number;
+    latestMeasure: any = {};
 
     constructor(
         private ble: BLE,
-        private servidor: ServidorFake
+        private servidor: ServidorFake,
+        private gps: LocalizadorGPS
     ) {
 
     }
@@ -60,15 +67,22 @@ export class ReceptorBLE {
 
     onConnected(peripheral) {
         this.peripheral = peripheral;
-        console.log(this.peripheral);
-        this.ble.startNotification(peripheral.id, this.serviceUUID, this.charUUID).subscribe(buffer => {
-            let data = this.bytesToString(buffer);
-            console.log(data);
-            this.servidor.guardarSo2(data);
+        console.log("Successfully connected to Sparkfun", this.peripheral);
+        this.ble.startNotification(peripheral.id, this.serviceUUID, this.charUUID).subscribe(async buffer => {
+            this.so2 = parseInt(this.bytesToString(buffer));
+            // Temporal
+            this.latestMeasure = {
+                value: this.so2,
+                date:  +new Date(),
+                latitude: await  this.gps.obtenerMiPosicionGPS().then(coords =>{return coords.lat}),
+                longitude: await this.gps.obtenerMiPosicionGPS().then(coords =>{return coords.lng}),
+            }
+            this.servidor.guardarSo2(this.latestMeasure);
+            console.log("ReceptorBLE received "+this.so2);
         })
     }
 
-    onDeviceDisconnected(peripheral) {
+    onDeviceDisconnected(peripheral) { 
         //this.showToast("The peripheral unexpectedly disconnected");
     }
 
