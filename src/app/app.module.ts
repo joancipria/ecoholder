@@ -19,11 +19,12 @@ import { LocalizadorGPS } from "./core/services/LocalizadorGPS.service";
 
 // Servidor Fake
 import { ServidorFake } from "./core/services/servidorFake.service";
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
   providers: [
     StatusBar,
     SplashScreen,
@@ -32,7 +33,8 @@ import { ServidorFake } from "./core/services/servidorFake.service";
     Geolocation,
     LocalizadorGPS,
     ReceptorBLE,
-    ServidorFake
+    ServidorFake,
+    HttpClientModule
   ],
   bootstrap: [AppComponent]
 })
