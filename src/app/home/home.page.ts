@@ -4,7 +4,6 @@ import { BLE } from "@ionic-native/ble/ngx";
 import { AlertController, ToastController, NavController } from "@ionic/angular";
 
 // Services
-import { LocalizadorGPS } from "../core/services/LocalizadorGPS.service";
 import { ReceptorBLE } from "../core/services/receptorBLE.service";
 
 @Component({
@@ -23,11 +22,9 @@ export class HomePage {
     private ble: ReceptorBLE,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    private ngZone: NgZone,
-    private localizador: LocalizadorGPS
+    private ngZone: NgZone
   ) {
     this.ble.inizializar();
-    this.localizador.obtenerMiPosicionGPS();
   }
 
   async showError(error) {
