@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from "@angular/core";
 
 // Cordova GPS plugin
 import { Geolocation } from '@ionic-native/geolocation/ngx';
@@ -6,18 +6,19 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @Injectable()
 export class LocalizadorGPS {
+   public lat;
+   public lng;
    constructor(
       private geolocation: Geolocation
    ) {
-      
+
    }
 
-   obtenerMiPosicionGPS() {
-      this.geolocation.getCurrentPosition().then((resp) => {
-         console.log("https://www.google.com/maps/place/"+resp.coords.latitude+","+resp.coords.longitude);
-        }).catch((error) => {
-          console.log('Error getting location', error);
-        });
+   async obtenerMiPosicionGPS() {
+      const resp = await this.geolocation.getCurrentPosition()
+      this.lat = resp.coords.latitude;
+      this.lng = resp.coords.longitude;
+      return { lat: this.lat, lng: this.lng }
    }
 
 }
