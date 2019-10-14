@@ -1,18 +1,13 @@
-  <ion-header translucent>
-    <ion-toolbar>
-      <ion-title>Proyecto 3A</ion-title>
-      <ion-buttons slot="primary">
-        <ion-toggle [(ngModel)]="toggleSwitch" (ionChange)="switchConnect()"></ion-toggle>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-  
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Proyecto 3A</ion-title>
+    <ion-buttons slot="primary">
+      <!--<ion-toggle [(ngModel)]="toggleSwitch" (ionChange)="switchConnect()"></ion-toggle>-->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 
 <ion-content>
-  <ion-card>
-    <ion-card-header>
-        <ion-card-subtitle>Air value</ion-card-subtitle>
-        <ion-card-title>{{ airValue || 'No data' }}</ion-card-title>
-    </ion-card-header>
-  </ion-card>
+  <div #map style="height:100%;"></div>
 </ion-content>
