@@ -21,10 +21,25 @@ import { LocalizadorGPS } from "./core/services/LocalizadorGPS.service";
 import { ServidorFake } from "./core/services/servidorFake.service";
 import { HttpClientModule } from '@angular/common/http';
 
+// Firebase
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { environment } from '../environments/environment';
+import { Firebase } from './core/services/firebase.service';
+
+
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
+  imports: [
+    BrowserModule, 
+    IonicModule.forRoot(), 
+    AppRoutingModule, 
+    HttpClientModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+ 	  AngularFirestoreModule
+  ],
   providers: [
     StatusBar,
     SplashScreen,
@@ -34,7 +49,8 @@ import { HttpClientModule } from '@angular/common/http';
     LocalizadorGPS,
     ReceptorBLE,
     ServidorFake,
-    HttpClientModule
+    HttpClientModule,
+    Firebase
   ],
   bootstrap: [AppComponent]
 })
