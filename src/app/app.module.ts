@@ -29,6 +29,8 @@ import { Firebase } from './core/services/firebase.service';
 
 // Google maps
 import { GoogleMaps } from '@ionic-native/google-maps';
+import { Maps } from './core/services/maps.service';
+
 
 
 
@@ -54,7 +56,8 @@ import { GoogleMaps } from '@ionic-native/google-maps';
     ServidorFake,
     HttpClientModule,
     Firebase,
-    GoogleMaps
+    GoogleMaps,
+    Maps
   ],
   bootstrap: [AppComponent]
 })
