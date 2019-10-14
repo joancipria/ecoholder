@@ -27,6 +27,9 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 import { Firebase } from './core/services/firebase.service';
 
+// Google maps
+import { GoogleMaps } from '@ionic-native/google-maps';
+
 
 
 @NgModule({
@@ -50,7 +53,8 @@ import { Firebase } from './core/services/firebase.service';
     ReceptorBLE,
     ServidorFake,
     HttpClientModule,
-    Firebase
+    Firebase,
+    GoogleMaps
   ],
   bootstrap: [AppComponent]
 })
