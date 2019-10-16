@@ -32,6 +32,12 @@ import { GoogleMaps } from '@ionic-native/google-maps';
 import { Maps } from './core/services/maps.service';
 
 
+import { IBeacon } from '@ionic-native/ibeacon/ngx';
+import { BeaconProvider } from "./core/services/beaconprovider.service";
+import { Device } from '@ionic-native/device/ngx';
+
+
+
 
 
 @NgModule({
@@ -57,7 +63,8 @@ import { Maps } from './core/services/maps.service';
     HttpClientModule,
     Firebase,
     GoogleMaps,
-    Maps
+    Maps,
+    IBeacon,BeaconProvider,Device
   ],
   bootstrap: [AppComponent]
 })

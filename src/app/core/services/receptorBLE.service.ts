@@ -9,21 +9,21 @@ import { ServidorFake } from "../../core/services/servidorFake.service";
 // GPS
 import { LocalizadorGPS } from "../../core/services/LocalizadorGPS.service";
 
+import { IBeacon } from '@ionic-native/ibeacon/ngx';
+import { BeaconProvider } from "../../core/services/beaconprovider.service";
+import { Platform, Events } from '@ionic/angular';
 
 
 @Injectable()
 export class ReceptorBLE {
-    peripheral: any = {};
-    deviceMAC = "C4:17:3F:A1:4A:1B";
-    serviceUUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
-    charUUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
     so2: Number;
     latestMeasure: any = {};
 
     constructor(
         private ble: BLE,
         private servidor: ServidorFake,
-        private gps: LocalizadorGPS
+        private gps: LocalizadorGPS,
+        private ibeacon: IBeacon, public beaconProvider: BeaconProvider, public events: Events
     ) {
 
     }
@@ -32,11 +32,20 @@ export class ReceptorBLE {
         if (!this.estaBLEactivado()) {
             await this.activarBLE();
         }
-        this.conectar(this.deviceMAC);
+
+        this.beaconProvider.initialise().then((isInitialised) => {
+            if (isInitialised) {
+                this.obtenerMisTramas();
+            }
+        });
+
+        setInterval(() => { 
+            this.hayQueActualizarMedicionesYEnviarlasAlServidor();
+         }, 5000);
     }
 
     estaBLEactivado() {
-        this.ble.isEnabled().then(
+        this.ibeacon.isBluetoothEnabled().then(
             success => {
                 return true;
             },
@@ -48,7 +57,7 @@ export class ReceptorBLE {
     }
 
     activarBLE() {
-        this.ble.enable().then(
+        this.ibeacon.enableBluetooth().then(
             success => {
                 console.log("Bluetooth is enabled");
             },
@@ -58,38 +67,52 @@ export class ReceptorBLE {
         );
     }
 
-    conectar(deviceId) {
-        this.ble.connect(deviceId).subscribe(
-            peripheral => this.onConnected(peripheral),
-            peripheral => this.onDeviceDisconnected(peripheral)
-        );
+    async actualizarMediciones() { 
+        this.latestMeasure = {
+            value: this.so2,
+            date: +new Date(),
+            latitude: await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lat }),
+            longitude: await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lng }),
+        }
     }
 
-    onConnected(peripheral) {
-        this.peripheral = peripheral;
-        console.log("Successfully connected to Sparkfun", this.peripheral);
-        this.ble.startNotification(peripheral.id, this.serviceUUID, this.charUUID).subscribe(async buffer => {
-            this.so2 = parseInt(this.bytesToString(buffer));
-            // Temporal
-            this.latestMeasure = {
-                value: this.so2,
-                date:  +new Date(),
-                latitude: await  this.gps.obtenerMiPosicionGPS().then(coords =>{return coords.lat}),
-                longitude: await this.gps.obtenerMiPosicionGPS().then(coords =>{return coords.lng}),
+    obtenerMisTramas() {
+        this.events.subscribe('didRangeBeaconsInRegion', async (data) => {
+
+            let beacons = [];
+
+            let beaconList = data.beacons;
+            beaconList.forEach((beacon) => {
+                let beaconObject = beacon;
+                beacons.push(beaconObject);
+            });
+
+            if (beacons.length > 0) {
+                this.so2 = parseInt(beacons[0].major);
             }
-            this.servidor.guardarSo2(this.latestMeasure);
-            console.log("ReceptorBLE received "+this.so2);
-        })
+        });
     }
 
-    onDeviceDisconnected(peripheral) { 
-        //this.showToast("The peripheral unexpectedly disconnected");
+    hayQueActualizarMedicionesYEnviarlasAlServidor(){
+        //let measure = this.obtenerNox();
+        this.actualizarMediciones().then(
+            succes =>{
+                this.servidor.guardarSo2(this.latestMeasure);
+            },
+            error => {
+                console.log("Error al actualizar mediciones")
+            }
+        )
     }
 
-    // ASCII only
-    private bytesToString(buffer) {
-        return String.fromCharCode.apply(null, new Uint8Array(buffer));
-    }
-
-
+    /*obtenerNox() {
+        this.actualizarMediciones().then(
+            succes =>{
+                return this.latestMeasure;
+            },
+            error => {
+                console.log("Error al actualizar mediciones")
+            }
+        )
+    }*/
 }
