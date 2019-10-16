@@ -12,6 +12,6 @@ export class Firebase {
    }
 
    getAllMeasures(){
-        return this.db.collection('measures').snapshotChanges();
+        return this.db.collection('measures').valueChanges();
    }
 }
