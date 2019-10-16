@@ -32,15 +32,6 @@ export class HomePage {
     public plt: Platform
   ) {
     this.ble.inizializar();
-    
-    this.firebase.getAllMeasures()
-      .subscribe(data => {
-        if (data) {
-          data.map(measure => {
-            console.log(measure.payload.doc.data());
-          });
-        }
-      })
   }
 
   async showError(error) {
@@ -60,6 +51,7 @@ export class HomePage {
     await toast.present();
   }
 
+  // Wait for dom
   ionViewDidEnter() {
     this.plt.ready().then(() => {
       this.maps.initMap(this.element);
