@@ -1,47 +1,65 @@
+/*********************************************************************
+@name ReceptorBle.service.ts
+@description Lee las tramas emitidas por el módulo SparkFun Pro nRF52840 Mini 
+y actualiza las mediciones.
+@author Joan Ciprià Moreno Teodoro
+@date 10/10/2019
+@license GPLv3
+*********************************************************************/
+
+// Librerías de angular/ionic 
 import { Injectable } from "@angular/core";
-import { Platform, Events } from '@ionic/angular';
+import { Events } from '@ionic/angular';
 
 
-// Fake server
+// Servicios propios
+
+// Lógica false del servidor
 import { ServidorFake } from "../../core/services/servidorFake.service";
 
 // GPS
 import { LocalizadorGPS } from "../../core/services/LocalizadorGPS.service";
 
-// BLE
+// Beacon
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { BeaconProvider } from "../../core/services/beaconprovider.service";
 
 
 @Injectable()
 export class ReceptorBLE {
+    // Última medida de azufre
     so2: Number;
+
+    // Última medida
     latestMeasure: any = {};
 
     constructor(
         private servidor: ServidorFake,
         private gps: LocalizadorGPS,
-        private ibeacon: IBeacon, 
-        public beaconProvider: BeaconProvider, 
+        private ibeacon: IBeacon,
+        public beaconProvider: BeaconProvider,
         public events: Events
     ) {
 
     }
 
     async inizializar() {
+        // Activar ble si no lo está
         if (!this.estaBLEactivado()) {
             await this.activarBLE();
         }
 
+        // Inicializar servicio de beacon
         this.beaconProvider.initialise().then((isInitialised) => {
             if (isInitialised) {
                 this.obtenerMisTramas();
             }
         });
 
-        setInterval(() => { 
+        // "Alarma" temporal, actualizar mediciones y enviar al servidor cada 5 segundos
+        setInterval(() => {
             this.hayQueActualizarMedicionesYEnviarlasAlServidor();
-         }, 5000);
+        }, 5000);
     }
 
     estaBLEactivado() {
@@ -67,39 +85,33 @@ export class ReceptorBLE {
         );
     }
 
-    async actualizarMediciones() { 
+    async actualizarMediciones() {
         this.latestMeasure = {
-            value: this.so2,
-            date: +new Date(),
-            latitude: await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lat }),
+            value: this.so2, // última medida de azufre
+            date: +new Date(), // timestamp actual
+            latitude: await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lat }), // obtener ubicación actual
             longitude: await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lng }),
         }
     }
 
     obtenerMisTramas() {
+        // Callback al detectar el beacon
         this.events.subscribe('didRangeBeaconsInRegion', async (data) => {
 
-            let beacons = [];
-
-            let beaconList = data.beacons;
-            beaconList.forEach((beacon) => {
-                let beaconObject = beacon;
-                beacons.push(beaconObject);
-            });
-
-            if (beacons.length > 0) {
-                this.so2 = parseInt(beacons[0].major);
-            }else{
+            // Guardar medida sólo si el beacon está emitiendo datos
+            if (data.beacons.length > 0) {
+                this.so2 = parseInt(data.beacons[0].major);
+            } else {
                 this.so2 = undefined;
             }
         });
     }
 
-    hayQueActualizarMedicionesYEnviarlasAlServidor(){
+    hayQueActualizarMedicionesYEnviarlasAlServidor() {
         //let measure = this.obtenerNox();
         this.actualizarMediciones().then(
-            succes =>{
-                if(this.latestMeasure.value != undefined){
+            succes => {
+                if (this.latestMeasure.value != undefined) {
                     this.servidor.guardarSo2(this.latestMeasure);
                 }
             },
