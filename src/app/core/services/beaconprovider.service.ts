@@ -1,3 +1,11 @@
+/*********************************************************************
+@name BeaconProvider.service.ts
+@description Crea una BeaconRegion y devuelve una promesa con cada evento
+@author Joan Ciprià Moreno Teodoro
+@date 13/10/2019
+@license GPLv3
+*********************************************************************/
+
 import { Injectable } from '@angular/core';
 import { Platform, Events } from '@ionic/angular';
 import { IBeacon } from "@ionic-native/ibeacon/ngx";
@@ -14,18 +22,18 @@ export class BeaconProvider {
     constructor(public platform: Platform, public events: Events, public ibeacon: IBeacon, public device: Device) {
     }
 
-    initialise(): any {
+    public inicializar(): any {
         let promise = new Promise((resolve, reject) => {
-            // we need to be running on a device
+            // Necesitamos cordova para utilizar el servicio
             if (this.platform.is('cordova')) {
 
-                // Request permission to use location on iOS
+                // Solicitar permisos de localización en iOS
                 this.ibeacon.requestAlwaysAuthorization();
 
-                // create a new delegate and register it with the native layer
+                // Crear un nuevo delegado
                 this.delegate = this.ibeacon.Delegate();
 
-                // Subscribe to some of the delegate's event handlers
+                // Suscribirse al evento didRangeBeaconsInRegion
                 this.delegate.didRangeBeaconsInRegion()
                     .subscribe(
                         data => {
@@ -34,10 +42,10 @@ export class BeaconProvider {
                         error => console.error()
                     );
 
-                // setup a beacon region
+                // Crear una region con los datos de la UUID y el identificador
                 this.region = this.ibeacon.BeaconRegion(this.identifier, this.uuid);
 
-                // start ranging
+                // Escaner en busca de beacons
                 this.ibeacon.startRangingBeaconsInRegion(this.region)
                     .then(
                         () => {
@@ -56,6 +64,7 @@ export class BeaconProvider {
             }
         });
 
+        // Devolvemos la promesa
         return promise;
     }
 }

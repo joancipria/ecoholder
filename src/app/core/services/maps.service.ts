@@ -31,7 +31,6 @@ import {
 
 @Injectable()
 export class Maps {
-   public locations: any;
    public map: GoogleMap;
 
    constructor(
@@ -43,12 +42,12 @@ export class Maps {
    }
 
    // Inizializa el mapa sobre el elemento del DOM indidcado
-   initMap(mapElement) {
+   public inicializarMapa(mapElement) {
 
-      // Get data
-      this.getLocations();
+      // Obtener las localizaciones de las medidas
+      this.obtenerLocalizaciones();
 
-      // Set api key for browser
+      // Establecemos la API key para el navegador (es diferente a la de Android)
       if (document.URL.startsWith('http')) {
          Environment.setEnv({
             API_KEY_FOR_BROWSER_RELEASE: "AIzaSyDRJlCwAahLxcnY8Plxb5dnxVf6RlM0s2o",
@@ -56,12 +55,12 @@ export class Maps {
          });
       }
 
-      // Render map
+      // Renderizamos el mapa
       this.map = GoogleMaps.create(mapElement.nativeElement);
 
-      // On map ready
+      // Cuando haya  cargado el mapa
       this.map.one(GoogleMapsEvent.MAP_READY).then(async (data: any) => {
-         // Get current locations
+         // Obtenermos ubicación actual
          let coordinates: LatLng = new LatLng(
             await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lat }),
             await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lng })
@@ -72,13 +71,10 @@ export class Maps {
             zoom: 17
          };
 
-         // Zoom
+         // Animamos con Zoom
          this.map.animateCamera(position);
 
-
-
-
-
+         // Añadimos un marcador (ejemplo)
          let markerOptions: MarkerOptions = {
             position: coordinates,
             //icon: "assets/images/icons8-Marker-64.png",
@@ -92,7 +88,8 @@ export class Maps {
       })
    }
 
-   getLocations() {
+   // Obtener las localizaciones de las medidas
+   private obtenerLocalizaciones() {
       this.firebase.getAllMeasures()
          .subscribe(data => {
             console.log(data);

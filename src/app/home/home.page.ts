@@ -51,7 +51,7 @@ export class HomePage {
   // Wait for dom
   ionViewDidEnter() {
     this.plt.ready().then(() => {
-      this.maps.initMap(this.element);
+      this.maps.inicializarMapa(this.element);
     });
   }
 }

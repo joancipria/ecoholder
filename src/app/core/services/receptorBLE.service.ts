@@ -50,7 +50,7 @@ export class ReceptorBLE {
         }
 
         // Inicializar servicio de beacon
-        this.beaconProvider.initialise().then((isInitialised) => {
+        this.beaconProvider.inicializar().then((isInitialised) => {
             if (isInitialised) {
                 this.obtenerMisTramas();
             }
