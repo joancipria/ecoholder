@@ -3,7 +3,7 @@
 @description Lee las tramas emitidas por el módulo SparkFun Pro nRF52840 Mini 
 y actualiza las mediciones.
 @author Joan Ciprià Moreno Teodoro
-@date 10/10/2019
+@date 10/09/2019
 @license GPLv3
 *********************************************************************/
 
