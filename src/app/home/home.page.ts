@@ -16,7 +16,7 @@ import { Maps } from '../core/services/maps.service';
 export class HomePage {
   deviceId = "24:0A:C4:9E:0A:BE";
   airValue: String;
-  @ViewChild('map', {static: false}) element;
+  @ViewChild('map', { static: false }) element;
 
 
 
@@ -31,7 +31,9 @@ export class HomePage {
     public maps: Maps,
     public plt: Platform
   ) {
-    this.ble.inizializar();
+    if(plt.is('android')){
+      this.ble.inizializar();
+    }
   }
 
   async showError(error) {
