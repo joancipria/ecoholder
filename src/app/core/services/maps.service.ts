@@ -42,10 +42,7 @@ export class Maps {
    }
 
    // Inizializa el mapa sobre el elemento del DOM indidcado
-   public inicializarMapa(mapElement) {
-
-      // Obtener las localizaciones de las medidas
-      this.obtenerLocalizaciones();
+   public async inicializarMapa(mapElement) {
 
       // Establecemos la API key para el navegador (es diferente a la de Android)
       if (document.URL.startsWith('http')) {
@@ -74,26 +71,40 @@ export class Maps {
          // Animamos con Zoom
          this.map.animateCamera(position);
 
-         // Añadimos un marcador (ejemplo)
-         let markerOptions: MarkerOptions = {
-            position: coordinates,
-            //icon: "assets/images/icons8-Marker-64.png",
-            title: 'Medida'
-         };
+         this.firebase.getAllMeasures()
+            .subscribe( data => {
 
-         const marker = this.map.addMarker(markerOptions)
-            .then((marker: Marker) => {
-               marker.showInfoWindow();
-            });
+               console.log(data);
+               let rawData = JSON.stringify(data);
+               let obj = JSON.parse(rawData);
+               console.log(obj);
+
+               for (let i = 0; i < obj.length; i++) {
+                  
+                  let coords: LatLng = new LatLng(
+                     obj[i].latitude,
+                     obj[i].longitude
+                  );
+
+                  let markerOptions: MarkerOptions = {
+                     position: coords,
+                     //icon: "assets/images/icons8-Marker-64.png",
+                     title: "SO2: "+String(obj[i].value)
+                  };
+
+                  const marker = this.map.addMarker(markerOptions)
+                  .then((marker: Marker) => {
+                     marker.showInfoWindow();
+                  });
+
+                }
+                  
+            }
+            )
+
+
+
+
       })
-   }
-
-   // Obtener las localizaciones de las medidas
-   private obtenerLocalizaciones() {
-      this.firebase.getAllMeasures()
-         .subscribe(data => {
-            console.log(data);
-         }
-         )
    }
 }
