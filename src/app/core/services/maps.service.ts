@@ -43,7 +43,7 @@ export class Maps {
       }
 
       // Render map
-      this.map = this.googleMaps.create(mapElement.nativeElement);
+      this.map = GoogleMaps.create(mapElement.nativeElement);
 
       // On map ready
       this.map.one(GoogleMapsEvent.MAP_READY).then(async (data: any) => {
