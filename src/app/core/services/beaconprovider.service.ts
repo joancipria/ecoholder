@@ -9,7 +9,7 @@ export class BeaconProvider {
     delegate: any;
     region: any;
     identifier: string = "Beacon-Equipo1";
-    uuid: string = "EPSG-GTI-EQUI-01"
+    uuid: string = "45505347-2D47-5449-2D45-5155492D3031";
 
     constructor(public platform: Platform, public events: Events, public ibeacon: IBeacon, public device: Device) {
     }
