@@ -16,7 +16,7 @@ import { HttpParams, HttpClient } from '@angular/common/http';
 @Injectable()
 export class ServidorFake {
    // URL del servidor
-   serverURL: string = 'http://192.168.43.141:3000/api/measure';
+   private serverURL: string = 'http://192.168.43.141:3000/api/measure';
 
    constructor(
       private http: HttpClient
@@ -25,7 +25,7 @@ export class ServidorFake {
    }
 
    // Guardar medida de Azufre
-   guardarSo2(so2) {
+   public guardarSo2(so2) {
       // Crear el body de la petición
       let body = new HttpParams()
          .set('value', so2.value)

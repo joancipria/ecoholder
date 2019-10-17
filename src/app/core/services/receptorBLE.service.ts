@@ -28,22 +28,22 @@ import { BeaconProvider } from "../../core/services/beaconprovider.service";
 @Injectable()
 export class ReceptorBLE {
     // Última medida de azufre
-    so2: Number;
+    private so2: Number;
 
     // Última medida
-    latestMeasure: any = {};
+    private ultimaMedida: any = {};
 
     constructor(
         private servidor: ServidorFake,
         private gps: LocalizadorGPS,
         private ibeacon: IBeacon,
-        public beaconProvider: BeaconProvider,
-        public events: Events
+        private beaconProvider: BeaconProvider,
+        private events: Events
     ) {
 
     }
 
-    async inizializar() {
+    public async inizializar() {
         // Activar ble si no lo está
         if (!this.estaBLEactivado()) {
             await this.activarBLE();
@@ -62,7 +62,7 @@ export class ReceptorBLE {
         }, 5000);
     }
 
-    estaBLEactivado() {
+    public estaBLEactivado() {
         this.ibeacon.isBluetoothEnabled().then(
             success => {
                 return true;
@@ -74,7 +74,7 @@ export class ReceptorBLE {
         return false;
     }
 
-    activarBLE() {
+    public activarBLE() {
         this.ibeacon.enableBluetooth().then(
             success => {
                 console.log("Bluetooth is enabled");
@@ -85,8 +85,8 @@ export class ReceptorBLE {
         );
     }
 
-    async actualizarMediciones() {
-        this.latestMeasure = {
+    public async actualizarMediciones() {
+        this.ultimaMedida = {
             value: this.so2, // última medida de azufre
             date: +new Date(), // timestamp actual
             latitude: await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lat }), // obtener ubicación actual
@@ -94,7 +94,7 @@ export class ReceptorBLE {
         }
     }
 
-    obtenerMisTramas() {
+    private obtenerMisTramas() {
         // Callback al detectar el beacon
         this.events.subscribe('didRangeBeaconsInRegion', async (data) => {
 
@@ -107,12 +107,12 @@ export class ReceptorBLE {
         });
     }
 
-    hayQueActualizarMedicionesYEnviarlasAlServidor() {
-        //let measure = this.obtenerNox();
+    public hayQueActualizarMedicionesYEnviarlasAlServidor() {
+        //let measure = this.obtenerSO2();
         this.actualizarMediciones().then(
             succes => {
-                if (this.latestMeasure.value != undefined) {
-                    this.servidor.guardarSo2(this.latestMeasure);
+                if (this.ultimaMedida.value != undefined) {
+                    this.servidor.guardarSo2(this.ultimaMedida);
                 }
             },
             error => {
@@ -121,10 +121,10 @@ export class ReceptorBLE {
         )
     }
 
-    /*obtenerNox() {
+    /*public obtenerSO2() {
         this.actualizarMediciones().then(
             succes =>{
-                return this.latestMeasure;
+                return this.ultimaMedida;
             },
             error => {
                 console.log("Error al actualizar mediciones")

@@ -1,7 +1,20 @@
+/*********************************************************************
+@name Maps.service.ts
+@description Renderiza un mapa de Google con las medidas obtenidas de la base de datos
+@author Joan Ciprià Moreno Teodoro
+@date 14/10/2019
+@license GPLv3
+*********************************************************************/
+
+// Librerías de angular/ionic 
 import { Injectable } from "@angular/core";
+
+// Servicios propios
 
 // GPS
 import { LocalizadorGPS } from "../../core/services/LocalizadorGPS.service";
+
+// Firebase
 import { Firebase } from '../../core/services/firebase.service';
 
 
@@ -29,6 +42,7 @@ export class Maps {
 
    }
 
+   // Inizializa el mapa sobre el elemento del DOM indidcado
    initMap(mapElement) {
 
       // Get data
@@ -78,11 +92,11 @@ export class Maps {
       })
    }
 
-   getLocations(){
+   getLocations() {
       this.firebase.getAllMeasures()
-      .subscribe(data => {
-         console.log(data);
+         .subscribe(data => {
+            console.log(data);
          }
-      )
+         )
    }
 }
