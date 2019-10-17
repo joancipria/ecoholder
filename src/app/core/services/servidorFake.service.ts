@@ -26,7 +26,6 @@ export class ServidorFake {
 
    // Guardar medida de Azufre
    guardarSo2(so2) {
-
       // Crear el body de la petición
       let body = new HttpParams()
          .set('value', so2.value)
@@ -39,7 +38,7 @@ export class ServidorFake {
    }
 
    // Enviar peticiones POST
-   private enviarPeticionPost(body){
+   private enviarPeticionPost(body) {
       this.http.post(this.serverURL, body)
          .subscribe(
             res => {
@@ -47,7 +46,7 @@ export class ServidorFake {
             },
             err => {
                if (err.status != 200) { // En caso de error, mostrar por consola
-                  console.log("Error occured",err);
+                  console.log("Error occured", err);
                }
             }
          );
