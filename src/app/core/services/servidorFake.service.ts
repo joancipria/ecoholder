@@ -35,6 +35,11 @@ export class ServidorFake {
          .set('longitude', so2.longitude)
 
       // Enviar al servidor
+      this.enviarPeticionPost(body);
+   }
+
+   // Enviar peticiones POST
+   private enviarPeticionPost(body){
       this.http.post(this.serverURL, body)
          .subscribe(
             res => {
