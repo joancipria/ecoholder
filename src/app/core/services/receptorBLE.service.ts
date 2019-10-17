@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
+import { Platform, Events } from '@ionic/angular';
 
-// Cordova BLE plugin
-import { BLE } from "@ionic-native/ble/ngx";
 
 // Fake server
 import { ServidorFake } from "../../core/services/servidorFake.service";
@@ -9,9 +8,9 @@ import { ServidorFake } from "../../core/services/servidorFake.service";
 // GPS
 import { LocalizadorGPS } from "../../core/services/LocalizadorGPS.service";
 
+// BLE
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { BeaconProvider } from "../../core/services/beaconprovider.service";
-import { Platform, Events } from '@ionic/angular';
 
 
 @Injectable()
@@ -20,10 +19,11 @@ export class ReceptorBLE {
     latestMeasure: any = {};
 
     constructor(
-        private ble: BLE,
         private servidor: ServidorFake,
         private gps: LocalizadorGPS,
-        private ibeacon: IBeacon, public beaconProvider: BeaconProvider, public events: Events
+        private ibeacon: IBeacon, 
+        public beaconProvider: BeaconProvider, 
+        public events: Events
     ) {
 
     }
@@ -89,6 +89,8 @@ export class ReceptorBLE {
 
             if (beacons.length > 0) {
                 this.so2 = parseInt(beacons[0].major);
+            }else{
+                this.so2 = undefined;
             }
         });
     }
@@ -97,7 +99,9 @@ export class ReceptorBLE {
         //let measure = this.obtenerNox();
         this.actualizarMediciones().then(
             succes =>{
-                this.servidor.guardarSo2(this.latestMeasure);
+                if(this.latestMeasure.value != undefined){
+                    this.servidor.guardarSo2(this.latestMeasure);
+                }
             },
             error => {
                 console.log("Error al actualizar mediciones")

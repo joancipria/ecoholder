@@ -10,8 +10,11 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 // BLE
-import { BLE } from "@ionic-native/ble/ngx";
 import { ReceptorBLE } from "./core/services/receptorBLE.service";
+import { IBeacon } from '@ionic-native/ibeacon/ngx';
+import { BeaconProvider } from "./core/services/beaconprovider.service";
+import { Device } from '@ionic-native/device/ngx';
+
 
 // GPS
 import { Geolocation } from '@ionic-native/geolocation/ngx';
@@ -32,13 +35,6 @@ import { GoogleMaps } from '@ionic-native/google-maps';
 import { Maps } from './core/services/maps.service';
 
 
-import { IBeacon } from '@ionic-native/ibeacon/ngx';
-import { BeaconProvider } from "./core/services/beaconprovider.service";
-import { Device } from '@ionic-native/device/ngx';
-
-
-
-
 
 @NgModule({
   declarations: [AppComponent],
@@ -55,7 +51,6 @@ import { Device } from '@ionic-native/device/ngx';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    BLE,
     Geolocation,
     LocalizadorGPS,
     ReceptorBLE,

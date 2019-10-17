@@ -24,7 +24,6 @@
     "@angular/platform-browser": "~8.1.2",
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
-    "@ionic-native/ble": "^5.13.0",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/device": "^5.15.0",
     "@ionic-native/geolocation": "^5.14.0",

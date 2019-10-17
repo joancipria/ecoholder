@@ -1,6 +1,5 @@
 import { Component, NgZone, ViewChild } from "@angular/core";
 import { Router } from '@angular/router';
-import { BLE } from "@ionic-native/ble/ngx";
 import { AlertController, ToastController, NavController, Platform } from "@ionic/angular";
 
 // Services
@@ -14,11 +13,7 @@ import { Maps } from '../core/services/maps.service';
   styleUrls: ["home.page.scss"]
 })
 export class HomePage {
-  deviceId = "24:0A:C4:9E:0A:BE";
-  airValue: String;
   @ViewChild('map', { static: false }) element;
-
-
 
   constructor(
     private router: Router,
