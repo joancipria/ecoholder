@@ -56,10 +56,10 @@ export class ReceptorBLE {
             }
         });
 
-        // "Alarma" temporal, actualizar mediciones y enviar al servidor cada 5 segundos
+        // "Alarma" temporal, actualizar mediciones y enviar al servidor cada 10 segundos
         setInterval(() => {
             this.hayQueActualizarMedicionesYEnviarlasAlServidor();
-        }, 5000);
+        }, 10000);
     }
 
     public estaBLEactivado() {
