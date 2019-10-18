@@ -71,40 +71,47 @@ export class Maps {
          // Animamos con Zoom
          this.map.animateCamera(position);
 
-         this.firebase.getAllMeasures()
-            .subscribe( data => {
+         this.renderizarMarcadores();
+      })
+   }
 
-               console.log(data);
-               let rawData = JSON.stringify(data);
-               let obj = JSON.parse(rawData);
-               console.log(obj);
+   private renderizarMarcadores() {
+      // Callback de firebase
+      this.firebase.getAllMeasures()
+         .subscribe(data => {
 
-               for (let i = 0; i < obj.length; i++) {
-                  
-                  let coords: LatLng = new LatLng(
-                     obj[i].latitude,
-                     obj[i].longitude
-                  );
+            // Datos de firebase
+            console.log(data);
 
-                  let markerOptions: MarkerOptions = {
-                     position: coords,
-                     //icon: "assets/images/icons8-Marker-64.png",
-                     title: "SO2: "+String(obj[i].value)
-                  };
+            // Pequeño hack para poder leer los datos
+            let rawData = JSON.stringify(data);
+            let obj = JSON.parse(rawData);
 
-                  const marker = this.map.addMarker(markerOptions)
+            // Limpiamos mapa
+            this.map.clear();
+
+            // Añadimos un marcador por cada medida
+            for (let i = 0; i < obj.length; i++) {
+
+               let coords: LatLng = new LatLng(
+                  obj[i].latitude,
+                  obj[i].longitude
+               );
+
+               let markerOptions: MarkerOptions = {
+                  position: coords,
+                  //icon: "assets/images/icons8-Marker-64.png",
+                  title: "SO2: " + String(obj[i].value)
+               };
+
+               const marker = this.map.addMarker(markerOptions)
                   .then((marker: Marker) => {
                      marker.showInfoWindow();
                   });
 
-                }
-                  
             }
-            )
 
-
-
-
-      })
+         }
+         )
    }
 }
