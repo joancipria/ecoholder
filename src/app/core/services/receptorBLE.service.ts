@@ -100,6 +100,7 @@ export class ReceptorBLE {
 
             // Guardar medida sólo si el beacon está emitiendo datos
             if (data.beacons.length > 0) {
+                console.log(data.beacons[0].major);
                 this.so2 = parseInt(data.beacons[0].major);
             } else {
                 this.so2 = undefined;
@@ -107,6 +108,7 @@ export class ReceptorBLE {
         });
     }
 
+    // Temporal, este método no pertenece a esta clase. Ver diseño
     public hayQueActualizarMedicionesYEnviarlasAlServidor() {
         //let measure = this.obtenerSO2();
         this.actualizarMediciones().then(
