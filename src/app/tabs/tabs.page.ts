@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController, ModalController } from '@ionic/angular';
+// Auth
+import { AuthenticateService } from '../core/services/authentication.service';
 
 @Component({
   selector: 'app-tabs',
@@ -7,9 +10,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TabsPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private navCtrl: NavController,
+    private authService: AuthenticateService
+  ) { }
 
   ngOnInit() {
+    if (this.authService.userDetails()) {
+      //this.userEmail = this.authService.userDetails().email;
+    } else {
+      this.navCtrl.navigateBack('');
+    }
   }
 
 }
