@@ -43,7 +43,7 @@ export class Maps {
 
    // Inizializa el mapa sobre el elemento del DOM indidcado
    public async inicializarMapa(mapElement) {
-
+      console.log(this.map);
       // Establecemos la API key para el navegador (es diferente a la de Android)
       if (document.URL.startsWith('http')) {
          Environment.setEnv({
