@@ -30,10 +30,20 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 import { Firebase } from './core/services/firebase.service';
 
+// Auth
+import { AuthenticateService } from './core/services/authentication.service';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+
 // Google maps
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { Maps } from './core/services/maps.service';
 
+
+import * as firebase from 'firebase';
+
+firebase.initializeApp(environment.firebaseConfig);
 
 
 @NgModule({
@@ -45,7 +55,9 @@ import { Maps } from './core/services/maps.service';
     AppRoutingModule, 
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
- 	  AngularFirestoreModule
+     AngularFirestoreModule,
+     AngularFireAuthModule,
+     ReactiveFormsModule
   ],
   providers: [
     StatusBar,
@@ -59,7 +71,8 @@ import { Maps } from './core/services/maps.service';
     Firebase,
     GoogleMaps,
     Maps,
-    IBeacon,BeaconProvider,Device
+    IBeacon,BeaconProvider,Device,
+    AuthenticateService,
   ],
   bootstrap: [AppComponent]
 })
