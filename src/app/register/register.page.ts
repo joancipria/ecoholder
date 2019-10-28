@@ -42,6 +42,8 @@ export class RegisterPage implements OnInit {
         Validators.minLength(5),
         Validators.required
       ])),
+      telephone: new FormControl(''),
+      name: new FormControl(''),
     });
   }
 
@@ -50,6 +52,7 @@ export class RegisterPage implements OnInit {
      .then(res => {
        console.log(res);
        this.errorMessage = "";
+       this.navCtrl.navigateForward('/app/tabs/home');
        this.successMessage = "Your account has been created. Please log in.";
      }, err => {
        console.log(err);

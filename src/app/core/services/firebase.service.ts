@@ -9,14 +9,18 @@
 // Librerías de angular/ionic
 import { Injectable } from "@angular/core";
 
+// Lógica false del servidor
+import { ServidorFake } from "../../core/services/servidorFake.service";
+
 // Firebase
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, validateEventsArray } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 
 @Injectable()
 export class Firebase {
    constructor(
-      private db: AngularFirestore
+      private db: AngularFirestore,
+      private servidor: ServidorFake,
    ) {
 
    }
@@ -32,15 +36,27 @@ export class Firebase {
          Post requests
    -----------------------*/
 
-   // --- Login / Register  
+   // Register user
    public registerUser(value) {
       return new Promise<any>((resolve, reject) => {
+         // Register user using Firebase Auth
          firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
             .then(
-               res => resolve(res),
+               // If register was succesful, store user data
+               res => {
+                  let userData = {
+                     uuid: firebase.auth().currentUser.uid,
+                     name: value.name,
+                     telephone: value.telephone
+                  };
+                  // And send it
+                  this.servidor.guardarDatosUsuario(userData);
+                  resolve(res)
+               },
                err => reject(err))
       })
    }
+
 
    public loginUser(value) {
       return new Promise<any>((resolve, reject) => {
