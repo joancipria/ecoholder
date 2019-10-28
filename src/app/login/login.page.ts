@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 
-// Importar auth service
-import { AuthenticateService } from '../core/services/authentication.service';
+// Importar service
+import { Firebase } from '../core/services/firebase.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +18,7 @@ export class LoginPage implements OnInit {
   constructor(
 
     private navCtrl: NavController,
-    private authService: AuthenticateService,
+    private firebase: Firebase,
     private formBuilder: FormBuilder
 
   ) { }
@@ -51,7 +51,7 @@ export class LoginPage implements OnInit {
  
 
   loginUser(value){
-    this.authService.loginUser(value)
+    this.firebase.loginUser(value)
     .then(res => {
       console.log(res);
       this.errorMessage = "";

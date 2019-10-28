@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { AuthenticateService } from '../core/services/authentication.service';
+import { Firebase } from '../core/services/firebase.service';
 import { NavController } from '@ionic/angular';
 
 @Component({
@@ -28,7 +28,7 @@ export class RegisterPage implements OnInit {
 
   constructor(
     private navCtrl: NavController,
-    private authService: AuthenticateService,
+    private firebase: Firebase,
     private formBuilder: FormBuilder
   ) {}
 
@@ -46,7 +46,7 @@ export class RegisterPage implements OnInit {
   }
 
   tryRegister(value){
-    this.authService.registerUser(value)
+    this.firebase.registerUser(value)
      .then(res => {
        console.log(res);
        this.errorMessage = "";

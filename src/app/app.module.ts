@@ -31,7 +31,6 @@ import { environment } from '../environments/environment';
 import { Firebase } from './core/services/firebase.service';
 
 // Auth
-import { AuthenticateService } from './core/services/authentication.service';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -40,7 +39,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { Maps } from './core/services/maps.service';
 
-
+// Import firebase and load config
 import * as firebase from 'firebase';
 
 firebase.initializeApp(environment.firebaseConfig);
@@ -72,7 +71,6 @@ firebase.initializeApp(environment.firebaseConfig);
     GoogleMaps,
     Maps,
     IBeacon,BeaconProvider,Device,
-    AuthenticateService,
   ],
   bootstrap: [AppComponent]
 })
