@@ -16,7 +16,9 @@ import { HttpParams, HttpClient } from '@angular/common/http';
 @Injectable()
 export class ServidorFake {
    // URL del servidor
-   private serverURL: string = 'http://192.168.43.141:3000/api/measure';
+   private serverURL: string = 'http://192.168.43.141:3000/';
+   private measuresURL: string = 'api/measure';
+   private usersURL: string = 'api/users';
 
    constructor(
       private http: HttpClient
@@ -34,12 +36,25 @@ export class ServidorFake {
          .set('longitude', so2.longitude)
 
       // Enviar al servidor
-      this.enviarPeticionPost(body);
+      this.enviarPeticionPost(body, this.measuresURL);
+   }
+
+   // Guardar medida de Azufre
+   public guardarDatosUsuario(datos) {
+      console.log(datos);
+      // Crear el body de la petición
+      let body = new HttpParams()
+         .set('uuid', datos.uuid)
+         .set('name', datos.name)
+         .set('telephone', datos.telephone)
+
+      // Enviar al servidor
+      this.enviarPeticionPost(body, this.usersURL);
    }
 
    // Enviar peticiones POST
-   private enviarPeticionPost(body) {
-      this.http.post(this.serverURL, body)
+   private enviarPeticionPost(body, url) {
+      this.http.post(this.serverURL + url, body)
          .subscribe(
             res => {
                console.log(res);
