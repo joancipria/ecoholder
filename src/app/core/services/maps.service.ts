@@ -23,6 +23,7 @@ declare var google;
 @Injectable()
 export class Maps {
    public map: any;
+   public heatMap: any;
 
    constructor(
       private gps: LocalizadorGPS,
@@ -81,12 +82,17 @@ export class Maps {
             }
             
             // Renderizamos mapa calor
-            let heatMap = new google.maps.visualization.HeatmapLayer({
+            this.heatMap = new google.maps.visualization.HeatmapLayer({
                data: heatMapData
             });
-            heatMap.setMap(this.map);
+            this.heatMap.setMap(this.map);
 
          }
          )
    }
+
+   public toggleMapaCalor() {
+      this.heatMap.setMap(this.heatMap.getMap() ? null : this.map);
+    }
+
 }
