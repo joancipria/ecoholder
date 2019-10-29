@@ -36,7 +36,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 // Google maps
-import { GoogleMaps } from '@ionic-native/google-maps';
 import { Maps } from './core/services/maps.service';
 
 // Import firebase and load config
@@ -71,7 +70,6 @@ firebase.initializeApp(environment.firebaseConfig);
     ServidorFake,
     HttpClientModule,
     Firebase,
-    GoogleMaps,
     Maps,
     Camera,
     IBeacon,BeaconProvider,Device,
