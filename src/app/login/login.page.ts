@@ -4,6 +4,8 @@ import { NavController } from '@ionic/angular';
 
 // Importar service
 import { Firebase } from '../core/services/firebase.service';
+import { LocalizadorGPS } from "../core/services/LocalizadorGPS.service";
+
 
 @Component({
   selector: 'app-login',
@@ -19,9 +21,12 @@ export class LoginPage implements OnInit {
 
     private navCtrl: NavController,
     private firebase: Firebase,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private gps: LocalizadorGPS
 
-  ) { }
+  ) { 
+    this.gps.checkGPSPermission();
+  }
 
   ngOnInit() {
 

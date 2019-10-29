@@ -89,8 +89,8 @@ export class ReceptorBLE {
         this.ultimaMedida = {
             value: this.so2, // última medida de azufre
             date: +new Date(), // timestamp actual
-            latitude: await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lat }), // obtener ubicación actual
-            longitude: await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lng }),
+            latitude: this.gps.lat, // obtener ubicación actual
+            longitude: this.gps.lng,
         }
     }
 

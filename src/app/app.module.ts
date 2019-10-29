@@ -15,10 +15,14 @@ import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { BeaconProvider } from "./core/services/beaconprovider.service";
 import { Device } from '@ionic-native/device/ngx';
 
+// Android permissions
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 // GPS
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { LocalizadorGPS } from "./core/services/LocalizadorGPS.service";
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+
 
 // Servidor Fake
 import { ServidorFake } from "./core/services/servidorFake.service";
@@ -73,6 +77,8 @@ firebase.initializeApp(environment.firebaseConfig);
     Maps,
     Camera,
     IBeacon,BeaconProvider,Device,
+    LocationAccuracy,
+    AndroidPermissions
   ],
   bootstrap: [AppComponent]
 })

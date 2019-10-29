@@ -37,8 +37,8 @@ export class Maps {
 
       // Obtener posición actual
       let latLng = new google.maps.LatLng(
-         await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lat }),
-         await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lng })
+         this.gps.lat,
+         this.gps.lng
       );
 
       let mapOptions = {
@@ -91,6 +91,7 @@ export class Maps {
          )
    }
 
+   // Mostrar/ocultar mapa calor
    public toggleMapaCalor() {
       this.heatMap.setMap(this.heatMap.getMap() ? null : this.map);
     }
