@@ -34,22 +34,26 @@ export class Maps {
    // Inizializa el mapa sobre el elemento del DOM indidcado
    public async inicializarMapa(mapElement) {
 
-         let latLng = new google.maps.LatLng(
-         await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lat }), 
+      // Obtener posición actual
+      let latLng = new google.maps.LatLng(
+         await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lat }),
          await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lng })
-         );
+      );
 
-         let mapOptions = {
-           center: latLng,
-           zoom: 15,
-           mapTypeId: google.maps.MapTypeId.ROADMAP
-         }
-       
-         this.map = new google.maps.Map(mapElement.nativeElement, mapOptions);
-         //this.renderizarMarcadores();
+      let mapOptions = {
+         center: latLng,
+         zoom: 15,
+         mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
+
+      // Renderizar mapa
+      this.map = new google.maps.Map(mapElement.nativeElement, mapOptions);
+
+      // Renderizar mapa calor
+      this.renderizarMapaCalor();
    }
 
-   /*private renderizarMarcadores() {
+   private renderizarMapaCalor() {
       // Callback de firebase
       this.firebase.getAllMeasures()
          .subscribe(data => {
@@ -57,35 +61,32 @@ export class Maps {
             // Datos de firebase
             console.log(data);
 
-            // Pequeño hack para poder leer los datos
+            // Pequeño hack para poder leer los datos de firebase.
+            // No se como se puede leer directamete sin que de fallo
             let rawData = JSON.stringify(data);
-            let obj = JSON.parse(rawData);
+            let measures = JSON.parse(rawData);
 
-            // Limpiamos mapa
-            this.map.clear();
+            // Array datos heatmap
+            let heatMapData = [];
 
-            // Añadimos un marcador por cada medida
-            for (let i = 0; i < obj.length; i++) {
+            // Recorremos medidas
+            for (let i = 0; i < measures.length; i++) {
 
-               let coords: LatLng = new LatLng(
-                  obj[i].latitude,
-                  obj[i].longitude
+               let coords = new google.maps.LatLng(
+                  measures[i].latitude,
+                  measures[i].longitude
                );
-
-               let markerOptions: MarkerOptions = {
-                  position: coords,
-                  //icon: "assets/images/icons8-Marker-64.png",
-                  title: "SO2: " + String(obj[i].value)
-               };
-
-               const marker = this.map.addMarker(markerOptions)
-                  .then((marker: Marker) => {
-                     marker.showInfoWindow();
-                  });
-
+               //Rellenamos array heatmap con las medidas
+               heatMapData.push(coords);
             }
+            
+            // Renderizamos mapa calor
+            let heatMap = new google.maps.visualization.HeatmapLayer({
+               data: heatMapData
+            });
+            heatMap.setMap(this.map);
 
          }
          )
-   }*/
+   }
 }
