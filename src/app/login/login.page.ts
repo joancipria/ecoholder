@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 
 // Importar service
 import { Firebase } from '../core/services/firebase.service';
@@ -22,10 +22,16 @@ export class LoginPage implements OnInit {
     private navCtrl: NavController,
     private firebase: Firebase,
     private formBuilder: FormBuilder,
-    private gps: LocalizadorGPS
+    private gps: LocalizadorGPS,
+    public plt: Platform
+
 
   ) { 
-    this.gps.checkGPSPermission();
+    if (plt.is('android')) {
+      this.gps.checkGPSPermission();
+    }else{
+      this.gps.updatePosition();
+    }
   }
 
   ngOnInit() {
