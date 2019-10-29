@@ -42,6 +42,9 @@ import { Maps } from './core/services/maps.service';
 // Import firebase and load config
 import * as firebase from 'firebase';
 
+//Camara
+import { Camera } from '@ionic-native/camera/ngx';
+
 firebase.initializeApp(environment.firebaseConfig);
 
 
@@ -70,6 +73,7 @@ firebase.initializeApp(environment.firebaseConfig);
     Firebase,
     GoogleMaps,
     Maps,
+    Camera,
     IBeacon,BeaconProvider,Device,
   ],
   bootstrap: [AppComponent]

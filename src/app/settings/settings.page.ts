@@ -33,4 +33,6 @@ export class SettingsPage implements OnInit {
         console.log(error);
       })
   }
+
+  
 }
