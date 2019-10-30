@@ -24,6 +24,8 @@ declare var google;
 export class Maps {
    public map: any;
    public heatMap: any;
+   public directionsService: any;
+   public directionsRenderer: any;
 
    constructor(
       private gps: LocalizadorGPS,
@@ -33,7 +35,7 @@ export class Maps {
    }
 
    // Inizializa el mapa sobre el elemento del DOM indidcado
-   public async inicializarMapa(mapElement) {
+   public inicializarMapa(mapElement) {
 
       // Obtener posición actual
       let latLng = new google.maps.LatLng(
@@ -49,8 +51,16 @@ export class Maps {
          streetViewControl: false,
       }
 
+      this.directionsService = new google.maps.DirectionsService();
+      this.directionsRenderer = new google.maps.DirectionsRenderer();
+
+
       // Renderizar mapa
       this.map = new google.maps.Map(mapElement.nativeElement, mapOptions);
+
+      // Renderizar directions
+      this.directionsRenderer.setMap(this.map);
+
 
       // Renderizar mapa calor
       this.renderizarMapaCalor();
@@ -82,7 +92,7 @@ export class Maps {
                //Rellenamos array heatmap con las medidas
                heatMapData.push(coords);
             }
-            
+
             // Renderizamos mapa calor
             this.heatMap = new google.maps.visualization.HeatmapLayer({
                data: heatMapData
@@ -96,6 +106,28 @@ export class Maps {
    // Mostrar/ocultar mapa calor
    public toggleMapaCalor() {
       this.heatMap.setMap(this.heatMap.getMap() ? null : this.map);
-    }
+   }
+
+   public calcRoute() {
+
+      let latLng = new google.maps.LatLng(
+         this.gps.lat,
+         this.gps.lng
+      )
+      
+      let start = latLng;
+      let end = "Faro Grau Gandia";
+      let request = {
+         origin: start,
+         destination: end,
+         travelMode: 'BICYCLING'
+      };
+      this.directionsService.route(request, (result, status) => {
+         if (status == 'OK') {
+            this.directionsRenderer.setDirections(result);
+         }
+      });
+   }
+
 
 }
