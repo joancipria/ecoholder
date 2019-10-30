@@ -86,7 +86,6 @@ export class LocalizadorGPS {
          .subscribe(position => {
             this.lat = position.coords.latitude;
             this.lng = position.coords.longitude;
-            console.log(this.lat, this.lng);
          });
    }
 }
