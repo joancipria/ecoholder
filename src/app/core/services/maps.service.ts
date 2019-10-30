@@ -43,8 +43,10 @@ export class Maps {
 
       let mapOptions = {
          center: latLng,
-         zoom: 15,
-         mapTypeId: google.maps.MapTypeId.ROADMAP
+         zoom: 13,
+         mapTypeId: google.maps.MapTypeId.ROADMAP,
+         zoomControl: false,
+         streetViewControl: false,
       }
 
       // Renderizar mapa

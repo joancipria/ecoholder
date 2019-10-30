@@ -38,9 +38,7 @@ export class RoutesPage implements OnInit {
   ionViewWillEnter() {
     this.plt.ready().then(() => {
       // Load just once
-      if(this.maps.map == undefined){
         this.maps.inicializarMapa(this.element);
-      }
     });
   }
 
