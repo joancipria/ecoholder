@@ -42,6 +42,10 @@ export class RoutesPage implements OnInit {
     });
   }
 
+  onChange($event) {
+        console.log("el sensor seleccionado es: " + $event.target.value);
+      }
+
   calcRoute(){
     this.maps.calcRoute();
   }
