@@ -6,7 +6,7 @@
 
 <ion-content>
   <!-- Searchbar with cancel button shown on focus -->
-  <ion-searchbar (ionInput)="calcRoute()" placeholder="Destination"></ion-searchbar>
+  <ion-searchbar (search)="calcRoute($event)" placeholder="Destination"></ion-searchbar>
     <div id="map" #map style="height:100%;">
   </div>
 </ion-content>
