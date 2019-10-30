@@ -14,6 +14,8 @@ import { Maps } from '../core/services/maps.service';
 })
 export class RoutesPage implements OnInit {
   @ViewChild('map', { static: false }) element;
+  @ViewChild('search', { static: false }) elementSearch;
+
 
   constructor(
     private router: Router,
@@ -38,7 +40,7 @@ export class RoutesPage implements OnInit {
   ionViewWillEnter() {
     this.plt.ready().then(() => {
       // Load just once
-        this.maps.inicializarMapa(this.element);
+        this.maps.inicializarMapa(this.element, this.elementSearch);
     });
   }
 
@@ -46,8 +48,8 @@ export class RoutesPage implements OnInit {
         console.log("el sensor seleccionado es: " + $event.target.value);
       }
 
-  calcRoute(){
-    this.maps.calcRoute();
+  calcRoute(destination){
+    this.maps.calcRoute(destination);
   }
 
 }

@@ -26,6 +26,8 @@ export class Maps {
    public heatMap: any;
    public directionsService: any;
    public directionsRenderer: any;
+   public googleAutocomplete: any;
+
 
    constructor(
       private gps: LocalizadorGPS,
@@ -35,7 +37,7 @@ export class Maps {
    }
 
    // Inizializa el mapa sobre el elemento del DOM indidcado
-   public inicializarMapa(mapElement) {
+   public async inicializarMapa(mapElement, searchElement) {
 
       // Obtener posición actual
       let latLng = new google.maps.LatLng(
@@ -64,6 +66,14 @@ export class Maps {
 
       // Renderizar mapa calor
       this.renderizarMapaCalor();
+
+      this.googleAutocomplete = new google.maps.places.Autocomplete(await searchElement.getInputElement())
+
+      this.googleAutocomplete.addListener('place_changed', () => {
+         let place = this.googleAutocomplete.getPlace();
+         this.calcRoute(place.name + " " + place.formatted_address);
+      });
+
    }
 
    private renderizarMapaCalor() {
@@ -108,15 +118,15 @@ export class Maps {
       this.heatMap.setMap(this.heatMap.getMap() ? null : this.map);
    }
 
-   public calcRoute() {
+   public calcRoute(destination) {
 
       let latLng = new google.maps.LatLng(
          this.gps.lat,
          this.gps.lng
       )
-      
+
       let start = latLng;
-      let end = "Faro Grau Gandia";
+      let end = destination;
       let request = {
          origin: start,
          destination: end,
