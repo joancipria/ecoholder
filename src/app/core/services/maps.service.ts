@@ -67,7 +67,15 @@ export class Maps {
       // Renderizar mapa calor
       this.renderizarMapaCalor();
 
-      this.googleAutocomplete = new google.maps.places.Autocomplete(await searchElement.getInputElement())
+      let defaultBounds = new google.maps.LatLngBounds(
+         new google.maps.LatLng(this.gps.lat,this.gps.lng));
+
+      let autoCompleteOptions = {
+         bounds: defaultBounds,
+         types: ['establishment']
+       };
+       
+      this.googleAutocomplete = new google.maps.places.Autocomplete(await searchElement.getInputElement(),autoCompleteOptions)
 
       this.googleAutocomplete.addListener('place_changed', () => {
          let place = this.googleAutocomplete.getPlace();
