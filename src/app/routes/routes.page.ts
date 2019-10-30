@@ -42,4 +42,8 @@ export class RoutesPage implements OnInit {
     });
   }
 
+  calcRoute(){
+    this.maps.calcRoute();
+  }
+
 }
