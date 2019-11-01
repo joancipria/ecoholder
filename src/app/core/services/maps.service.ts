@@ -60,6 +60,15 @@ export class Maps {
       // Renderizar mapa
       this.map = new google.maps.Map(mapElement.nativeElement, mapOptions);
 
+      var locationMarker = new google.maps.Marker({
+         position: latLng,
+         map: this.map,
+         icon: {url: "assets/maps/locationMarker.png", scaledSize: new google.maps.Size(20, 20)}
+       });
+       locationMarker.setMap(this.map);
+
+     
+
       // Renderizar directions
       this.directionsRenderer.setMap(this.map);
 
@@ -75,8 +84,10 @@ export class Maps {
          types: ['establishment']
        };
        
+      // Load autocomplete
       this.googleAutocomplete = new google.maps.places.Autocomplete(await searchElement.getInputElement(),autoCompleteOptions)
 
+      // Seelect place callback
       this.googleAutocomplete.addListener('place_changed', () => {
          let place = this.googleAutocomplete.getPlace();
          this.calcRoute(place.name + " " + place.formatted_address);
