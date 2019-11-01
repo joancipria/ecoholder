@@ -100,7 +100,7 @@ export class ReceptorBLE {
 
             // Guardar medida sólo si el beacon está emitiendo datos
             if (data.beacons.length > 0) {
-                console.log(data.beacons[0].major);
+                console.log("Received beacon: "+data.beacons[0].major);
                 this.so2 = parseInt(data.beacons[0].major);
             } else {
                 this.so2 = undefined;

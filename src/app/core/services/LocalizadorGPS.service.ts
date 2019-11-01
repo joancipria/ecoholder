@@ -52,7 +52,7 @@ export class LocalizadorGPS {
    requestGPSPermission() {
       this.locationAccuracy.canRequest().then((canRequest: boolean) => {
          if (canRequest) {
-            console.log("4");
+            //
          } else {
             //Show 'GPS Permission Request' dialogue
             this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
@@ -63,7 +63,7 @@ export class LocalizadorGPS {
                   },
                   error => {
                      //Show alert if user click on 'No Thanks'
-                     alert('requestPermission Error requesting location permissions ' + error)
+                     console.log("Error requesting location permissions " + error)
                   }
                );
          }

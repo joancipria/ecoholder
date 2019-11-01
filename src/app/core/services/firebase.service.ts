@@ -72,7 +72,7 @@ export class Firebase {
          if (firebase.auth().currentUser) {
             firebase.auth().signOut()
                .then(() => {
-                  console.log("LOG Out");
+                  console.log("User logged out");
                   resolve();
                }).catch((error) => {
                   reject();

@@ -41,7 +41,6 @@ export class ServidorFake {
 
    // Guardar medida de Azufre
    public guardarDatosUsuario(datos) {
-      console.log(datos);
       // Crear el body de la petición
       let body = new HttpParams()
          .set('uuid', datos.uuid)

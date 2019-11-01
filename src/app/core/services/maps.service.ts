@@ -90,7 +90,7 @@ export class Maps {
          .subscribe(data => {
 
             // Datos de firebase
-            console.log(data);
+            console.log("Data from firebase",data);
 
             // Pequeño hack para poder leer los datos de firebase.
             // No se como se puede leer directamete sin que de fallo
