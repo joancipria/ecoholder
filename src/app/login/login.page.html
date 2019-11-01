@@ -9,7 +9,7 @@
   
       <ion-item>
         <ion-label  position="floating">Email</ion-label>
-        <ion-input type="email" formControlName="email"></ion-input>
+        <ion-input autofocus="true" type="email" formControlName="email"></ion-input>
       </ion-item>
       <div class="validation-errors">
         <ng-container *ngFor="let validation of validation_messages.email">
