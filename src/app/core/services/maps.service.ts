@@ -59,20 +59,20 @@ export class Maps {
 
 
       // Renderizamos mapa en el dom con sus opciones
-      this.map = new google.maps.Map(mapElement.nativeElement, mapOptions);
+      this.mapa = new google.maps.Map(mapElement.nativeElement, mapOptions);
 
       // Creamos marcador personalizado para la posición actual
       let marcadorPosicionActual = new google.maps.Marker({
          position: posicionActual,
-         map: this.map,
+         map: this.mapa,
          icon: { url: "assets/maps/locationMarker.png", scaledSize: new google.maps.Size(20, 20) }
       });
 
       // Lo mostramos en el mapa
-      marcadorPosicionActual.setMap(this.map);
+      marcadorPosicionActual.setMap(this.mapa);
 
       // Renderizar directions
-      this.directionsRenderer.setMap(this.map);
+      this.directionsRenderer.setMap(this.mapa);
 
       // Renderizar mapa calor
       this.renderizarMapaCalor();
@@ -124,10 +124,10 @@ export class Maps {
             }
 
             // Renderizamos mapa calor
-            this.heatMap = new google.maps.visualization.HeatmapLayer({
+            this.mapaCalor = new google.maps.visualization.HeatmapLayer({
                data: heatMapData
             });
-            this.heatMap.setMap(this.map);
+            this.mapaCalor.setMap(this.mapa);
 
          }
          )
@@ -135,7 +135,7 @@ export class Maps {
 
    // Mostrar/ocultar mapa calor
    public toggleMapaCalor() {
-      this.heatMap.setMap(this.heatMap.getMap() ? null : this.map);
+      this.mapaCalor.setMap(this.mapaCalor.getMap() ? null : this.mapa);
    }
 
    // Calculamos ruta desde ubicación actual hasta destino
