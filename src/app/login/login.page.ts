@@ -54,8 +54,8 @@ export class LoginPage implements OnInit {
   };
 
 
-  loginUser(value) {
-    this.firebase.loginUser(value)
+  login(value) {
+    this.firebase.login(value)
       .then(res => {
         this.errorMessage = "";
         this.navCtrl.navigateForward('/app/tabs/home');

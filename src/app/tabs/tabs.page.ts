@@ -16,8 +16,8 @@ export class TabsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (this.firebase.userDetails()) {
-      //this.userEmail = this.authService.userDetails().email;
+    if (this.firebase.informacionUsuario()) {
+      //this.userEmail = this.authService.informacionUsuario().email;
     } else {
       this.navCtrl.navigateBack('');
     }

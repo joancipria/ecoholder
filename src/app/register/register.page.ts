@@ -48,7 +48,7 @@ export class RegisterPage implements OnInit {
   }
 
   tryRegister(value){
-    this.firebase.registerUser(value)
+    this.firebase.registrarUsuario(value)
      .then(res => {
        console.log(res);
        this.errorMessage = "";

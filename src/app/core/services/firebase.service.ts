@@ -26,30 +26,32 @@ export class Firebase {
    }
 
    /*---------------------- 
-         Get requests
+         Peticiones GET 
    -----------------------*/
-   public getAllMeasures() {
+
+   // Obtener toda la colección "medidas"
+   public obtenerMedidas() {
       return this.db.collection('measures').valueChanges();
    }
 
    /*---------------------- 
-         Post requests
+         Firebase AUTH
    -----------------------*/
 
-   // Register user
-   public registerUser(value) {
+   // Registrar usuario
+   public registrarUsuario(value) {
       return new Promise<any>((resolve, reject) => {
-         // Register user using Firebase Auth
+         // Registrar usuario utilizando Firebase Auth
          firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
             .then(
-               // If register was succesful, store user data
+               // Si el registro se ha completado con éxio, guardar la información del usuario
                res => {
                   let userData = {
                      uuid: firebase.auth().currentUser.uid,
                      name: value.name,
                      telephone: value.telephone
                   };
-                  // And send it
+                  // Enviar al servidor
                   this.servidor.guardarDatosUsuario(userData);
                   resolve(res)
                },
@@ -57,8 +59,8 @@ export class Firebase {
       })
    }
 
-
-   public loginUser(value) {
+   // Login / Iniciar sesión
+   public login(value) {
       return new Promise<any>((resolve, reject) => {
          firebase.auth().signInWithEmailAndPassword(value.email, value.password)
             .then(
@@ -67,7 +69,8 @@ export class Firebase {
       })
    }
 
-   public logoutUser() {
+   // Logout / Cerrar sesión
+   public logout() {
       return new Promise((resolve, reject) => {
          if (firebase.auth().currentUser) {
             firebase.auth().signOut()
@@ -81,7 +84,8 @@ export class Firebase {
       })
    }
 
-   public userDetails() {
+   // Obtener información usuario
+   public informacionUsuario() {
       return firebase.auth().currentUser;
    }
 }

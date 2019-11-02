@@ -17,14 +17,14 @@ export class SettingsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (this.firebase.userDetails()) {
-      this.userEmail = this.firebase.userDetails().email;
+    if (this.firebase.informacionUsuario()) {
+      this.userEmail = this.firebase.informacionUsuario().email;
     }
   }
 
 
   logout() {
-    this.firebase.logoutUser()
+    this.firebase.logout()
       .then(res => {
         console.log(res);
         this.navCtrl.navigateBack('');

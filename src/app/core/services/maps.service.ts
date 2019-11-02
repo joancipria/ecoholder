@@ -97,7 +97,7 @@ export class Maps {
 
    private renderizarMapaCalor() {
       // Callback de firebase
-      this.firebase.getAllMeasures()
+      this.firebase.obtenerMedidas()
          .subscribe(data => {
 
             // Datos de firebase
