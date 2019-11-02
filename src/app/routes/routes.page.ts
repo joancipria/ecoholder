@@ -49,7 +49,7 @@ export class RoutesPage implements OnInit {
       }
 
   calcRoute(destination){
-    this.maps.calcRoute(destination);
+    this.maps.calcularRuta(destination);
   }
 
 }

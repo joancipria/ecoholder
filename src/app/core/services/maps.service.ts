@@ -10,7 +10,6 @@
 import { Injectable } from "@angular/core";
 
 // Servicios propios
-
 // GPS
 import { LocalizadorGPS } from "../../core/services/LocalizadorGPS.service";
 
@@ -40,57 +39,59 @@ export class Maps {
    public async inicializarMapa(mapElement, searchElement) {
 
       // Obtener posición actual
-      let latLng = new google.maps.LatLng(
+      let posicionActual = new google.maps.LatLng(
          this.gps.lat,
          this.gps.lng
       );
 
+      // Opciones del mapa
       let mapOptions = {
-         center: latLng,
+         center: posicionActual,
          zoom: 13,
          mapTypeId: google.maps.MapTypeId.ROADMAP,
          zoomControl: false,
          streetViewControl: false,
       }
 
+      // Creamos nueva instancia de DirectionsService y su renderer
       this.directionsService = new google.maps.DirectionsService();
       this.directionsRenderer = new google.maps.DirectionsRenderer();
 
 
-      // Renderizar mapa
+      // Renderizamos mapa en el dom con sus opciones
       this.map = new google.maps.Map(mapElement.nativeElement, mapOptions);
 
-      var locationMarker = new google.maps.Marker({
-         position: latLng,
+      // Creamos marcador personalizado para la posición actual
+      let marcadorPosicionActual = new google.maps.Marker({
+         position: posicionActual,
          map: this.map,
-         icon: {url: "assets/maps/locationMarker.png", scaledSize: new google.maps.Size(20, 20)}
-       });
-       locationMarker.setMap(this.map);
+         icon: { url: "assets/maps/locationMarker.png", scaledSize: new google.maps.Size(20, 20) }
+      });
 
-     
+      // Lo mostramos en el mapa
+      marcadorPosicionActual.setMap(this.map);
 
       // Renderizar directions
       this.directionsRenderer.setMap(this.map);
 
-
       // Renderizar mapa calor
       this.renderizarMapaCalor();
 
-      let defaultBounds = new google.maps.LatLngBounds(
-         new google.maps.LatLng(this.gps.lat,this.gps.lng));
+      // Configuramos googleAutocomplete
+      let defaultBounds = new google.maps.LatLngBounds(posicionActual);
 
       let autoCompleteOptions = {
          bounds: defaultBounds,
          types: ['establishment']
-       };
-       
-      // Load autocomplete
-      this.googleAutocomplete = new google.maps.places.Autocomplete(await searchElement.getInputElement(),autoCompleteOptions)
+      };
 
-      // Seelect place callback
+      // Renderizamos autocomplete sobre el buscador
+      this.googleAutocomplete = new google.maps.places.Autocomplete(await searchElement.getInputElement(), autoCompleteOptions)
+
+      // Callback para cuando se seleccione un sitio del autocomplete
       this.googleAutocomplete.addListener('place_changed', () => {
-         let place = this.googleAutocomplete.getPlace();
-         this.calcRoute(place.name + " " + place.formatted_address);
+         let place = this.googleAutocomplete.getPlace(); // obtenemos sitio seleccionado
+         this.calcularRuta(place.name + " " + place.formatted_address); // calculamos ruta
       });
 
    }
@@ -101,7 +102,7 @@ export class Maps {
          .subscribe(data => {
 
             // Datos de firebase
-            console.log("Data from firebase",data);
+            console.log("Data from firebase", data);
 
             // Pequeño hack para poder leer los datos de firebase.
             // No se como se puede leer directamete sin que de fallo
@@ -137,7 +138,8 @@ export class Maps {
       this.heatMap.setMap(this.heatMap.getMap() ? null : this.map);
    }
 
-   public calcRoute(destination) {
+   // Calculamos ruta desde ubicación actual hasta destino
+   public calcularRuta(destination) {
 
       let latLng = new google.maps.LatLng(
          this.gps.lat,
