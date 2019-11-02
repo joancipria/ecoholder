@@ -9,6 +9,7 @@ el usuario se ha movido
 
 // Librerías de angular/ionic 
 import { Injectable } from "@angular/core";
+import { Platform } from '@ionic/angular';
 
 // Cordova GPS plugin
 import { Geolocation } from '@ionic-native/geolocation/ngx';
@@ -24,23 +25,33 @@ export class LocalizadorGPS {
    constructor(
       private geolocation: Geolocation,
       private androidPermissions: AndroidPermissions,
-      private locationAccuracy: LocationAccuracy
+      private locationAccuracy: LocationAccuracy,
+      public plt: Platform
    ) {
 
    }
 
-   //Check if application having GPS access permission  
-   checkGPSPermission() {
+   public inicializar() {
+      // Si estamos en android
+      if (this.plt.is('android')) {
+         // Verificar permisos android
+         this.verificarPermisosGPS();
+      } else {
+         // Si estamos en web, directamente monitorizar posicion
+         this.monitorizarPosicion();
+      }
+   }
+
+   // Verificar si tenemos permisos para el GPS
+   public verificarPermisosGPS() {
       this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
          result => {
             if (result.hasPermission) {
-
-               //If having permission show 'Turn On GPS' dialogue
-               this.askToTurnOnGPS();
+               // Si tenemos permiso, preguntar para activar GPS
+               this.activarGPS();
             } else {
-
-               //If not having permission ask for permission
-               this.requestGPSPermission();
+               // Si no tenemos permiso
+               this.pedirPermisoGPS();
             }
          },
          err => {
@@ -49,20 +60,21 @@ export class LocalizadorGPS {
       );
    }
 
-   requestGPSPermission() {
+   // Pedir permisos para el GPS
+   public pedirPermisoGPS() {
       this.locationAccuracy.canRequest().then((canRequest: boolean) => {
          if (canRequest) {
             //
          } else {
-            //Show 'GPS Permission Request' dialogue
+            // Pedir permisos
             this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
                .then(
                   () => {
-                     // call method to turn on GPS
-                     this.askToTurnOnGPS();
+                     // Si tenemos permiso, activar el GPS
+                     this.activarGPS();
                   },
                   error => {
-                     //Show alert if user click on 'No Thanks'
+                     // Mostrar error si el usuario rechaza dar permisos
                      console.log("Error requesting location permissions " + error)
                   }
                );
@@ -70,18 +82,20 @@ export class LocalizadorGPS {
       });
    }
 
-   askToTurnOnGPS() {
+   // Activar el GPS
+   public activarGPS() {
       this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
          () => {
-            // When GPS Turned ON call method to get Accurate location coordinates
-            this.updatePosition()
+            // Cuando activamos el GPS, monitorizar posición
+            this.monitorizarPosicion()
          },
          error => alert('Error requesting location permissions ' + JSON.stringify(error))
       );
    }
 
-   public updatePosition() {
-      // Update gps
+   // Monitorizar posición en tiempo real
+   public monitorizarPosicion() {
+      // Cada vez que el usuario se mueva, actualizar posición
       this.geolocation.watchPosition()
          .subscribe(position => {
             this.lat = position.coords.latitude;

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { NavController, Platform } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 
-// Importar service
+// Importar firebase y GPS
 import { Firebase } from '../core/services/firebase.service';
 import { LocalizadorGPS } from "../core/services/LocalizadorGPS.service";
 
@@ -23,15 +23,8 @@ export class LoginPage implements OnInit {
     private firebase: Firebase,
     private formBuilder: FormBuilder,
     private gps: LocalizadorGPS,
-    public plt: Platform
-
-
-  ) { 
-    if (plt.is('android')) {
-      this.gps.checkGPSPermission();
-    }else{
-      this.gps.updatePosition();
-    }
+  ) {
+    this.gps.inicializar();
   }
 
   ngOnInit() {
@@ -59,19 +52,19 @@ export class LoginPage implements OnInit {
       { type: 'minlength', message: 'Password must be at least 6 characters long.' }
     ]
   };
- 
 
-  loginUser(value){
+
+  loginUser(value) {
     this.firebase.loginUser(value)
-    .then(res => {
-      this.errorMessage = "";
-      this.navCtrl.navigateForward('/app/tabs/home');
-    }, err => {
-      this.errorMessage = err.message;
-    })
+      .then(res => {
+        this.errorMessage = "";
+        this.navCtrl.navigateForward('/app/tabs/home');
+      }, err => {
+        this.errorMessage = err.message;
+      })
   }
 
-  goToRegisterPage(){
+  goToRegisterPage() {
     this.navCtrl.navigateForward('/register');
   }
 
