@@ -21,8 +21,8 @@ declare var google;
 
 @Injectable()
 export class Maps {
-   public map: any;
-   public heatMap: any;
+   public mapa: any;
+   public mapaCalor: any;
    public directionsService: any;
    public directionsRenderer: any;
    public googleAutocomplete: any;
