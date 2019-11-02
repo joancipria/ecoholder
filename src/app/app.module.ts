@@ -12,7 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 // BLE
 import { ReceptorBLE } from "./core/services/receptorBLE.service";
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
-import { BeaconProvider } from "./core/services/beaconprovider.service";
+import { Beacon } from "./core/services/beacon.service";
 import { Device } from '@ionic-native/device/ngx';
 
 // Android permissions
@@ -76,7 +76,7 @@ firebase.initializeApp(environment.firebaseConfig);
     Firebase,
     Maps,
     Camera,
-    IBeacon,BeaconProvider,Device,
+    IBeacon,Beacon,Device,
     LocationAccuracy,
     AndroidPermissions
   ],

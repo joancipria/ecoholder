@@ -1,5 +1,5 @@
 /*********************************************************************
-@name BeaconProvider.service.ts
+@name Beacon.service.ts
 @description Crea una BeaconRegion y devuelve una promesa con cada evento
 @author Joan Ciprià Moreno Teodoro
 @date 13/10/2019
@@ -12,7 +12,7 @@ import { IBeacon } from "@ionic-native/ibeacon/ngx";
 import { Device } from '@ionic-native/device/ngx';
 
 @Injectable()
-export class BeaconProvider {
+export class Beacon {
 
     delegate: any;
     region: any;
