@@ -14,41 +14,62 @@
       <ion-label position="floating">Name</ion-label>
       <ion-input type="text" formControlName="name"></ion-input>
     </ion-item>
+    <ion-item lines="none">
+      <ng-container>
+        <ion-text color="danger" class="form-error">
+        </ion-text>
+      </ng-container>
+    </ion-item>
 
     <ion-item>
       <ion-label position="floating">Email</ion-label>
-      <ion-input type="text" formControlName="email"></ion-input>
+      <ion-input autofocus="true" type="email" formControlName="email"></ion-input>
     </ion-item>
-    <div class="validation-errors">
+
+    <ion-item lines="none">
       <ng-container *ngFor="let validation of validation_messages.email">
-        <div class="error-message"
-          *ngIf="validations_form.get('email').hasError(validation.type) && (validations_form.get('email').dirty || validations_form.get('email').touched)">
+        <ion-text
+          *ngIf="validations_form.get('email').hasError(validation.type) && (validations_form.get('email').dirty || validations_form.get('email').touched)"
+          color="danger" class="form-error">
           {{ validation.message }}
-        </div>
+        </ion-text>
       </ng-container>
-    </div>
+    </ion-item>
 
     <ion-item>
       <ion-label position="floating">Password</ion-label>
       <ion-input type="password" formControlName="password" class="form-controll" required></ion-input>
     </ion-item>
-    <div class="validation-errors">
+    <ion-item lines="none">
       <ng-container *ngFor="let validation of validation_messages.password">
-        <div class="error-message"
-          *ngIf="validations_form.get('password').hasError(validation.type) && (validations_form.get('password').dirty || validations_form.get('password').touched)">
+        <ion-text
+          *ngIf="validations_form.get('password').hasError(validation.type) && (validations_form.get('password').dirty || validations_form.get('password').touched)"
+          color="danger" class="form-error">
           {{ validation.message }}
-        </div>
+        </ion-text>
       </ng-container>
-    </div>
+    </ion-item>
 
     <ion-item>
       <ion-label position="floating">Contact Number</ion-label>
       <ion-input type="text" formControlName="telephone"></ion-input>
     </ion-item>
+    <ion-item lines="none">
+      <ng-container>
+        <ion-text color="danger" class="form-error">
+        </ion-text>
+      </ng-container>
+    </ion-item>
 
-    <br>
-    <ion-button expand="block" class="submit-btn" type="submit" [disabled]="!validations_form.valid">Register</ion-button>
-    <label class="error-message">{{errorMessage}}</label>
+    <ion-button expand="block" class="submit-btn" type="submit" [disabled]="!validations_form.valid">Register
+    </ion-button>
+    <ion-item lines="none">
+      <ng-container>
+        <ion-text color="danger" class="form-error">
+          {{errorMessage}}
+        </ion-text>
+      </ng-container>
+    </ion-item>
     <label class="success-message">{{successMessage}}</label>
   </form>
 </ion-content>

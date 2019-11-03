@@ -19,7 +19,9 @@ import { LocalizadorGPS } from "../../core/services/LocalizadorGPS.service";
 @Injectable()
 
 export class RecogidaDatos {
-  
+
+    private latAnterior: any;
+    private lngAnterior: any;
 
     constructor(
         private ble: ReceptorBLE,
@@ -28,7 +30,7 @@ export class RecogidaDatos {
         private gps: LocalizadorGPS
 
     ) {}
-  
+    
 
      public hayQueActualizarMedicionesYEnviarlasAlServidor() {
         this.ble.actualizarMediciones().then(
@@ -45,13 +47,19 @@ export class RecogidaDatos {
 
     public comprobarMovimiento(){
 
-        if(this.gps.meHeMovido()){
-
+        if( this.gps.meHeMovido(this.latAnterior,this.lngAnterior) || this.latAnterior == undefined){
+            
             this.hayQueActualizarMedicionesYEnviarlasAlServidor();
+
+            this.latAnterior = this.gps.lat;
+            this.lngAnterior = this.gps.lng;
 
         }
 
     }
+
+
+
 
 
     public alarmaEstacionamiento(){

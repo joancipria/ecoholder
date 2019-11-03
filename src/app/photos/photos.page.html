@@ -6,4 +6,9 @@
 
 <ion-content>
 
+    <ion-content padding>
+        <ion-button (click)="hacerFoto()">Hacer foto</ion-button>
+        <img [src]="foto" *ngIf="foto" />
+      </ion-content>
+
 </ion-content>

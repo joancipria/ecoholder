@@ -10,7 +10,6 @@
 import { Injectable } from "@angular/core";
 
 // Servicios propios
-
 // GPS
 import { LocalizadorGPS } from "../../core/services/LocalizadorGPS.service";
 
@@ -18,23 +17,18 @@ import { LocalizadorGPS } from "../../core/services/LocalizadorGPS.service";
 import { Firebase } from '../../core/services/firebase.service';
 
 
-import {
-   GoogleMaps,
-   GoogleMap,
-   GoogleMapsEvent,
-   LatLng,
-   MarkerOptions,
-   Marker,
-   Environment
-} from "@ionic-native/google-maps";
-
+declare var google;
 
 @Injectable()
 export class Maps {
-   public map: GoogleMap;
+   public mapa: any;
+   public mapaCalor: any;
+   public directionsService: any;
+   public directionsRenderer: any;
+   public googleAutocomplete: any;
+
 
    constructor(
-      public googleMaps: GoogleMaps,
       private gps: LocalizadorGPS,
       public firebase: Firebase,
    ) {
@@ -42,76 +36,129 @@ export class Maps {
    }
 
    // Inizializa el mapa sobre el elemento del DOM indidcado
-   public async inicializarMapa(mapElement) {
-      console.log(this.map);
-      // Establecemos la API key para el navegador (es diferente a la de Android)
-      if (document.URL.startsWith('http')) {
-         Environment.setEnv({
-            API_KEY_FOR_BROWSER_RELEASE: "AIzaSyDRJlCwAahLxcnY8Plxb5dnxVf6RlM0s2o",
-            API_KEY_FOR_BROWSER_DEBUG: "AIzaSyDRJlCwAahLxcnY8Plxb5dnxVf6RlM0s2o"
-         });
+   public async inicializarMapa(mapElement, searchElement) {
+
+      // Obtener posición actual
+      let posicionActual = new google.maps.LatLng(
+         this.gps.lat,
+         this.gps.lng
+      );
+
+      // Opciones del mapa
+      let mapOptions = {
+         center: posicionActual,
+         zoom: 13,
+         mapTypeId: google.maps.MapTypeId.ROADMAP,
+         zoomControl: false,
+         streetViewControl: false,
       }
 
-      // Renderizamos el mapa
-      this.map = GoogleMaps.create(mapElement.nativeElement);
+      // Creamos nueva instancia de DirectionsService y su renderer
+      this.directionsService = new google.maps.DirectionsService();
+      this.directionsRenderer = new google.maps.DirectionsRenderer();
 
-      // Cuando haya  cargado el mapa
-      this.map.one(GoogleMapsEvent.MAP_READY).then(async (data: any) => {
-         // Obtenermos ubicación actual
-         let coordinates: LatLng = new LatLng(
-            await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lat }),
-            await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lng })
-         );
 
-         let position = {
-            target: coordinates,
-            zoom: 17
-         };
+      // Renderizamos mapa en el dom con sus opciones
+      this.mapa = new google.maps.Map(mapElement.nativeElement, mapOptions);
 
-         // Animamos con Zoom
-         this.map.animateCamera(position);
+      // Creamos marcador personalizado para la posición actual
+      let marcadorPosicionActual = new google.maps.Marker({
+         position: posicionActual,
+         map: this.mapa,
+         icon: { url: "assets/maps/locationMarker.png", scaledSize: new google.maps.Size(20, 20) }
+      });
 
-         this.renderizarMarcadores();
-      })
+      // Lo mostramos en el mapa
+      marcadorPosicionActual.setMap(this.mapa);
+
+      // Renderizar directions
+      this.directionsRenderer.setMap(this.mapa);
+
+      // Renderizar mapa calor
+      this.renderizarMapaCalor();
+
+      // Configuramos googleAutocomplete
+      let defaultBounds = new google.maps.LatLngBounds(posicionActual);
+
+      let autoCompleteOptions = {
+         bounds: defaultBounds,
+         types: ['establishment']
+      };
+
+      // Renderizamos autocomplete sobre el buscador
+      this.googleAutocomplete = new google.maps.places.Autocomplete(await searchElement.getInputElement(), autoCompleteOptions)
+
+      // Callback para cuando se seleccione un sitio del autocomplete
+      this.googleAutocomplete.addListener('place_changed', () => {
+         let place = this.googleAutocomplete.getPlace(); // obtenemos sitio seleccionado
+         this.calcularRuta(place.name + " " + place.formatted_address); // calculamos ruta
+      });
+
    }
 
-   private renderizarMarcadores() {
+   private renderizarMapaCalor() {
       // Callback de firebase
-      this.firebase.getAllMeasures()
+      this.firebase.obtenerMedidas()
          .subscribe(data => {
 
             // Datos de firebase
-            console.log(data);
+            console.log("Data from firebase", data);
 
-            // Pequeño hack para poder leer los datos
+            // Pequeño hack para poder leer los datos de firebase.
+            // No se como se puede leer directamete sin que de fallo
             let rawData = JSON.stringify(data);
-            let obj = JSON.parse(rawData);
+            let measures = JSON.parse(rawData);
 
-            // Limpiamos mapa
-            this.map.clear();
+            // Array datos heatmap
+            let heatMapData = [];
 
-            // Añadimos un marcador por cada medida
-            for (let i = 0; i < obj.length; i++) {
+            // Recorremos medidas
+            for (let i = 0; i < measures.length; i++) {
 
-               let coords: LatLng = new LatLng(
-                  obj[i].latitude,
-                  obj[i].longitude
+               let coords = new google.maps.LatLng(
+                  measures[i].latitude,
+                  measures[i].longitude
                );
-
-               let markerOptions: MarkerOptions = {
-                  position: coords,
-                  //icon: "assets/images/icons8-Marker-64.png",
-                  title: "SO2: " + String(obj[i].value)
-               };
-
-               const marker = this.map.addMarker(markerOptions)
-                  .then((marker: Marker) => {
-                     marker.showInfoWindow();
-                  });
-
+               //Rellenamos array heatmap con las medidas
+               heatMapData.push(coords);
             }
+
+            // Renderizamos mapa calor
+            this.mapaCalor = new google.maps.visualization.HeatmapLayer({
+               data: heatMapData
+            });
+            this.mapaCalor.setMap(this.mapa);
 
          }
          )
    }
+
+   // Mostrar/ocultar mapa calor
+   public toggleMapaCalor() {
+      this.mapaCalor.setMap(this.mapaCalor.getMap() ? null : this.mapa);
+   }
+
+   // Calculamos ruta desde ubicación actual hasta destino
+   public calcularRuta(destination) {
+
+      let latLng = new google.maps.LatLng(
+         this.gps.lat,
+         this.gps.lng
+      )
+
+      let start = latLng;
+      let end = destination;
+      let request = {
+         origin: start,
+         destination: end,
+         travelMode: 'BICYCLING'
+      };
+      this.directionsService.route(request, (result, status) => {
+         if (status == 'OK') {
+            this.directionsRenderer.setDirections(result);
+         }
+      });
+   }
+
+
 }

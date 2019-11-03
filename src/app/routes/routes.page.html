@@ -5,5 +5,16 @@
 </ion-header>
 
 <ion-content>
-    <div #map style="height:100%;"></div>
+  <!-- Searchbar with cancel button shown on focus -->
+  <ion-searchbar id="search" #search type="text" placeholder="Pick a destination"></ion-searchbar>
+    <ion-item>
+          <ion-label>Pollutant</ion-label>
+          <ion-select value="SO2" ok-text="Ok" cancel-text="Cancel" (ionChange)="onChange($event)">
+            <ion-select-option value="SO2">SO2</ion-select-option>
+            <ion-select-option value="CO2">CO2</ion-select-option>
+            <ion-select-option value="NOX">NOX</ion-select-option>
+          </ion-select>
+  </ion-item>
+    <div id="map" #map style="height:100%;">
+  </div>
 </ion-content>

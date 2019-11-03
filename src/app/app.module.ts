@@ -12,13 +12,17 @@ import { AppRoutingModule } from './app-routing.module';
 // BLE
 import { ReceptorBLE } from "./core/services/receptorBLE.service";
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
-import { BeaconProvider } from "./core/services/beaconprovider.service";
+import { Beacon } from "./core/services/beacon.service";
 import { Device } from '@ionic-native/device/ngx';
 
+// Android permissions
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 // GPS
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { LocalizadorGPS } from "./core/services/LocalizadorGPS.service";
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+
 
 // Servidor Fake
 import { ServidorFake } from "./core/services/servidorFake.service";
@@ -36,11 +40,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 // Google maps
-import { GoogleMaps } from '@ionic-native/google-maps';
 import { Maps } from './core/services/maps.service';
 
 // Import firebase and load config
 import * as firebase from 'firebase';
+
+//Camara
+import { Camera } from '@ionic-native/camera/ngx';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -68,9 +74,11 @@ firebase.initializeApp(environment.firebaseConfig);
     ServidorFake,
     HttpClientModule,
     Firebase,
-    GoogleMaps,
     Maps,
-    IBeacon,BeaconProvider,Device,
+    Camera,
+    IBeacon,Beacon,Device,
+    LocationAccuracy,
+    AndroidPermissions
   ],
   bootstrap: [AppComponent]
 })

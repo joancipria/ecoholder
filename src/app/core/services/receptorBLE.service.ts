@@ -22,7 +22,7 @@ import { LocalizadorGPS } from "../../core/services/LocalizadorGPS.service";
 
 // Beacon
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
-import { BeaconProvider } from "../../core/services/beaconprovider.service";
+import { Beacon } from "./beacon.service";
 
 
 @Injectable()
@@ -37,7 +37,7 @@ export class ReceptorBLE {
         private servidor: ServidorFake,
         private gps: LocalizadorGPS,
         private ibeacon: IBeacon,
-        private beaconProvider: BeaconProvider,
+        private beacon: Beacon,
         private events: Events
     ) {
 
@@ -50,7 +50,7 @@ export class ReceptorBLE {
         }
 
         // Inicializar servicio de beacon
-        this.beaconProvider.inicializar().then((isInitialised) => {
+        this.beacon.inicializar().then((isInitialised) => {
             if (isInitialised) {
                 this.obtenerMisTramas();
             }
@@ -91,8 +91,8 @@ export class ReceptorBLE {
         this.ultimaMedida = {
             value: this.so2, // última medida de azufre
             date: +new Date(), // timestamp actual
-            latitude: await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lat }), // obtener ubicación actual
-            longitude: await this.gps.obtenerMiPosicionGPS().then(coords => { return coords.lng }),
+            latitude: this.gps.lat, // obtener ubicación actual
+            longitude: this.gps.lng,
         }
     }
 
@@ -102,7 +102,7 @@ export class ReceptorBLE {
 
             // Guardar medida sólo si el beacon está emitiendo datos
             if (data.beacons.length > 0) {
-                console.log(data.beacons[0].major);
+                console.log("Received beacon: "+data.beacons[0].major);
                 this.so2 = parseInt(data.beacons[0].major);
             } else {
                 this.so2 = undefined;

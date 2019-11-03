@@ -9,40 +9,64 @@ el usuario se ha movido
 
 // Librerías de angular/ionic 
 import { Injectable } from "@angular/core";
+import { Platform } from '@ionic/angular';
 
 // Cordova GPS plugin
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 
 
 @Injectable()
 export class LocalizadorGPS {
-   private ultimaPosicion = {
-      lat: undefined,
-      lng: undefined
-   }
+   public lat: any;
+   public lng: any;
+
    constructor(
-      private geolocation: Geolocation
+      private geolocation: Geolocation,
+      private androidPermissions: AndroidPermissions,
+      private locationAccuracy: LocationAccuracy,
+      public plt: Platform
    ) {
 
    }
 
-   public async obtenerMiPosicionGPS() {
-      const resp = await this.geolocation.getCurrentPosition()
-      this.ultimaPosicion.lat = resp.coords.latitude;
-      this.ultimaPosicion.lng = resp.coords.longitude;
-      return this.ultimaPosicion;
+   public inicializar() {
+      // Si estamos en android
+      if (this.plt.is('android')) {
+         // Verificar permisos android
+         this.verificarPermisosGPS();
+      } else {
+         // Si estamos en web, directamente monitorizar posicion
+         this.monitorizarPosicion();
+      }
    }
 
-   public async meHeMovido(){
+   public meHeMovido(latAnterior, lngAnterior){
 
-      var anterior = this.ultimaPosicion;
+      
+      var latActual = this.lat;
 
-      var actual = await this.obtenerMiPosicionGPS();
+      var lngActual = this.lng;
+ 
 
-   //calcular distancia entre los dos puuntos en metros i comprobar si es >20
+      var R = 6371e3; // metres
+      var toRadians =  Math.PI/180;
+      var φ1 = latAnterior*toRadians;
+      var φ2 = latActual*toRadians;
+      var Δφ = (latActual-latAnterior)*toRadians;
+      var Δλ = (lngActual-lngAnterior)*toRadians;
+      
+      var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ/2) * Math.sin(Δλ/2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      
+      var d = R * c;
 
-
-      if(anterior.lat !=  actual.lat || anterior.lng != anterior.lng){
+      console.log(d);
+   
+      if(d>20){
 
             return true;
 
@@ -51,5 +75,66 @@ export class LocalizadorGPS {
       return false;
 
    } 
+    
 
+   // Verificar si tenemos permisos para el GPS
+   public verificarPermisosGPS() {
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
+         result => {
+            if (result.hasPermission) {
+               // Si tenemos permiso, preguntar para activar GPS
+               this.activarGPS();
+            } else {
+               // Si no tenemos permiso
+               this.pedirPermisoGPS();
+            }
+         },
+         err => {
+            alert(err);
+         }
+      );
+   }
+
+   // Pedir permisos para el GPS
+   public pedirPermisoGPS() {
+      this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+         if (canRequest) {
+            //
+         } else {
+            // Pedir permisos
+            this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
+               .then(
+                  () => {
+                     // Si tenemos permiso, activar el GPS
+                     this.activarGPS();
+                  },
+                  error => {
+                     // Mostrar error si el usuario rechaza dar permisos
+                     console.log("Error requesting location permissions " + error)
+                  }
+               );
+         }
+      });
+   }
+
+   // Activar el GPS
+   public activarGPS() {
+      this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+         () => {
+            // Cuando activamos el GPS, monitorizar posición
+            this.monitorizarPosicion()
+         },
+         error => alert('Error requesting location permissions ' + JSON.stringify(error))
+      );
+   }
+
+   // Monitorizar posición en tiempo real
+   public monitorizarPosicion() {
+      // Cada vez que el usuario se mueva, actualizar posición
+      this.geolocation.watchPosition()
+         .subscribe(position => {
+            this.lat = position.coords.latitude;
+            this.lng = position.coords.longitude;
+         });
+   }
 }

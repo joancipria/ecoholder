@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 
-// Importar service
+// Importar firebase y GPS
 import { Firebase } from '../core/services/firebase.service';
+import { LocalizadorGPS } from "../core/services/LocalizadorGPS.service";
+
 
 @Component({
   selector: 'app-login',
@@ -19,9 +21,11 @@ export class LoginPage implements OnInit {
 
     private navCtrl: NavController,
     private firebase: Firebase,
-    private formBuilder: FormBuilder
-
-  ) { }
+    private formBuilder: FormBuilder,
+    private gps: LocalizadorGPS,
+  ) {
+    this.gps.inicializar();
+  }
 
   ngOnInit() {
 
@@ -31,7 +35,7 @@ export class LoginPage implements OnInit {
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
       password: new FormControl('', Validators.compose([
-        Validators.minLength(5),
+        Validators.minLength(6),
         Validators.required
       ])),
     });
@@ -45,23 +49,22 @@ export class LoginPage implements OnInit {
     ],
     'password': [
       { type: 'required', message: 'Password is required.' },
-      { type: 'minlength', message: 'Password must be at least 5 characters long.' }
+      { type: 'minlength', message: 'Password must be at least 6 characters long.' }
     ]
   };
- 
 
-  loginUser(value){
-    this.firebase.loginUser(value)
-    .then(res => {
-      console.log(res);
-      this.errorMessage = "";
-      this.navCtrl.navigateForward('/app/tabs/home');
-    }, err => {
-      this.errorMessage = err.message;
-    })
+
+  login(value) {
+    this.firebase.login(value)
+      .then(res => {
+        this.errorMessage = "";
+        this.navCtrl.navigateForward('/app/tabs/home');
+      }, err => {
+        this.errorMessage = err.message;
+      })
   }
 
-  goToRegisterPage(){
+  goToRegisterPage() {
     this.navCtrl.navigateForward('/register');
   }
 
