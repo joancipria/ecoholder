@@ -74,6 +74,8 @@ export class ReceptorBLE {
         return false;
     }
 
+    
+
     public activarBLE() {
         this.ibeacon.enableBluetooth().then(
             success => {
@@ -123,6 +125,12 @@ export class ReceptorBLE {
         )
     }
 
+
+    public getUltima(){
+
+        return this.ultimaMedida;
+
+    }
     /*public obtenerSO2() {
         this.actualizarMediciones().then(
             succes =>{

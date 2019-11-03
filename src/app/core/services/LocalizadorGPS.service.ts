@@ -33,4 +33,23 @@ export class LocalizadorGPS {
       return this.ultimaPosicion;
    }
 
+   public async meHeMovido(){
+
+      var anterior = this.ultimaPosicion;
+
+      var actual = await this.obtenerMiPosicionGPS();
+
+   //calcular distancia entre los dos puuntos en metros i comprobar si es >20
+
+
+      if(anterior.lat !=  actual.lat || anterior.lng != anterior.lng){
+
+            return true;
+
+      }
+
+      return false;
+
+   } 
+
 }
