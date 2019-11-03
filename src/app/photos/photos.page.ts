@@ -8,7 +8,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 })
 export class PhotosPage implements OnInit {
 
-  foto: any;
+  foto: any = "https://keyassets.timeincuk.net/inspirewp/live/wp-content/uploads/sites/12/2016/07/iStock_91298679_MEDIUM.jpg";
 
   constructor(
     private camera: Camera
