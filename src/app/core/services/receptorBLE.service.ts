@@ -24,7 +24,6 @@ import { LocalizadorGPS } from "../../core/services/LocalizadorGPS.service";
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { Beacon } from "./beacon.service";
 
-
 @Injectable()
 export class ReceptorBLE {
     // Última medida de azufre
@@ -38,7 +37,7 @@ export class ReceptorBLE {
         private gps: LocalizadorGPS,
         private ibeacon: IBeacon,
         private beacon: Beacon,
-        private events: Events
+        private events: Events,
     ) {
 
     }
@@ -56,10 +55,14 @@ export class ReceptorBLE {
             }
         });
 
+        this.hayQueActualizarMedicionesYEnviarlasAlServidor();
+        
+        this.comprobarMovimientoParaEnviar()
+
         // "Alarma" temporal, actualizar mediciones y enviar al servidor cada 10 segundos
-        setInterval(() => {
+       /* setInterval(() => {
             this.hayQueActualizarMedicionesYEnviarlasAlServidor();
-        }, 10000);
+        }, 10000);*/
     }
 
     public estaBLEactivado() {
@@ -110,13 +113,20 @@ export class ReceptorBLE {
         });
     }
 
-    // Temporal, este método no pertenece a esta clase. Ver diseño
+    
+
+
+    public getUltima(){
+
+        return this.ultimaMedida;
+
+    }
+
     public hayQueActualizarMedicionesYEnviarlasAlServidor() {
-        //let measure = this.obtenerSO2();
         this.actualizarMediciones().then(
             succes => {
-                if (this.ultimaMedida.value != undefined) {
-                    this.servidor.guardarSo2(this.ultimaMedida);
+                if (this.getUltima().value != undefined) {
+                    this.servidor.guardarSo2(this.getUltima());
                 }
             },
             error => {
@@ -126,11 +136,42 @@ export class ReceptorBLE {
     }
 
 
-    public getUltima(){
+   //---------------------------------------------------------------------------------------------------------------------------
+   //                                       comprobarMovimientoParaEnviar() 
+   //          Autor: Vicent Borja Roca
+   //          Descripción: Se inicializan dos temporizadores:
+   //                       -Cada minuto se comprueba si ha habido movimiento llamando a meHeMovido(),
+   //                       si devuelve true se llama a hayQueActualizarMedicionesYEnviarlasAlServidor().
+   //                       -Si han pasado 10 min sin moverse se llamara a hayQueActualizarMedicionesYEnviarlasAlServidor().                 
+   //--------------------------------------------------------------------------------------------------------------------------
 
-        return this.ultimaMedida;
+   public comprobarMovimientoParaEnviar(){     
+       
+    setInterval(function(){  
+        //si this.latAnterior significa que es la primera medida entonces enviamos
+        if( this.gps.meHeMovido(this.latAnterior,this.lngAnterior) || this.latAnterior == undefined){
+        
+        this.hayQueActualizarMedicionesYEnviarlasAlServidor();
+            
+        //guardamos la posicion para compararla posteriormete
+        this.gps.latAnterior = this.gps.lat;  
+        this.gps.lngAnterior = this.gps.lng;
+        
+    }  
+    }, 60000)
+   
+    setInterval(function(){
 
-    }
+        if(this.gps.meHeMovido()==false){
+        this.hayQueActualizarMedicionesYEnviarlasAlServidor();
+        this.gps.latAnterior = this.gps.lat;  
+        this.gps.lngAnterior = this.gps.lng;
+      }
+
+    }, 600000)
+
+}
+
     /*public obtenerSO2() {
         this.actualizarMediciones().then(
             succes =>{
