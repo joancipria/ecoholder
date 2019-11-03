@@ -20,6 +20,9 @@ import { ServidorFake } from "../../core/services/servidorFake.service";
 // GPS
 import { LocalizadorGPS } from "../../core/services/LocalizadorGPS.service";
 
+//Recogida datos
+import { RecogidaDatos } from '../../core/services/recogidaDatos.service'
+
 // Beacon
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { Beacon } from "./beacon.service";
@@ -38,7 +41,9 @@ export class ReceptorBLE {
         private gps: LocalizadorGPS,
         private ibeacon: IBeacon,
         private beacon: Beacon,
-        private events: Events
+        private events: Events,
+        public datos: RecogidaDatos
+
     ) {
 
     }
@@ -56,10 +61,12 @@ export class ReceptorBLE {
             }
         });
 
-        // "Alarma" temporal, actualizar mediciones y enviar al servidor cada 10 segundos
-        setInterval(() => {
-            this.hayQueActualizarMedicionesYEnviarlasAlServidor();
-        }, 10000);
+        // Al inicializar auctualizamos las mediciones i las enviamos al servidor
+            this.datos.hayQueActualizarMedicionesYEnviarlasAlServidor();
+
+        //Ahora activamos los relojes para ir enviando los datos mientras la aplicacion este encendida
+            this.datos.comprobarMovimientoParaEnviar();
+
     }
 
     public estaBLEactivado() {
@@ -110,20 +117,6 @@ export class ReceptorBLE {
         });
     }
 
-    // Temporal, este método no pertenece a esta clase. Ver diseño
-    public hayQueActualizarMedicionesYEnviarlasAlServidor() {
-        //let measure = this.obtenerSO2();
-        this.actualizarMediciones().then(
-            succes => {
-                if (this.ultimaMedida.value != undefined) {
-                    this.servidor.guardarSo2(this.ultimaMedida);
-                }
-            },
-            error => {
-                console.log("Error al actualizar mediciones")
-            }
-        )
-    }
 
 
     public getUltima(){
