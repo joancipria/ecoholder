@@ -5,8 +5,24 @@
 </ion-header>
 
 <ion-content>
-  <div class="ion-padding">
-    <p>Gases respirados en un día</p>
-    <div style="display: block"><canvas id="yudhatp-chart"></canvas></div>
-  </div>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Pollutants</ion-card-title>
+      <ion-card-subtitle>last 24h</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <div style="display: block"><canvas id="yudhatp-chart"></canvas></div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-icon name="navigate" slot="start"></ion-icon>
+      <ion-label>Work</ion-label>
+      <ion-label color="medium">15min</ion-label>
+      <ion-icon color="success" name="happy"></ion-icon>
+      <ion-button fill="outline" slot="end">Go</ion-button>
+    </ion-item>
+    <img src="https://img.mobiscroll.com/demos/route.png" alt="">
+  </ion-card>
 </ion-content>

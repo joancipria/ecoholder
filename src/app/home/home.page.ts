@@ -14,35 +14,33 @@ export class HomePage implements OnInit {
     this.showChart();
   }
 
-  showChart(){
-    var ctx = (<any>document.getElementById('yudhatp-chart')).getContext('2d');
-    var chart = new Chart(ctx, {
-      type: 'pie', 
-      data: {
-        labels: ["SO2", "CO2", "NOX"],
-        datasets: [{
-          label: "This is chart",
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 163, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 163, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          data: [20, 5, 10],
-          borderWidth:1
-        }]
-      }
-    })
+  showChart() {
+    let ctx = (<any>document.getElementById('yudhatp-chart')).getContext('2d');
+
+    let data = {
+      datasets: [{
+        data: [
+          20,
+          5,
+          10
+        ],
+        backgroundColor: [
+          "#FF6384",
+          "#4BC0C0",
+          "#FFCE56"
+        ]
+      }],
+      labels: [
+        "SO2",
+        "CO2",
+        "NOX"
+      ]
+    };
+
+    let chart = new Chart(ctx, {
+      data: data,
+      type: 'doughnut'
+    });
   }
 
 }
