@@ -16,6 +16,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 
+
 @Injectable()
 export class LocalizadorGPS {
    public lat: any;
@@ -25,8 +26,7 @@ export class LocalizadorGPS {
       private geolocation: Geolocation,
       private androidPermissions: AndroidPermissions,
       private locationAccuracy: LocationAccuracy,
-      public plt: Platform,
-
+      public plt: Platform
    ) {
 
    }
@@ -40,11 +40,41 @@ export class LocalizadorGPS {
          // Si estamos en web, directamente monitorizar posicion
          this.monitorizarPosicion();
       }
-
-
-      
    }
 
+   public meHeMovido(latAnterior, lngAnterior){
+
+      
+      var latActual = this.lat;
+
+      var lngActual = this.lng;
+ 
+
+      var R = 6371e3; // metres
+      var toRadians =  Math.PI/180;
+      var φ1 = latAnterior*toRadians;
+      var φ2 = latActual*toRadians;
+      var Δφ = (latActual-latAnterior)*toRadians;
+      var Δλ = (lngActual-lngAnterior)*toRadians;
+      
+      var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ/2) * Math.sin(Δλ/2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      
+      var d = R * c;
+
+      console.log(d);
+   
+      if(d>20){
+
+            return true;
+
+      }
+
+      return false;
+
+   } 
     
 
    // Verificar si tenemos permisos para el GPS
@@ -107,46 +137,4 @@ export class LocalizadorGPS {
             this.lng = position.coords.longitude;
          });
    }
-
-     //---------------------------------------------------------------------------------------------------
-   //          double, double --> meHeMovido() --> V/F 
-   //          Autor: Vicent Borja Roca
-   //          Descripción: Comprueba si la distancia desde la posición anterior a la posición actual
-   //                       es mayor que 50 mediante la formula de Haversine de la distancia de 
-   //                       circulo máximo https://en.wikipedia.org/wiki/Haversine_formula
-   //----------------------------------------------------------------------------------------------------
-
-   public meHeMovido(latAnterior, lngAnterior){
-
-      
-      var latActual = this.lat;
-      var lngActual = this.lng;
-
-      var R = 6371e3; 
-      var toRadians =  Math.PI/180;
-      var φ1 = latAnterior*toRadians;
-      var φ2 = latActual*toRadians;
-      var Δφ = (latActual-latAnterior)*toRadians;
-      var Δλ = (lngActual-lngAnterior)*toRadians;
-      
-      var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-              Math.cos(φ1) * Math.cos(φ2) *
-              Math.sin(Δλ/2) * Math.sin(Δλ/2);
-      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      
-      var d = R * c;
-
-      console.log(d);
-   
-      if(d>50){
-
-            return true;
-
-      }
-
-      return false;
-
-   } 
-   
 }
-

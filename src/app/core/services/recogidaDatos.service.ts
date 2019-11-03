@@ -45,41 +45,25 @@ export class RecogidaDatos {
         )
     }
 
-   //---------------------------------------------------------------------------------------------------------------------------
-   //                                       comprobarMovimientoParaEnviar() 
-   //          Autor: Vicent Borja Roca
-   //          Descripción: Se inicializan dos temporizadores:
-   //                       -Cada minuto se comprueba si ha habido movimiento llamando a meHeMovido(),
-   //                       si devuelve true se llama a hayQueActualizarMedicionesYEnviarlasAlServidor().
-   //                       -Si han pasado 10 min sin moverse se llamara a hayQueActualizarMedicionesYEnviarlasAlServidor().                 
-   //--------------------------------------------------------------------------------------------------------------------------
+    public comprobarMovimiento(){
 
-    public comprobarMovimientoParaEnviar(){     
-       
-        setInterval(function(){  
-            //si this.latAnterior significa que es la primera medida entonces enviamos
-            if( this.gps.meHeMovido(this.latAnterior,this.lngAnterior) || this.latAnterior == undefined){
+        if( this.gps.meHeMovido(this.latAnterior,this.lngAnterior) || this.latAnterior == undefined){
             
             this.hayQueActualizarMedicionesYEnviarlasAlServidor();
-                
-            //guardamos la posicion para compararla posteriormete
-            this.latAnterior = this.gps.lat;  
-            this.lngAnterior = this.gps.lng;
-            
-        }  
-        }, 60000)
-       
-        setInterval(function(){
 
-            if(this.gps.meHeMovido()==false){
-            this.hayQueActualizarMedicionesYEnviarlasAlServidor();
-            this.latAnterior = this.gps.lat;  
+            this.latAnterior = this.gps.lat;
             this.lngAnterior = this.gps.lng;
-          }
 
-        }, 600000)
+        }
 
     }
 
-  
+
+
+
+
+    public alarmaEstacionamiento(){
+
+        setInterval(function(){  }, 600000);
+    }
 }
