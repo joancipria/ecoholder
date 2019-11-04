@@ -15,6 +15,7 @@ import { Maps } from '../core/services/maps.service';
 export class RoutesPage implements OnInit {
   @ViewChild('map', { static: false }) element;
   @ViewChild('search', { static: false }) elementSearch;
+  showSelectContaminante: boolean = false;
 
 
   constructor(
@@ -44,12 +45,17 @@ export class RoutesPage implements OnInit {
     });
   }
 
-  onChange($event) {
+  onChangeContaminante($event) {
         console.log("el sensor seleccionado es: " + $event.target.value);
+    
       }
 
   calcRoute(destination){
     this.maps.calcularRuta(destination);
+  }
+
+  toggleSelectorContaminante() {
+    this.showSelectContaminante = !this.showSelectContaminante;
   }
 
 }
