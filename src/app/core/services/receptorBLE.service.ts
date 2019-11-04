@@ -147,9 +147,9 @@ export class ReceptorBLE {
 
    public comprobarMovimientoParaEnviar(){     
        
-    setInterval(function(){  
+    setInterval(()=>{  
         //si this.latAnterior significa que es la primera medida entonces enviamos
-        if( this.gps.meHeMovido(this.latAnterior,this.lngAnterior) || this.latAnterior == undefined){
+        if(this.gps.meHeMovido()){
         
         this.hayQueActualizarMedicionesYEnviarlasAlServidor();
             
@@ -158,17 +158,16 @@ export class ReceptorBLE {
         this.gps.lngAnterior = this.gps.lng;
         
     }  
-    }, 60000)
+    }, 15000)
    
-    setInterval(function(){
-
-        if(this.gps.meHeMovido()==false){
+    setInterval(() =>{
+        console.log("Enviamos");
         this.hayQueActualizarMedicionesYEnviarlasAlServidor();
         this.gps.latAnterior = this.gps.lat;  
         this.gps.lngAnterior = this.gps.lng;
-      }
 
-    }, 600000)
+
+    }, 1800000)
 
 }
 

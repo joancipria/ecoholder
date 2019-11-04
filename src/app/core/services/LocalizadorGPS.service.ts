@@ -104,6 +104,7 @@ export class LocalizadorGPS {
       // Cada vez que el usuario se mueva, actualizar posición
       this.geolocation.watchPosition()
          .subscribe(position => {
+            console.log("Posición actual: ", this.lat +","+this.lng);            
             this.lat = position.coords.latitude;
             this.lng = position.coords.longitude;
          });
@@ -118,18 +119,21 @@ export class LocalizadorGPS {
    //                       circulo máximo https://en.wikipedia.org/wiki/Haversine_formula
    //----------------------------------------------------------------------------------------------------
 
-   public meHeMovido(latAnterior, lngAnterior){
+   public meHeMovido(){
 
+      if(this.latAnterior == undefined){
+         return true;
+      }
       
       var latActual = this.lat;
       var lngActual = this.lng;
 
       var R = 6371e3; 
       var toRadians =  Math.PI/180;
-      var φ1 = latAnterior*toRadians;
+      var φ1 = this.latAnterior*toRadians;
       var φ2 = latActual*toRadians;
-      var Δφ = (latActual-latAnterior)*toRadians;
-      var Δλ = (lngActual-lngAnterior)*toRadians;
+      var Δφ = (latActual-this.latAnterior)*toRadians;
+      var Δλ = (lngActual-this.lngAnterior)*toRadians;
       
       var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
               Math.cos(φ1) * Math.cos(φ2) *
