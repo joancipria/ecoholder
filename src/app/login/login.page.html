@@ -7,52 +7,57 @@
 <ion-content text-center>
   <form class="form" [formGroup]="validations_form" (ngSubmit)="login(validations_form.value)">
 
-      <ion-grid>
-          <ion-row>
-            <ion-col size="0" size-sm="3">
-            </ion-col>
-            <ion-col size="12" size-sm="6">
-              <img class="logo" src="assets/img/icon.png" alt="">
-              <ion-item>
-                <ion-label position="floating">Email</ion-label>
-                <ion-input autofocus="true" type="email" formControlName="email"></ion-input>
-              </ion-item>
-              <ion-item lines="none">
-                <ng-container *ngFor="let validation of validation_messages.email">
-                  <ion-text
-                    *ngIf="validations_form.get('email').hasError(validation.type) && (validations_form.get('email').dirty || validations_form.get('email').touched)"
-                    color="danger" class="form-error">
-                    {{ validation.message }}
-                  </ion-text>
-                </ng-container>
-              </ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="0" size-sm="3">
+        </ion-col>
+        <ion-col size="12" size-sm="6">
+          <img class="logo" src="assets/img/icon.png" alt="">
+          <ion-text>
+            <h1>ecoHolder</h1>
+          </ion-text>
+          <ion-item>
+            <br>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input autofocus="true" type="email" formControlName="email"></ion-input>
+          </ion-item>
+          <ion-item lines="none">
+            <ng-container *ngFor="let validation of validation_messages.email">
+              <ion-text
+                *ngIf="validations_form.get('email').hasError(validation.type) && (validations_form.get('email').dirty || validations_form.get('email').touched)"
+                color="danger" class="form-error">
+                {{ validation.message }}
+              </ion-text>
+            </ng-container>
+          </ion-item>
 
-              <ion-item>
-                <ion-label position="floating">Password</ion-label>
-                <ion-input type="password" formControlName="password" class="form-controll" required></ion-input>
-              </ion-item>
-              <ion-item lines="none">
-                <ng-container *ngFor="let validation of validation_messages.password">
-                  <ion-text
-                    *ngIf="validations_form.get('password').hasError(validation.type) && (validations_form.get('password').dirty || validations_form.get('password').touched)"
-                    color="danger" class="form-error">
-                    {{ validation.message }}
-                  </ion-text>
-                </ng-container>
-              </ion-item>
-              <ion-button expand="block" class="submit-btn" type="submit" [disabled]="!validations_form.valid">Log In</ion-button>
-              <br>
-              <ion-button expand="block" (click)="goToRegisterPage()">Register</ion-button>
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" formControlName="password" class="form-controll" required></ion-input>
+          </ion-item>
+          <ion-item lines="none">
+            <ng-container *ngFor="let validation of validation_messages.password">
+              <ion-text
+                *ngIf="validations_form.get('password').hasError(validation.type) && (validations_form.get('password').dirty || validations_form.get('password').touched)"
+                color="danger" class="form-error">
+                {{ validation.message }}
+              </ion-text>
+            </ng-container>
+          </ion-item>
+          <ion-button expand="block" class="submit-btn" type="submit" [disabled]="!validations_form.valid">Log In
+          </ion-button>
+          <br>
+          <ion-button expand="block" (click)="goToRegisterPage()">Register</ion-button>
 
-              <ion-item lines="none">
-                <ng-container>
-                  <ion-text color="danger" class="form-error">
-                      {{errorMessage}}
-                  </ion-text>
-                </ng-container>
-              </ion-item>
-            </ion-col>
-          <ion-col size="0" size-sm="3">
+          <ion-item lines="none">
+            <ng-container>
+              <ion-text color="danger" class="form-error">
+                {{errorMessage}}
+              </ion-text>
+            </ng-container>
+          </ion-item>
+        </ion-col>
+        <ion-col size="0" size-sm="3">
         </ion-col>
       </ion-row>
     </ion-grid>
