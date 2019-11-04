@@ -29,9 +29,17 @@ export class Firebase {
          Peticiones GET 
    -----------------------*/
 
-   // Obtener toda la colección "medidas"
+   // Obtener toda la colección "measures"
    public obtenerMedidas() {
       return this.db.collection('measures').valueChanges();
+   }
+
+   // Obtener toda la colección "medidas"
+   public obtenerMedidasMapaCalor() {
+
+   let data: any;
+   data = this.db.doc('medidas/11-4-2019').collection('measures').valueChanges();
+   return data;
    }
 
    /*---------------------- 

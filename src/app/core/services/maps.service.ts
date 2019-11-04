@@ -96,6 +96,16 @@ export class Maps {
 
    }
 
+   public cambiarRadius(radius: number) {
+      this.mapaCalor.set('radius',  radius);
+
+   }
+
+   public cambiarGradiente(g: any) {
+      this.mapaCalor.set('gradient', g);
+
+   }
+
    private renderizarMapaCalor() {
       // Callback de firebase
       this.firebase.obtenerMedidas()
@@ -123,27 +133,9 @@ export class Maps {
                heatMapData.push(coords);
             }
 
-            var g = [
-               'rgba(0, 255, 255, 0)',
-               'rgba(0, 255, 255, 1)',
-               'rgba(0, 191, 255, 1)',
-               'rgba(0, 127, 255, 1)',
-               'rgba(0, 63, 255, 1)',
-               'rgba(0, 0, 255, 1)',
-               'rgba(0, 0, 223, 1)',
-               'rgba(0, 0, 191, 1)',
-               'rgba(0, 0, 159, 1)',
-               'rgba(0, 0, 127, 1)',
-               'rgba(63, 0, 91, 1)',
-               'rgba(127, 0, 63, 1)',
-               'rgba(191, 0, 31, 1)',
-               'rgba(255, 0, 0, 1)'
-           ];
-
             // Renderizamos mapa calor
             this.mapaCalor = new google.maps.visualization.HeatmapLayer({
-               gradient:  g,
-               radius: 50,
+               radius: 30,
                data: heatMapData
             });
             this.mapaCalor.setMap(this.mapa);
