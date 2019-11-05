@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
+import { ReceptorBLE } from "../core/services/receptorBLE.service";
+import { Platform } from "@ionic/angular";
+
 
 @Component({
   selector: 'app-home',
@@ -8,7 +11,14 @@ import { Chart } from 'chart.js';
 })
 export class HomePage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private ble: ReceptorBLE,
+    public plt: Platform
+  ) { 
+    if (plt.is('android')) {
+      this.ble.inizializar();
+    }
+  }
 
   ngOnInit() {
     this.showChart();

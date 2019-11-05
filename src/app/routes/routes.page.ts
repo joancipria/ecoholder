@@ -29,9 +29,6 @@ export class RoutesPage implements OnInit {
     public maps: Maps,
     public plt: Platform
   ) {
-    if (plt.is('android')) {
-      this.ble.inizializar();
-    }
   }
 
   ngOnInit() {
