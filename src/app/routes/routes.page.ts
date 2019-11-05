@@ -1,6 +1,6 @@
 import { Component, NgZone, ViewChild, OnInit } from "@angular/core";
 import { Router } from '@angular/router';
-import { AlertController, ToastController, NavController, Platform } from "@ionic/angular";
+import { AlertController, ToastController, NavController, Platform, IonSelect } from "@ionic/angular";
 
 // Services
 import { ReceptorBLE } from "../core/services/receptorBLE.service";
@@ -16,7 +16,7 @@ export class RoutesPage implements OnInit {
   @ViewChild('map', { static: false }) element;
   @ViewChild('search', { static: false }) elementSearch;
   showSelectContaminante: boolean = false;
-
+  @ViewChild('select', { static: false }) select: IonSelect;
 
   constructor(
     private router: Router,
@@ -110,7 +110,8 @@ export class RoutesPage implements OnInit {
 // -> f() ->
 // ------------------------------------------------------------------------
   toggleSelectorContaminante() {
-    this.showSelectContaminante = !this.showSelectContaminante;
+    this.select.open();
+    //this.showSelectContaminante = !this.showSelectContaminante;
     // this.maps.toggleMapaCalor();
   }
 
