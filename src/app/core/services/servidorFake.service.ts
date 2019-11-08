@@ -16,7 +16,7 @@ import { HttpParams, HttpClient } from '@angular/common/http';
 @Injectable()
 export class ServidorFake {
    // URL del servidor
-   private serverURL: string = 'http://192.168.43.141:3000/';
+   private serverURL: string = 'https://diaherso.upv.edu.es/';
    private measuresURL: string = 'api/measure';
    private usersURL: string = 'api/users';
 
