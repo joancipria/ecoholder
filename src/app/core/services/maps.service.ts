@@ -53,7 +53,7 @@ export class Maps {
          streetViewControl: false,
       }
 
-      // Mostramos las estaciones de medidas
+      // Mostramos la estación de medida de Gandía en el mapa
       this.mostrarEstacionDeMedida();
 
       // Creamos nueva instancia de DirectionsService y su renderer
@@ -181,7 +181,7 @@ export class Maps {
    private mostrarEstacionDeMedida() {
 
       // Ruta al icono personalizado para las estaciones de medida
-      const urlIcon = 'assets/maps/iconoEstacionMedida.png';
+      const urlIcon = 'assets/maps/IconoEstacionDeMedida.png';
 
       // Obtención de la información de la estación de medida de Gandía
       let estacionGandia = {};
@@ -204,12 +204,12 @@ export class Maps {
             icon: { url: urlIcon, scaledSize: new google.maps.Size(50, 50) },
          });
 
-         const infowindowContent = "<div><header style='width:100%;height:40px;margin: 0 auto;background-color:green;padding: 5px;'><h2 style='  width:100%;margin: 0 auto;color: white;'>ESTACIÓN DE GANDIA</h2></header>" +
+         const infowindowContent = "<div><header style='width:100%;height:40px;margin: 0 auto;background-color:green;padding: 5px;'><h3 style='  width:100%;margin: 0 auto;color: white;'>ESTACIÓN DE GANDIA</h3></header>" +
          "<main style='margin: 10px 0;'><section style='  display:flex; justify-content: center'>" +
-         "<img  width='50%'  style='margin:10px;padding-left:5px;' src=\'http://www.cma.gva.es/cidam/emedio/atmosfera/jsp/img/ES_00005.jpg\' alt=\'estación meteorlogíca Gandía\'>" +
-         "<article><br />Municipio   Gandia <br /> Provincia   VALÈNCIA <br /> Zona   Residencial <br /> Dirección   Parc Alquería Nova" +
-         "<br /> Código   46131002 <br /> Longitud   0º 11 min 25 seg Oeste <br />" +
-         "Latitud   38º 58 min 08 seg Norte <br /> Altitud   22 m <br /> </article></section><section style='  margin-top: 5px;width:90%;margin: 0 auto;'><h3>" +
+         "<img  width='50%'  style='margin:10px;padding-left:5px;' src='assets/img/estacionGandia.jpg'>" +
+         "<article> <br />Dirección   Parc Alquería Nova" +
+         "<br /> Código   46131002 <br /> Longitud   -0.1902778 <br />" +
+         "Latitud   38.9688889, <br /> Altitud   22 m <br /> </article></section><section style='  margin-top: 5px;width:90%;margin: 0 auto;'><h3>" +
          "ÚLTIMAS MEDIDAS<span style='  display:block;font-size: 12px;'> 11:00 AM 14/11/2019 </span></h3><table border=\'1\' style='  border-collapse:collapse;margin:10px 5px;'>" +
          "<tr><th style='width: 60px;height:30px;text-align: center;'>SO2</th><th style='width: 60px;height:30px;text-align: center;'>CO</th><th style='width: 60px;height:30px;text-align: center;'>NO</th><th style='width: 60px;height:30px;text-align: center;'>N02</th><th style='width: 60px;height:30px;text-align: center;'>NOX</th> <th style='width: 60px;height:30px;text-align: center;'>O3</th> </tr><tr><td style='width: 60px;height:30px;text-align: center;'>3</td><td style='width: 60px;height:30px;text-align: center;'>0.1</td><td style='width: 60px;height:30px;text-align: center;'>1</td>" +
          " <td style='width: 60px;height:30px;text-align: center;'>11</td><td style='width: 60px;height:30px;text-align: center;'>13</td><td style='width: 60px;height:30px;text-align: center;'>32</td></tr></table>Fuente de los datos:" +
