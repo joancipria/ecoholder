@@ -96,4 +96,50 @@ export class Firebase {
    public informacionUsuario() {
       return firebase.auth().currentUser;
    }
+
+   // -------------------------------------------
+   // Obtención de la información de la estación de medición en Gandía
+   // -> f() -> {codigo: string, direccion: string, latitud: float; longitud: float [ ...+ info ] }
+   // -------------------------------------------
+   public obtenerEstacionDeMedida() {
+
+      return new Promise<any>((resolve, reject) => {
+
+         let estacionGandia = {};
+         estacionGandia = {
+           codigo : '46131002',
+           Direccion : 'Parc Alquería Nova',
+           ciudad : 'gandia',
+           provincia : 'valencia',
+           latitud :  '38.9688889',
+           longitud : '-0.1902778',
+           estado : true,
+           altutud : '22', // EN METROS
+           longitudGrados : '0º 11\' 25\'\' Oeste',
+           latitudGrados : '38º 58\' 08\'\' Norte',
+           contaminantes : [
+              'Arsénico',
+              'Benzo(a)pireno',
+              'Cadmio',
+              'Dióxido de Azufre',
+              'Dióxido de Nitrógeno',
+              'Monóxido de Carbono',
+              'Monóxido de Nitrógeno',
+              'Níquel',
+              'Oxidos de Nitrógeno totales',
+              'Ozono',
+              'Partículas en Suspensión (< 10 µm)',
+              'Partículas en Suspensión (< 2,5 µm)',
+              'Partículas en suspensión totales',
+              'Plomo'
+           ]
+        };
+         console.log('firebase service', estacionGandia);
+         resolve(estacionGandia);
+      });
+   }
+
+
+
+
 }
