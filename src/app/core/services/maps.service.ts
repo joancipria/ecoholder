@@ -183,9 +183,7 @@ export class Maps {
 
      // Obtenemos las últimas medidas de la estación oficial de Gandía
       this.firebase.obtenerUltimasMedidasEstacionOfical().subscribe((data: any) => {
-
-         // Parsearmos los datos recibidos de Firestore para su correcta visualización
-         this.lastMeasuresStation = this.parsearDatos(data);
+         this.lastMeasuresStation = data[0];
       });
 
       // Ruta al icono personalizado para las estaciones de medida
@@ -215,16 +213,16 @@ export class Maps {
       // Contenido del infowindow
       const infowindowContent = "<div><header style=\'width:100%;height:40px;margin: 0 auto;background-color:green;padding: 5px;\'><h3 style=\'  width:100%;margin: 0 auto;color:white;\'>ESTACIÓN DE GANDIA</h3></header><main style=\'margin: 10px 0;\'><section style=\'  display:flex; justify-content: center\'><img  width=\'30%\'  style=\'margin:10px;padding-left:5px;\' src=\'assets/img/estacionGandia.jpg\'><article> <br />Dirección " 
          + station.address + "<br /> Código   46131002 <br /> Longitud"
-         + station.longitude +" <br />Latitud " 
-         + station.latitude +"<br /> Altitud   "
-         + station.altitude +" m <br /></article></section><section style=\'margin-top: 5px;width:90%;margin: 0 auto;\'><h3>ÚLTIMAS MEDIDAS<span style=\'display:block;font-size: 12px;\'> "
-         + this.lastMeasuresStation.date +"</span></h3><table border=\'1\' style=\'  border-collapse:collapse;margin:10px 5px;\'><tr><th style=\'width: 60px;height:30px;text-align: center;\'>SO2</th><th style=\'width: 60px;height:30px;text-align: center;\'>CO</th><th style=\'width: 60px;height:30px;text-align: center;\'>NO</th><th style=\'width: 60px;height:30px;text-align: center;\'>N02</th><th style=\'width: 60px;height:30px;text-align: center;\'>NOX</th> <th style=\'width: 60px;height:30px;text-align: center;\'>O3</th> </tr><tr><td style=\'width: 60px;height:30px;text-align: center;\'>"
-         + this.lastMeasuresStation.SO2 +"</td><td style=\'width: 60px;height:30px;text-align: center;\'>"
-         + this.lastMeasuresStation.CO +"</td><td style=\'width: 60px;height:30px;text-align: center;\'> " 
+         + station.longitude + " <br />Latitud " 
+         + station.latitude + "<br /> Altitud   "
+         + station.altitude + " m <br /></article></section><section style=\'margin-top: 5px;width:90%;margin: 0 auto;\'><h3>ÚLTIMAS MEDIDAS<span style=\'display:block;font-size: 12px;\'> "
+         + this.lastMeasuresStation.date + "</span></h3><table border=\'1\' style=\'  border-collapse:collapse;margin:10px 5px;\'><tr><th style=\'width: 60px;height:30px;text-align: center;\'>SO2</th><th style=\'width: 60px;height:30px;text-align: center;\'>CO</th><th style=\'width: 60px;height:30px;text-align: center;\'>NO</th><th style=\'width: 60px;height:30px;text-align: center;\'>N02</th><th style=\'width: 60px;height:30px;text-align: center;\'>NOX</th> <th style=\'width: 60px;height:30px;text-align: center;\'>O3</th> </tr><tr><td style=\'width: 60px;height:30px;text-align: center;\'>"
+         + this.lastMeasuresStation.SO2 + "</td><td style=\'width: 60px;height:30px;text-align: center;\'>"
+         + this.lastMeasuresStation.CO + "</td><td style=\'width: 60px;height:30px;text-align: center;\'> " 
          + this.lastMeasuresStation.NO + "</td><td style=\'width: 60px;height:30px;text-align: center;\'>" 
          + this.lastMeasuresStation.NO2 + "</td><td style=\'width: 60px;height:30px;text-align: center;\'>" 
-         + this.lastMeasuresStation.NOX +"</td><td style=\'width: 60px;height:30px;text-align: center;\'>"
-         + this.lastMeasuresStation.O3 +"</td></tr></table>Fuente de los datos:<a href=\'http://www.agroambient.gva.es/es/web/calidad-ambiental/datos-on-line\'> RVVCCA </a></section></main></div>";
+         + this.lastMeasuresStation.NOX + "</td><td style=\'width: 60px;height:30px;text-align: center;\'>"
+         + this.lastMeasuresStation.O3 + "</td></tr></table>Fuente de los datos:<a href=\'http://www.agroambient.gva.es/es/web/calidad-ambiental/datos-on-line\'> RVVCCA </a></section></main></div>";
 
       // Creamos el infowindow
       const infowindow = new google.maps.InfoWindow({
@@ -243,7 +241,7 @@ export class Maps {
    // No se como se puede leer directamete sin que de fallo
    // data: Observable<Item> FirestoreData(?) -> f() -> json
    // ----------------------------------------------------------------
-   private parsearDatos(data) {
+   private parsearDatos(data: any) {
       const rawData = JSON.stringify(data);
       return JSON.parse(rawData);
    }

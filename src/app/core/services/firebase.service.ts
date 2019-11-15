@@ -98,11 +98,12 @@ export class Firebase {
    }
 
    // -------------------------------------------
-   // Obtención de el útlimo grupo de medidas de la estación de Gandía
+   // Obtención de el útlimo (por fecha) grupo de medidas de la estación de Gandía
    // -> f() -> { date: string, S02: number, NO: number, NOX: number, C02: number, 03: number }
    // -------------------------------------------
    public obtenerUltimasMedidasEstacionOfical() {
-      return this.db.doc('stations/46131002/measures/test').valueChanges();
+      const measuresRef = this.db.doc('stations/46131002');
+      return measuresRef.collection('measures', ref => ref.orderBy('date', 'desc').limit(1)).valueChanges();
    }
 
 }
