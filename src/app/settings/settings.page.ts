@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
 import { Firebase } from '../core/services/firebase.service';
 
 @Component({
@@ -15,7 +15,8 @@ export class SettingsPage implements OnInit {
 
   constructor(
     private navCtrl: NavController,
-    private firebase: Firebase
+    private firebase: Firebase,
+    private alertCtrl: AlertController
   ) { }
 
   ngOnInit() {
@@ -66,14 +67,46 @@ export class SettingsPage implements OnInit {
   // uuid: string -> f() ->
   // -------------------------------------------------------------------
   eliminarDispositivo(index: string) {
-    console.log('index', index);
+
     const id = this.devices[index].id;
-    console.log(id);
-    this.devices.splice(index, 1);
-    this.firebase.eliminarDispositivo(this.userUuid, id);
+
+    const alert = this.alertCtrl.create({
+      message: 'Esta acción no se puede deshacer',
+      subHeader: '¿Está seguro que quiere eliminar el dispositivo ' + this.devices[index].alias + '?',
+        buttons: [
+          { text: 'SI', handler: () => this.firebase.eliminarDispositivo(this.userUuid, id) },
+          { text: 'NO', role: 'cancel', handler: () => console.log('Ha pulsado NO') }
+        ]
+      }).then(alert => {
+      alert.present();
+      });
+
+    // Implemenación con mostrarConfirmacion()
+    // const handler =  this.firebase.eliminarDispositivo(this.userUuid, id);
+    // this.mostrarConfirmacion(
+    //   'Esta acción no se puede deshacer',
+    //   '¿Está seguro que quiere eliminar el dispositivo ' + this.devices[index].alias + '?',
+    //   handler);
   }
 
-
+  // -------------------------------------------------------------------
+  // Genera una alerta de confirmación personalizada
+  // texto: string, subtexto: string, handler: function -> f() -> void
+  // Diana Hernández Soler
+  // DE MOMENTO NO FUNCIONA .- Ejecuta el handler de SI antes de mostrar la alerta ?
+  // -------------------------------------------------------------------
+  private mostrarConfirmacion(texto: string, subtexto: string, handlerAction: any) {
+    const aleart = this.alertCtrl.create({
+    message: texto,
+    subHeader: subtexto,
+      buttons: [
+        { text: 'SI', handler: () => handlerAction },
+        { text: 'NO', role: 'cancel', handler: () => console.log('Ha pulsado NO') }
+      ]
+    }).then(alert => {
+    alert.present();
+    });
+  }
 
   // ----------------------------------------------------------------
   // Pequeño hack para poder leer los datos de firebase.
@@ -84,4 +117,5 @@ export class SettingsPage implements OnInit {
     const rawData = JSON.stringify(data);
     return JSON.parse(rawData);
   }
+
 }
