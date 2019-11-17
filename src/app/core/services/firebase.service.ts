@@ -118,4 +118,14 @@ export class Firebase {
       return measuresRef.collection('devices').valueChanges();
    }
 
+   // -----------------------------------------------------
+   // Muestra los dispositivos vinculados con el usuario logueado
+   // uuid: string, id: string -> f() -> void
+   // Diana Hernández Soler
+   // -----------------------------------------------------
+   public eliminarDispositivo(uuid: string, id: string) {
+      const measuresRef = this.db.doc('users/' + uuid);
+      measuresRef.collection('devices').doc(id).delete();
+   }
+
 }

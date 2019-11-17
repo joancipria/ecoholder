@@ -10,6 +10,7 @@ import { Firebase } from '../core/services/firebase.service';
 export class SettingsPage implements OnInit {
 
   userEmail: string;
+  userUuid: string;
   devices: any;
 
   constructor(
@@ -19,13 +20,14 @@ export class SettingsPage implements OnInit {
 
   ngOnInit() {
     if (this.firebase.informacionUsuario()) {
-      this.userEmail = this.firebase.informacionUsuario().email;
+      const user = this.firebase.informacionUsuario();
+      this.userEmail = user.email;
+      this.userUuid = user.uid;
+
+      // Mostramos los dispositivos vinculados
+      this.mostrarDispositivosVinculados(this.userUuid);
     }
-
-    // Mostramos los dispositivos vinculados
-    this.mostrarDispositivosVinculados(this.firebase.informacionUsuario().uid);
   }
-
 
   logout() {
     this.firebase.logout()
@@ -58,6 +60,20 @@ export class SettingsPage implements OnInit {
       this.devices = this.parsearDatos(res);
     });
   }
+
+  // -------------------------------------------------------------------
+  // Mostramos los dispositivos vinculados con el usuario logueado
+  // uuid: string -> f() ->
+  // -------------------------------------------------------------------
+  eliminarDispositivo(index: string) {
+    console.log('index', index);
+    const id = this.devices[index].id;
+    console.log(id);
+    this.devices.splice(index, 1);
+    this.firebase.eliminarDispositivo(this.userUuid, id);
+  }
+
+
 
   // ----------------------------------------------------------------
   // Pequeño hack para poder leer los datos de firebase.

@@ -27,9 +27,9 @@
             <ion-col size="12" size-sm="6">
                 <ion-list>
                     <ion-list-header>Mis EcoHolders</ion-list-header>
-                    <ion-item *ngFor="let device of devices">
+                    <ion-item *ngFor="let device of devices;let i = index">
                         <ion-icon slot="start" name="bluetooth"></ion-icon>
-                        <ion-icon slot="end" name="trash"></ion-icon>
+                        <ion-icon slot="end" name="trash" (click)="eliminarDispositivo(i)"></ion-icon>
                         <ion-label>
                             <h3> {{ device.alias }} </h3>
                             <p> Vinculado el: {{ device.date | date:'d MMM, y' }} </p>
