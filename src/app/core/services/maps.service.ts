@@ -178,6 +178,7 @@ export class Maps {
    // ----------------------------------------------------------------
    // Colocar marker con la estación de medida de Gandía
    // -> f() ->
+   // Diana Hernández Soler
    // ----------------------------------------------------------------
    private mostrarEstacionDeMedida() {
 

@@ -10,6 +10,7 @@ import { Firebase } from '../core/services/firebase.service';
 export class SettingsPage implements OnInit {
 
   userEmail: string;
+  devices: any;
 
   constructor(
     private navCtrl: NavController,
@@ -20,6 +21,9 @@ export class SettingsPage implements OnInit {
     if (this.firebase.informacionUsuario()) {
       this.userEmail = this.firebase.informacionUsuario().email;
     }
+
+    // Mostramos los dispositivos vinculados
+    this.mostrarDispositivosVinculados(this.firebase.informacionUsuario().uid);
   }
 
 
@@ -43,5 +47,25 @@ export class SettingsPage implements OnInit {
     var size = 160;
 
     return 'http://www.gravatar.com/avatar/' + md5Hash(email) + '.jpg?s=' + size;
+  }
+
+  // -------------------------------------------------------------------
+  // Mostramos los dispositivos vinculados con el usuario logueado
+  // uuid: string -> f() ->
+  // -------------------------------------------------------------------
+  mostrarDispositivosVinculados(uuid) {
+    this.firebase.obtenerDevices(uuid).subscribe(res => {
+      this.devices = this.parsearDatos(res);
+    });
+  }
+
+  // ----------------------------------------------------------------
+  // Pequeño hack para poder leer los datos de firebase.
+  // No se como se puede leer directamete sin que de fallo
+  // data: Observable<Item> FirestoreData(?) -> f() -> json
+  // ----------------------------------------------------------------
+  private parsearDatos(data: any) {
+    const rawData = JSON.stringify(data);
+    return JSON.parse(rawData);
   }
 }

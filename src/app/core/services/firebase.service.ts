@@ -92,18 +92,30 @@ export class Firebase {
    // -------------------------------------------
    // Obtención de la información de la estación de medición en Gandía
    // -> f() -> {codigo: string, direccion: string, latitud: float; longitud: float [ ...+ info ] }
+   // Diana Hernández Soler
    // -------------------------------------------
    public obtenerEstacionDeMedida() {
       return this.db.collection('stations').doc('46131002').valueChanges();
    }
 
    // -------------------------------------------
-   // Obtención de el útlimo (por fecha) grupo de medidas de la estación de Gandía
+   // Obtención del útlimo (por fecha) grupo de medidas de la estación de Gandía
    // -> f() -> { date: string, S02: number, NO: number, NOX: number, C02: number, 03: number }
+   // Diana Hernández Soler
    // -------------------------------------------
    public obtenerUltimasMedidasEstacionOfical() {
       const measuresRef = this.db.doc('stations/46131002');
       return measuresRef.collection('measures', ref => ref.orderBy('date', 'desc').limit(1)).valueChanges();
+   }
+
+   // -----------------------------------------------------
+   // Muestra los dispositivos vinculados con el usuario logueado
+   // uuid: string -> f() -> dispostivo: { id: string, alias: string, date: number }
+   // Diana Hernández Soler
+   // -----------------------------------------------------
+   public obtenerDevices(uuid: string) {
+      const measuresRef = this.db.doc('users/' + uuid);
+      return measuresRef.collection('devices').valueChanges();
    }
 
 }
