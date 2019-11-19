@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
 import { Firebase } from '../core/services/firebase.service';
 
 @Component({
@@ -10,18 +10,25 @@ import { Firebase } from '../core/services/firebase.service';
 export class SettingsPage implements OnInit {
 
   userEmail: string;
+  userUuid: string;
+  devices: any;
 
   constructor(
     private navCtrl: NavController,
-    private firebase: Firebase
+    private firebase: Firebase,
+    private alertCtrl: AlertController
   ) { }
 
   ngOnInit() {
     if (this.firebase.informacionUsuario()) {
-      this.userEmail = this.firebase.informacionUsuario().email;
+      const user = this.firebase.informacionUsuario();
+      this.userEmail = user.email;
+      this.userUuid = user.uid;
+
+      // Mostramos los dispositivos vinculados
+      this.mostrarDispositivosVinculados(this.userUuid);
     }
   }
-
 
   logout() {
     this.firebase.logout()
@@ -44,4 +51,71 @@ export class SettingsPage implements OnInit {
 
     return 'http://www.gravatar.com/avatar/' + md5Hash(email) + '.jpg?s=' + size;
   }
+
+  // -------------------------------------------------------------------
+  // Mostramos los dispositivos vinculados con el usuario logueado
+  // uuid: string -> f() ->
+  // -------------------------------------------------------------------
+  mostrarDispositivosVinculados(uuid) {
+    this.firebase.obtenerDevices(uuid).subscribe(res => {
+      this.devices = this.parsearDatos(res);
+    });
+  }
+
+  // -------------------------------------------------------------------
+  // Mostramos los dispositivos vinculados con el usuario logueado
+  // uuid: string -> f() ->
+  // -------------------------------------------------------------------
+  eliminarDispositivo(index: string) {
+
+    const id = this.devices[index].id;
+
+    const alert = this.alertCtrl.create({
+      message: 'Esta acción no se puede deshacer',
+      subHeader: '¿Está seguro que quiere eliminar el dispositivo ' + this.devices[index].alias + '?',
+        buttons: [
+          { text: 'SI', handler: () => this.firebase.eliminarDispositivo(this.userUuid, id) },
+          { text: 'NO', role: 'cancel', handler: () => console.log('Ha pulsado NO') }
+        ]
+      }).then(alert => {
+      alert.present();
+      });
+
+    // Implemenación con mostrarConfirmacion()
+    // const handler =  this.firebase.eliminarDispositivo(this.userUuid, id);
+    // this.mostrarConfirmacion(
+    //   'Esta acción no se puede deshacer',
+    //   '¿Está seguro que quiere eliminar el dispositivo ' + this.devices[index].alias + '?',
+    //   handler);
+  }
+
+  // -------------------------------------------------------------------
+  // Genera una alerta de confirmación personalizada
+  // texto: string, subtexto: string, handler: function -> f() -> void
+  // Diana Hernández Soler
+  // DE MOMENTO NO FUNCIONA .- Ejecuta el handler de SI antes de mostrar la alerta ?
+  // -------------------------------------------------------------------
+  private mostrarConfirmacion(texto: string, subtexto: string, handlerAction: any) {
+    const aleart = this.alertCtrl.create({
+    message: texto,
+    subHeader: subtexto,
+      buttons: [
+        { text: 'SI', handler: () => handlerAction },
+        { text: 'NO', role: 'cancel', handler: () => console.log('Ha pulsado NO') }
+      ]
+    }).then(alert => {
+    alert.present();
+    });
+  }
+
+  // ----------------------------------------------------------------
+  // Pequeño hack para poder leer los datos de firebase.
+  // No se como se puede leer directamete sin que de fallo
+  // data: Observable<Item> FirestoreData(?) -> f() -> json
+  // ----------------------------------------------------------------
+  private parsearDatos(data: any) {
+    const rawData = JSON.stringify(data);
+    return JSON.parse(rawData);
+  }
+
 }
