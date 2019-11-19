@@ -81,9 +81,6 @@ export class Maps {
       // Renderizar mapa calor
       this.renderizarMapaCalor();
 
-      // Mostrar cuadaricula
-      this.generarCuadricula();
-
       // Configuramos googleAutocomplete
       const defaultBounds = new google.maps.LatLngBounds(posicionActual);
 

@@ -17,6 +17,7 @@ export class RoutesPage implements OnInit {
   @ViewChild('search', { static: false }) elementSearch;
   showSelectContaminante: boolean = false;
   @ViewChild('select', { static: false }) select: IonSelect;
+  private cuadricula = false;
 
   constructor(
     private router: Router,
@@ -108,8 +109,21 @@ export class RoutesPage implements OnInit {
 // ------------------------------------------------------------------------
   toggleSelectorContaminante() {
     this.select.open();
-    //this.showSelectContaminante = !this.showSelectContaminante;
+    // this.showSelectContaminante = !this.showSelectContaminante;
     // this.maps.toggleMapaCalor();
+  }
+
+  // -----------------------------------------------------------
+  // ocultamos mapa de calor y mostramos caudricula o viceversa
+  // -> f() ->
+  // Diana Hernández Soler
+  // -----------------------------------------------------------
+  public mostrarGrid(): void {
+    this.maps.toggleMapaCalor();
+    if (!this.cuadricula) {
+      this.maps.generarCuadricula();
+      this.cuadricula = true;
+    }
   }
 
 }
