@@ -10,6 +10,8 @@ import { Injectable } from '@angular/core';
 import { Platform, Events } from '@ionic/angular';
 import { IBeacon } from "@ionic-native/ibeacon/ngx";
 import { Device } from '@ionic-native/device/ngx';
+import { BLE } from '@ionic-native/ble/ngx';
+import { Component, NgZone } from '@angular/core';
 
 @Injectable()
 export class Beacon {
