@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-
+//import { NgZone } from '@angular/core';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -14,6 +14,7 @@ import { ReceptorBLE } from "./core/services/receptorBLE.service";
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { Beacon } from "./core/services/beacon.service";
 import { Device } from '@ionic-native/device/ngx';
+import { BLE } from '@ionic-native/ble/ngx';
 
 // Android permissions
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
@@ -71,6 +72,7 @@ firebase.initializeApp(environment.firebaseConfig);
     Geolocation,
     LocalizadorGPS,
     ReceptorBLE,
+    BLE,
     ServidorFake,
     HttpClientModule,
     Firebase,

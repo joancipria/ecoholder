@@ -101,7 +101,7 @@ export class Maps {
    }
 
    public cambiarRadius(radius: number) {
-      this.mapaCalor.set('radius',  radius);
+      this.mapaCalor.set('radius', radius);
 
    }
 
@@ -128,11 +128,13 @@ export class Maps {
 
             // Recorremos medidas
             for (let i = 0; i < measures.length; i++) {
-
-               const coords = new google.maps.LatLng(
-                  measures[i].latitude,
-                  measures[i].longitude
-               );
+               const coords = {
+                  location: new google.maps.LatLng(
+                     measures[i].latitude,
+                     measures[i].longitude
+                  ),
+                  weight: measures[i].value
+               }
                // Rellenamos array heatmap con las medidas
                heatMapData.push(coords);
             }
@@ -182,7 +184,7 @@ export class Maps {
    // ----------------------------------------------------------------
    private mostrarEstacionDeMedida() {
 
-     // Obtenemos las últimas medidas de la estación oficial de Gandía
+      // Obtenemos las últimas medidas de la estación oficial de Gandía
       this.firebase.obtenerUltimasMedidasEstacionOfical().subscribe((data: any) => {
          this.lastMeasuresStation = data[0];
       });
@@ -193,45 +195,45 @@ export class Maps {
       // Obtención de la información de la estación de medida de Gandía
       this.firebase.obtenerEstacionDeMedida().subscribe((res: any) => {
 
-      // Parsearmos los datos recibidos de Firestore para su correcta visualización
-      const station = this.parsearDatos(res);
-      console.log('map service', station);
+         // Parsearmos los datos recibidos de Firestore para su correcta visualización
+         const station = this.parsearDatos(res);
+         console.log('map service', station);
 
-      // Creación del objeto LatLng de Google Maps con las coordenadas de la estación
-      const LocalizacionEstacion = new google.maps.LatLng(
-         station.latitude,
-         station.longitude
-      );
+         // Creación del objeto LatLng de Google Maps con las coordenadas de la estación
+         const LocalizacionEstacion = new google.maps.LatLng(
+            station.latitude,
+            station.longitude
+         );
 
-      // Creación del Marker y posicionamiento sobre el mapa
-      const marker = new google.maps.Marker({
-               position: LocalizacionEstacion,
-               map: this.mapa,
-               title: 'Estación medida Gandía',
-               icon: { url: urlIcon, scaledSize: new google.maps.Size(50, 50) },
-            });
+         // Creación del Marker y posicionamiento sobre el mapa
+         const marker = new google.maps.Marker({
+            position: LocalizacionEstacion,
+            map: this.mapa,
+            title: 'Estación medida Gandía',
+            icon: { url: urlIcon, scaledSize: new google.maps.Size(50, 50) },
+         });
 
-      // Contenido del infowindow
-      const infowindowContent = "<div><header style=\'width:100%;height:40px;margin: 0 auto;background-color:green;padding: 5px;\'><h3 style=\'  width:100%;margin: 0 auto;color:white;\'>ESTACIÓN DE GANDIA</h3></header><main style=\'margin: 10px 0;\'><section style=\'  display:flex; justify-content: center\'><img  width=\'30%\'  style=\'margin:10px;padding-left:5px;\' src=\'assets/img/estacionGandia.jpg\'><article> <br />Dirección " 
-         + station.address + "<br /> Código   46131002 <br /> Longitud"
-         + station.longitude + " <br />Latitud " 
-         + station.latitude + "<br /> Altitud   "
-         + station.altitude + " m <br /></article></section><section style=\'margin-top: 5px;width:90%;margin: 0 auto;\'><h3>ÚLTIMAS MEDIDAS<span style=\'display:block;font-size: 12px;\'> "
-         + this.lastMeasuresStation.date + "</span></h3><table border=\'1\' style=\'  border-collapse:collapse;margin:10px 5px;\'><tr><th style=\'width: 60px;height:30px;text-align: center;\'>SO2</th><th style=\'width: 60px;height:30px;text-align: center;\'>CO</th><th style=\'width: 60px;height:30px;text-align: center;\'>NO</th><th style=\'width: 60px;height:30px;text-align: center;\'>N02</th><th style=\'width: 60px;height:30px;text-align: center;\'>NOX</th> <th style=\'width: 60px;height:30px;text-align: center;\'>O3</th> </tr><tr><td style=\'width: 60px;height:30px;text-align: center;\'>"
-         + this.lastMeasuresStation.SO2 + "</td><td style=\'width: 60px;height:30px;text-align: center;\'>"
-         + this.lastMeasuresStation.CO + "</td><td style=\'width: 60px;height:30px;text-align: center;\'> " 
-         + this.lastMeasuresStation.NO + "</td><td style=\'width: 60px;height:30px;text-align: center;\'>" 
-         + this.lastMeasuresStation.NO2 + "</td><td style=\'width: 60px;height:30px;text-align: center;\'>" 
-         + this.lastMeasuresStation.NOX + "</td><td style=\'width: 60px;height:30px;text-align: center;\'>"
-         + this.lastMeasuresStation.O3 + "</td></tr></table>Fuente de los datos:<a href=\'http://www.agroambient.gva.es/es/web/calidad-ambiental/datos-on-line\'> RVVCCA </a></section></main></div>";
+         // Contenido del infowindow
+         const infowindowContent = "<div><header style=\'width:100%;height:40px;margin: 0 auto;background-color:green;padding: 5px;\'><h3 style=\'  width:100%;margin: 0 auto;color:white;\'>ESTACIÓN DE GANDIA</h3></header><main style=\'margin: 10px 0;\'><section style=\'  display:flex; justify-content: center\'><img  width=\'30%\'  style=\'margin:10px;padding-left:5px;\' src=\'assets/img/estacionGandia.jpg\'><article> <br />Dirección "
+            + station.address + "<br /> Código   46131002 <br /> Longitud"
+            + station.longitude + " <br />Latitud "
+            + station.latitude + "<br /> Altitud   "
+            + station.altitude + " m <br /></article></section><section style=\'margin-top: 5px;width:90%;margin: 0 auto;\'><h3>ÚLTIMAS MEDIDAS<span style=\'display:block;font-size: 12px;\'> "
+            + this.lastMeasuresStation.date + "</span></h3><table border=\'1\' style=\'  border-collapse:collapse;margin:10px 5px;\'><tr><th style=\'width: 60px;height:30px;text-align: center;\'>SO2</th><th style=\'width: 60px;height:30px;text-align: center;\'>CO</th><th style=\'width: 60px;height:30px;text-align: center;\'>NO</th><th style=\'width: 60px;height:30px;text-align: center;\'>N02</th><th style=\'width: 60px;height:30px;text-align: center;\'>NOX</th> <th style=\'width: 60px;height:30px;text-align: center;\'>O3</th> </tr><tr><td style=\'width: 60px;height:30px;text-align: center;\'>"
+            + this.lastMeasuresStation.SO2 + "</td><td style=\'width: 60px;height:30px;text-align: center;\'>"
+            + this.lastMeasuresStation.CO + "</td><td style=\'width: 60px;height:30px;text-align: center;\'> "
+            + this.lastMeasuresStation.NO + "</td><td style=\'width: 60px;height:30px;text-align: center;\'>"
+            + this.lastMeasuresStation.NO2 + "</td><td style=\'width: 60px;height:30px;text-align: center;\'>"
+            + this.lastMeasuresStation.NOX + "</td><td style=\'width: 60px;height:30px;text-align: center;\'>"
+            + this.lastMeasuresStation.O3 + "</td></tr></table>Fuente de los datos:<a href=\'http://www.agroambient.gva.es/es/web/calidad-ambiental/datos-on-line\'> RVVCCA </a></section></main></div>";
 
-      // Creamos el infowindow
-      const infowindow = new google.maps.InfoWindow({
+         // Creamos el infowindow
+         const infowindow = new google.maps.InfoWindow({
             content: infowindowContent
          });
 
-     // Añadimos un esuchador para que al clickar sobre el icono se habra el infowindow
-      marker.addListener('click', () => {
+         // Añadimos un esuchador para que al clickar sobre el icono se habra el infowindow
+         marker.addListener('click', () => {
             infowindow.open(this.mapa, marker);
          });
       });

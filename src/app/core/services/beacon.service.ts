@@ -10,16 +10,21 @@ import { Injectable } from '@angular/core';
 import { Platform, Events } from '@ionic/angular';
 import { IBeacon } from "@ionic-native/ibeacon/ngx";
 import { Device } from '@ionic-native/device/ngx';
+import { BLE } from '@ionic-native/ble/ngx';
+import { NgZone } from '@angular/core';
+
+
 
 @Injectable()
 export class Beacon {
 
     delegate: any;
     region: any;
+    newDevices: any[] = [];
     identifier: string = "Beacon-Equipo1";
     uuid: string = "45505347-2D47-5449-2D45-5155492D3031";
 
-    constructor(public platform: Platform, public events: Events, public ibeacon: IBeacon, public device: Device) {
+    constructor(public platform: Platform, public events: Events, public ibeacon: IBeacon, public device: Device,public ble:BLE, public ngZone: NgZone ) {
     }
 
     public inicializar(): any {
@@ -67,4 +72,23 @@ export class Beacon {
         // Devolvemos la promesa
         return promise;
     }
+
+    escanearDispositivos(){
+        this.ble.scan([],15).subscribe(
+    device => this.onDispositvoEncontrado(device)
+    );
+
+    return this.newDevices;
+    }  
+
+onDispositvoEncontrado(device){
+console.log('Discovered' + JSON.stringify(device,null,2));
+
+this.ngZone.run(()=>{
+this.newDevices.push(device);
+})
+}
+
+
+ 
 }
