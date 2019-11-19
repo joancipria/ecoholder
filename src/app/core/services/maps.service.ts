@@ -28,6 +28,12 @@ export class Maps {
    public googleAutocomplete: any;
    public lastMeasuresStation: any;
 
+   // Variables para la cuadrícula
+   public rectangle: any;
+   public rectangleLng = [];
+   public marker1: any;
+   public marker2: any;
+
 
    constructor(
       private gps: LocalizadorGPS,
@@ -152,7 +158,7 @@ export class Maps {
 
    // Mostrar/ocultar mapa calor
    public toggleMapaCalor() {
-      this.mapaCalor.setMap(this.mapaCalor.getMap() ? null : this.mapa);
+      return this.toggle(this.mapaCalor);
    }
 
    // Calculamos ruta desde ubicación actual hasta destino
@@ -254,14 +260,14 @@ export class Maps {
          console.log('parse', info);
 
          // Creamos los dos marcadores del area a cuadricular
-         const marker1 = new google.maps.Marker({
+         this.marker1 = new google.maps.Marker({
             position: new google.maps.LatLng(info.PointA.split(',')[0], info.PointA.split(',')[1]),
             map: this.mapa,
             draggable: true,
             title: 'Esquina inferior izquierda'
          });
 
-         const marker2 = new google.maps.Marker({
+         this.marker2 = new google.maps.Marker({
             position: new google.maps.LatLng(info.PointB.split(',')[0], info.PointB.split(',')[1]),
             map: this.mapa,
             draggable: true,
@@ -269,7 +275,7 @@ export class Maps {
          });
 
          // Mostramos en el mapa el polígono a cudricular
-         let rectangle = new google.maps.Rectangle({
+         this.rectangle = new google.maps.Rectangle({
             strokeColor: '#FF0000',
             strokeOpacity: 0.8,
             strokeWeight: 2,
@@ -277,68 +283,61 @@ export class Maps {
             fillOpacity: 0.35,
             map: this.mapa,
             bounds: new google.maps.LatLngBounds(
-               marker1.getPosition(),
-               marker2.getPosition())
+               this.marker1.getPosition(),
+               this.marker2.getPosition())
           });
 
-         let rectangleLat = [];
-         let rectangleLng = [];
+         this.rectangleLng = [];
 
          // Creamos y mostramos el grid
-         this.obtenerCasillas(marker1, marker2, rectangleLng, info.rows, info.columns);
+         this.obtenerCasillas(info.rows, info.columns);
 
-         let leftSideDist = Math.round((marker2.getPosition().lng() - marker1.getPosition().lng()) * 10000) / 100;
-         let belowSideDist =  Math.round((marker2.getPosition().lat() - marker1.getPosition().lat()) * 10000) / 100;
+         let leftSideDist = Math.round((this.marker2.getPosition().lng() - this.marker1.getPosition().lng()) * 10000) / 100;
+         let belowSideDist =  Math.round((this.marker2.getPosition().lat() - this.marker1.getPosition().lat()) * 10000) / 100;
 
-         google.maps.event.addListener(marker1, 'dragend', () => {
-            rectangle.setBounds(new google.maps.LatLngBounds(marker1.getPosition(), marker2.getPosition()));
-            leftSideDist = Math.round((marker2.getPosition().lng() - marker1.getPosition().lng()) * 10000) / 100;
-            this.obtenerCasillas(marker1, marker2, rectangleLng, info.rows, info.columns);
+         google.maps.event.addListener(this.marker1, 'dragend', () => {
+            this.rectangle.setBounds(new google.maps.LatLngBounds(this.marker1.getPosition(), this.marker2.getPosition()));
+            leftSideDist = Math.round((this.marker2.getPosition().lng() - this.marker1.getPosition().lng()) * 10000) / 100;
+            this.obtenerCasillas(info.rows, info.columns);
          });
 
-         google.maps.event.addListener(marker2, 'dragend', () => {
-            rectangle.setBounds(new google.maps.LatLngBounds(marker1.getPosition(), marker2.getPosition()));
-            belowSideDist = Math.round((marker2.getPosition().lat() - marker1.getPosition().lat()) * 10000) / 100;
-            this.obtenerCasillas(marker1, marker2, rectangleLng, info.rows, info.columns);
+         google.maps.event.addListener(this.marker2, 'dragend', () => {
+            this.rectangle.setBounds(new google.maps.LatLngBounds(this.marker1.getPosition(), this.marker2.getPosition()));
+            belowSideDist = Math.round((this.marker2.getPosition().lat() - this.marker1.getPosition().lat()) * 10000) / 100;
+            this.obtenerCasillas(info.rows, info.columns);
          });
       });
    }
 
 
-   public obtenerCasillas(marker1: any, marker2: any, rectangleLng: any, filas: number, columnas: number) {
-
-      // Aquí guardaremos las coordenadas de cada celda
-      let coordsCuadricula = [];
-
+   public obtenerCasillas(filas: number, columnas: number) {
       // tslint:disable-next-line: forin
-      for (let x in rectangleLng) {
-         for (let y in rectangleLng[x]) {
-            if (rectangleLng[x][y].setMap) {
-               rectangleLng[x][y].setMap(null)
-               rectangleLng[x][y] = null;
+      for (let x in this.rectangleLng) {
+         for (let y in this.rectangleLng[x]) {
+            if (this.rectangleLng[x][y].setMap) {
+               this.rectangleLng[x][y].setMap(null)
+               this.rectangleLng[x][y] = null;
             }
          }
       }
-      const leftSideDist = marker2.getPosition().lng() - marker1.getPosition().lng();
-      const belowSideDist = marker2.getPosition().lat() - marker1.getPosition().lat();
+      const leftSideDist = this.marker2.getPosition().lng() - this.marker1.getPosition().lng();
+      const belowSideDist = this.marker2.getPosition().lat() - this.marker1.getPosition().lat();
  
       const dividerLat = columnas;
       const dividerLng = filas;
       const excLat = belowSideDist / dividerLat;
       const excLng = leftSideDist / dividerLng;
  
-      const m1Lat = marker1.getPosition().lat();
-      const m1Lng = marker1.getPosition().lng();
-      const m2Lat = marker2.getPosition().lat();
-      const m2Lng = marker2.getPosition().lng();
+      const m1Lat = this.marker1.getPosition().lat();
+      const m1Lng = this.marker1.getPosition().lng();
 
       for (let i = 0; i < dividerLat; i++) {
-     if (!rectangleLng[i]) { rectangleLng[i] = []; }
+     if (!this.rectangleLng[i]) { this.rectangleLng[i] = []; }
      for (let j = 0; j < dividerLng; j++) {
-       if (!rectangleLng[i][j]) { rectangleLng[i][j] = {}; }
+       if (!this.rectangleLng[i][j]) { this.rectangleLng[i][j] = {}; }
  
  
-       rectangleLng[i][j] = new google.maps.Rectangle({
+       this.rectangleLng[i][j] = new google.maps.Rectangle({
          strokeColor: '#FFFFFF',
          strokeOpacity: 0.8,
          strokeWeight: 2,
@@ -349,12 +348,31 @@ export class Maps {
            new google.maps.LatLng(m1Lat + (excLat * i), m1Lng + (excLng * j)),
            new google.maps.LatLng(m1Lat + (excLat * (i + 1)), m1Lng + (excLng * (j + 1))))
        });
-
-       coordsCuadricula.push({xy: i + ',' + j, posicion: rectangleLng[i][j].getBounds()});
      } // for j Lng
    } // for i Lat
-      console.log(coordsCuadricula);
 }
+
+   public toggleCuadricula() {
+      this.toggle(this.rectangle);
+      this.toggle(this.marker1);
+      this.toggle(this.marker2);
+
+      for (let i = 0; i < 5; i++) {
+         for (let j = 0; j < 5; j++) {
+            this.toggle(this.rectangleLng[i][j]);
+         }
+      }
+   }
+
+   // ---------------------------------------------------------------
+   // Función genérica para mostrar/ocultar elementos del mapa
+   // elemento -> f() -> void
+   // Diana Hernández Soler
+   // ---------------------------------------------------------------
+   private toggle(elemento: any) {
+      elemento.setMap(elemento.getMap() ? null : this.mapa);
+   }
+
 
    // ----------------------------------------------------------------
    // Pequeño hack para poder leer los datos de firebase.

@@ -114,7 +114,8 @@ export class RoutesPage implements OnInit {
   }
 
   // -----------------------------------------------------------
-  // ocultamos mapa de calor y mostramos caudricula o viceversa
+  // this.cuadricula inicializado a false
+  // Mostrar/Ocultar cuadricula/mapa de calor y viceversa
   // -> f() ->
   // Diana Hernández Soler
   // -----------------------------------------------------------
@@ -123,7 +124,8 @@ export class RoutesPage implements OnInit {
     if (!this.cuadricula) {
       this.maps.generarCuadricula();
       this.cuadricula = true;
+      return;
     }
+    this.maps.toggleCuadricula();
   }
-
 }
