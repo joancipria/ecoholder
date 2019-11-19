@@ -6,7 +6,6 @@
 </ion-header>
 
 <ion-content>
-<<<<<<< HEAD
   <ion-grid>
     <ion-row>
       <ion-col size="3">
@@ -65,43 +64,6 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-=======
-    <ion-grid>
-        <ion-row>
-            <ion-col size="3">
-            </ion-col>
-            <ion-col size="6" class="ion-text-center">
-                <ion-avatar>
-                    <img [src]="obtenerImagenGravatar()">
-                </ion-avatar>
-                <ion-label>{{userEmail}}</ion-label>
-            </ion-col>
-            <ion-col size="3">
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-    <ion-grid>
-        <ion-row>
-            <ion-col size="0" size-sm="3">
-            </ion-col>
-            <ion-col size="12" size-sm="6">
-                <ion-list>
-                    <ion-list-header>Mis EcoHolders</ion-list-header>
-                    <ion-item *ngFor="let device of devices;let i = index">
-                        <ion-icon slot="start" name="bluetooth"></ion-icon>
-                        <ion-icon slot="end" name="trash" (click)="eliminarDispositivo(i)"></ion-icon>
-                        <ion-label>
-                            <h3> {{ device.alias }} </h3>
-                            <p> Vinculado el: {{ device.date | date:'d MMM, y' }} </p>
-                        </ion-label>
-                    </ion-item>
-                </ion-list>
-            </ion-col>
-            <ion-col size="0" size-sm="3">
-            </ion-col>
-        </ion-row>
-    </ion-grid>
->>>>>>> d54913863d7a67b302eee6b42dc184d98efc5eda
 
     <ion-grid>
         <ion-row>
