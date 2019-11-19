@@ -81,6 +81,9 @@ export class Maps {
       // Renderizar mapa calor
       this.renderizarMapaCalor();
 
+      // Mostrar cuadaricula
+      this.generarCuadricula();
+
       // Configuramos googleAutocomplete
       const defaultBounds = new google.maps.LatLngBounds(posicionActual);
 
@@ -116,7 +119,7 @@ export class Maps {
          .subscribe(data => {
 
             // Datos de firebase
-            console.log('Data from firebase', data);
+            // console.log('Data from firebase', data);
 
             // Pequeño hack para poder leer los datos de firebase.
             // No se como se puede leer directamete sin que de fallo
@@ -197,7 +200,6 @@ export class Maps {
 
          // Parsearmos los datos recibidos de Firestore para su correcta visualización
          const station = this.parsearDatos(res);
-         console.log('map service', station);
 
          // Creación del objeto LatLng de Google Maps con las coordenadas de la estación
          const LocalizacionEstacion = new google.maps.LatLng(
@@ -238,6 +240,124 @@ export class Maps {
          });
       });
    }
+
+   // ----------------------------------------------------------------
+   // Generar cuadricula mediante rectángulos de Google Maps
+   // -> f() ->
+   // Diana Hernández Soler a partir de:
+   // https://stackoverflow.com/questions/25908973/how-do-i-create-a-grid-in-google-maps-api-v3
+   // ----------------------------------------------------------------
+   public generarCuadricula() {
+      // Obtenemos la información de la cuadricula guardada en la BBDD
+      this.firebase.obtenerInfoCuadricula().subscribe((res: any) => {
+
+         // Parseramos los datos de Firestore
+         const info = this.parsearDatos(res);
+         console.log('raw', res);
+         console.log('parse', info);
+
+         // Creamos los dos marcadores del area a cuadricular
+         const marker1 = new google.maps.Marker({
+            position: new google.maps.LatLng(info.PointA.split(',')[0], info.PointA.split(',')[1]),
+            map: this.mapa,
+            draggable: true,
+            title: 'Esquina inferior izquierda'
+         });
+
+         const marker2 = new google.maps.Marker({
+            position: new google.maps.LatLng(info.PointB.split(',')[0], info.PointB.split(',')[1]),
+            map: this.mapa,
+            draggable: true,
+            title: 'Esquina superior derecha'
+         });
+
+         // Mostramos en el mapa el polígono a cudricular
+         let rectangle = new google.maps.Rectangle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            map: this.mapa,
+            bounds: new google.maps.LatLngBounds(
+               marker1.getPosition(),
+               marker2.getPosition())
+          });
+
+         let rectangleLat = [];
+         let rectangleLng = [];
+
+         // Creamos y mostramos el grid
+         this.obtenerCasillas(marker1, marker2, rectangleLng, info.rows, info.columns);
+
+         let leftSideDist = Math.round((marker2.getPosition().lng() - marker1.getPosition().lng()) * 10000) / 100;
+         let belowSideDist =  Math.round((marker2.getPosition().lat() - marker1.getPosition().lat()) * 10000) / 100;
+
+         google.maps.event.addListener(marker1, 'dragend', () => {
+            rectangle.setBounds(new google.maps.LatLngBounds(marker1.getPosition(), marker2.getPosition()));
+            leftSideDist = Math.round((marker2.getPosition().lng() - marker1.getPosition().lng()) * 10000) / 100;
+            this.obtenerCasillas(marker1, marker2, rectangleLng, info.rows, info.columns);
+         });
+
+         google.maps.event.addListener(marker2, 'dragend', () => {
+            rectangle.setBounds(new google.maps.LatLngBounds(marker1.getPosition(), marker2.getPosition()));
+            belowSideDist = Math.round((marker2.getPosition().lat() - marker1.getPosition().lat()) * 10000) / 100;
+            this.obtenerCasillas(marker1, marker2, rectangleLng, info.rows, info.columns);
+         });
+      });
+   }
+
+
+   public obtenerCasillas(marker1: any, marker2: any, rectangleLng: any, filas: number, columnas: number) {
+
+      // Aquí guardaremos las coordenadas de cada celda
+      let coordsCuadricula = [];
+
+      // tslint:disable-next-line: forin
+      for (let x in rectangleLng) {
+         for (let y in rectangleLng[x]) {
+            if (rectangleLng[x][y].setMap) {
+               rectangleLng[x][y].setMap(null)
+               rectangleLng[x][y] = null;
+            }
+         }
+      }
+      const leftSideDist = marker2.getPosition().lng() - marker1.getPosition().lng();
+      const belowSideDist = marker2.getPosition().lat() - marker1.getPosition().lat();
+ 
+      const dividerLat = columnas;
+      const dividerLng = filas;
+      const excLat = belowSideDist / dividerLat;
+      const excLng = leftSideDist / dividerLng;
+ 
+      const m1Lat = marker1.getPosition().lat();
+      const m1Lng = marker1.getPosition().lng();
+      const m2Lat = marker2.getPosition().lat();
+      const m2Lng = marker2.getPosition().lng();
+
+      for (let i = 0; i < dividerLat; i++) {
+     if (!rectangleLng[i]) { rectangleLng[i] = []; }
+     for (let j = 0; j < dividerLng; j++) {
+       if (!rectangleLng[i][j]) { rectangleLng[i][j] = {}; }
+ 
+ 
+       rectangleLng[i][j] = new google.maps.Rectangle({
+         strokeColor: '#FFFFFF',
+         strokeOpacity: 0.8,
+         strokeWeight: 2,
+         fillColor: '#FF0000',
+         fillOpacity: 0.1,
+         map: this.mapa,
+         bounds: new google.maps.LatLngBounds(
+           new google.maps.LatLng(m1Lat + (excLat * i), m1Lng + (excLng * j)),
+           new google.maps.LatLng(m1Lat + (excLat * (i + 1)), m1Lng + (excLng * (j + 1))))
+       });
+
+       coordsCuadricula.push({xy: i + ',' + j, posicion: rectangleLng[i][j].getBounds()});
+     } // for j Lng
+   } // for i Lat
+      console.log(coordsCuadricula);
+}
 
    // ----------------------------------------------------------------
    // Pequeño hack para poder leer los datos de firebase.

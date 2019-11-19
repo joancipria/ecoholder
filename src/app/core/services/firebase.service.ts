@@ -119,7 +119,7 @@ export class Firebase {
    }
 
    // -----------------------------------------------------
-   // Muestra los dispositivos vinculados con el usuario logueado
+   // Elimina el dispostivo con el id dado del usuario logueado
    // uuid: string, id: string -> f() -> void
    // Diana Hernández Soler
    // -----------------------------------------------------
@@ -127,5 +127,23 @@ export class Firebase {
       const measuresRef = this.db.doc('users/' + uuid);
       measuresRef.collection('devices').doc(id).delete();
    }
+
+   // -----------------------------------------------------
+   // Obtiene información sobre la cuadricula
+   //  -> f() -> {city, PointA, PointB, rows, columns, date}
+   // Diana Hernández Soler
+   // -----------------------------------------------------
+   public obtenerInfoCuadricula() {
+      return this.db.doc('gridMaps/IQ8yXEdYnouVPbNZvCEc').valueChanges();
+   }
+
+   // // -----------------------------------------------------
+   // // Guarda información de la cuadrícula
+   // //  {city, PointA, PointB, rows, columns, date} -> f() ->
+   // // Diana Hernández Soler
+   // // -----------------------------------------------------
+   // public guardarInfoCuadricula(datos: any) {
+   //   this.servidor.guardarInfoCuadricula(datos);
+   // }
 
 }
