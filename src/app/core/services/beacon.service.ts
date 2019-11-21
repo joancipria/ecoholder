@@ -74,6 +74,7 @@ export class Beacon {
     }
 
     escanearDispositivos() {
+        this.newDevices = [];
         this.ble.scan([], 15).subscribe(
             device => this.onDispositvoEncontrado(device)
         );
