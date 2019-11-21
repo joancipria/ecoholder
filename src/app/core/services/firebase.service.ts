@@ -146,4 +146,11 @@ export class Firebase {
    //   this.servidor.guardarInfoCuadricula(datos);
    // }
 
+
+   
+   public guardarDispositivo(dispositivo: ){
+
+
+   }
+
 }

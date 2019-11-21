@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, AlertController } from '@ionic/angular';
 import { Firebase } from '../core/services/firebase.service';
 import { Beacon } from '../core/services/beacon.service';
+import { NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-settings',
@@ -18,7 +19,8 @@ export class SettingsPage implements OnInit {
     private navCtrl: NavController,
     private firebase: Firebase,
     private alertCtrl: AlertController,
-    private beacon: Beacon
+    private beacon: Beacon,
+    private ngZone: NgZone
   ) { }
 
   ngOnInit() {
@@ -30,8 +32,6 @@ export class SettingsPage implements OnInit {
       // Mostramos los dispositivos vinculados
       this.mostrarDispositivosVinculados(this.userUuid);
       this.newDevices = [];
-
-      this.buscarYMostrarDispositivos();
     }
   }
 
@@ -123,19 +123,24 @@ export class SettingsPage implements OnInit {
 
 
 
-
-private buscarYMostrarDispositivos(){
+ buscarYMostrarDispositivos(){
 
     this.newDevices = this.beacon.escanearDispositivos();
-
+    
     console.log(this.newDevices);
     //Mostrar los dispositivos
 }
 
-private addDevice(){
+ darDeAlta(index: string){
+
+  const id = this.newDevices[index].id;
+  console.log(id);
+  console.log("el nombre: " + this.newDevices[index].name);
 
 
-
+  this.ngZone.run(()=>{
+    this.devices.push(this.newDevices[index]);
+    })
 }
 
 

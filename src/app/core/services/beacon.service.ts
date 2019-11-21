@@ -83,9 +83,13 @@ export class Beacon {
 
 onDispositvoEncontrado(device){
 console.log('Discovered' + JSON.stringify(device,null,2));
-
 this.ngZone.run(()=>{
-this.newDevices.push(device);
+    if(typeof device.name === 'undefined'){
+        console.log('dispositivo no valido');
+    } else{
+        console.log('dispositivo valido: '+ device.name);
+        this.newDevices.push(device);
+    }
 })
 }
 
