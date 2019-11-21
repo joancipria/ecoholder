@@ -1,38 +1,48 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Home</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>Home</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
     <ion-grid>
         <ion-row>
-          <ion-col size="0" size-lg="3">
-          </ion-col>
-          <ion-col size="12" size-lg="6">
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>Pollutants</ion-card-title>
-                <ion-card-subtitle>last 24h</ion-card-subtitle>
-              </ion-card-header>
-              <ion-card-content>
-                <div style="display: block"><canvas id="yudhatp-chart"></canvas></div>
-              </ion-card-content>
-            </ion-card>
+            <ion-col size="0" size-lg="3">
+            </ion-col>
+            <ion-col size="12" size-lg="6">
+                <ion-card>
+                    <ion-card-header>
+                        <ion-card-title>Mi nivel de exposición</ion-card-title>
+                        <ion-card-subtitle>Últimas 24 horas</ion-card-subtitle>
+                    </ion-card-header>
+                    <ion-card-content>
 
-            <ion-card>
-              <ion-item>
-                <ion-icon name="navigate" slot="start"></ion-icon>
-                <ion-label>Work</ion-label>
-                <ion-label color="medium">15min</ion-label>
-                <ion-icon color="success" name="happy"></ion-icon>
-                <ion-button fill="outline" slot="end">Go</ion-button>
-              </ion-item>
-              <img src="https://img.mobiscroll.com/demos/route.png" alt="">
-            </ion-card>
-          </ion-col>
-        <ion-col size="0" size-lg="3">
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content>
+                        <div style="display: block"><canvas id="yudhatp-chart" style="z-index:2;"></canvas>
+                            <ion-avatar><img class="avatar" [src]="userImg" /></ion-avatar>
+                            <section style="font-size:.8 rem;">
+                                <ion-icon name="alert"> </ion-icon> ¡Ten Cuidado! <br />Tu nivel de exposición empieza a ser elevado
+                                <div style="float:right">
+                                    <ion-button fill="outline" color="primary" size="small" (click)="mostrarConsejos()">CONSEJOS</ion-button>
+                                </div>
+                            </section>
+                        </div>
+
+                    </ion-card-content>
+                </ion-card>
+
+                <ion-card>
+                    <ion-item>
+                        <ion-icon name="navigate" slot="start"></ion-icon>
+                        <ion-label>Work</ion-label>
+                        <ion-label color="medium">15min</ion-label>
+                        <ion-icon color="success" name="happy"></ion-icon>
+                        <ion-button fill="outline" slot="end">Go</ion-button>
+                    </ion-item>
+                    <img src="https://img.mobiscroll.com/demos/route.png" alt="">
+                </ion-card>
+            </ion-col>
+            <ion-col size="0" size-lg="3">
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>;
