@@ -24,7 +24,7 @@ export class Beacon {
     identifier: string = "Beacon-Equipo1";
     uuid: string = "45505347-2D47-5449-2D45-5155492D3031";
 
-    constructor(public platform: Platform, public events: Events, public ibeacon: IBeacon, public device: Device,public ble:BLE, public ngZone: NgZone ) {
+    constructor(public platform: Platform, public events: Events, public ibeacon: IBeacon, public device: Device, public ble: BLE, public ngZone: NgZone) {
     }
 
     public inicializar(): any {
@@ -73,26 +73,26 @@ export class Beacon {
         return promise;
     }
 
-    escanearDispositivos(){
-        this.ble.scan([],15).subscribe(
-    device => this.onDispositvoEncontrado(device)
-    );
+    escanearDispositivos() {
+        this.ble.scan([], 15).subscribe(
+            device => this.onDispositvoEncontrado(device)
+        );
 
-    return this.newDevices;
-    }  
-
-onDispositvoEncontrado(device){
-console.log('Discovered' + JSON.stringify(device,null,2));
-this.ngZone.run(()=>{
-    if(typeof device.name === 'undefined'){
-        console.log('dispositivo no valido');
-    } else{
-        console.log('dispositivo valido: '+ device.name);
-        this.newDevices.push(device);
+        return this.newDevices;
     }
-})
-}
+
+    onDispositvoEncontrado(device) {
+        console.log('Discovered' + JSON.stringify(device, null, 2));
+        this.ngZone.run(() => {
+            if (typeof device.name === 'undefined' || device.name != this.identifier) {
+                console.log('dispositivo no valido');
+            } else {
+                console.log('dispositivo valido: ' + device.name);
+                this.newDevices.push(device);
+            }
+        })
+    }
 
 
- 
+
 }
