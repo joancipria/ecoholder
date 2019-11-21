@@ -3,7 +3,7 @@ import { NavController, AlertController } from '@ionic/angular';
 import { Firebase } from '../core/services/firebase.service';
 import { Beacon } from '../core/services/beacon.service';
 import { NgZone } from '@angular/core';
-
+import { LoadingController } from '@ionic/angular';
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
@@ -20,7 +20,8 @@ export class SettingsPage implements OnInit {
     private firebase: Firebase,
     private alertCtrl: AlertController,
     private beacon: Beacon,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private loading: LoadingController
   ) { }
 
   ngOnInit() {
@@ -121,27 +122,72 @@ export class SettingsPage implements OnInit {
   }
 
 
+  async presentLoading(tipoCarga: any) {
 
+    if(tipoCarga == 1){
+    var cargando = await this.loading.create({
+      message: 'Buscando...',
+      duration: 2000
+    });
+    await cargando.present();
+
+  const { role, data } = await cargando.onDidDismiss();
+  }
+  if(tipoCarga == 2){
+    var cargando = await this.loading.create({
+      message: 'Sincronizando...',
+      duration: 3000
+    });
+    await cargando.present();
+
+    const { role, data } = await cargando.onDidDismiss();
+
+    const alert = this.alertCtrl.create({
+      message: "Dispositivo sincronizado satisfactoriamente",
+        buttons: [
+          { text: 'Confirmar', role: 'cancel', handler: () => console.log('sincronizado') }
+        ]
+      }).then(alert => {
+      alert.present();
+      });
+    
+  }
+  console.log('Loading dismissed!');
+}
+
+  
 
  buscarYMostrarDispositivos(){
 
+    this.newDevices = [];
+    this.presentLoading(1);
     this.newDevices = this.beacon.escanearDispositivos();
     
     console.log(this.newDevices);
     //Mostrar los dispositivos
+
 }
 
  darDeAlta(index: string){
 
   const id = this.newDevices[index].id;
-  console.log(id);
-  console.log("el nombre: " + this.newDevices[index].name);
 
+  console.log("dar de alta a: " + id);
+
+this.presentLoading(2);
 
   this.ngZone.run(()=>{
-    this.devices.push(this.newDevices[index]);
+    this.firebase.guardarDispositivo(this.userUuid, this.newDevices[index]);
     })
+
+    
 }
 
+
+limpiar(laLista){
+
+
+
+}
 
 }

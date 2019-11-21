@@ -55,7 +55,7 @@
             <ion-col size="12" size-sm="6">
 
 
-                <ion-button expand="block" (click)="buscarYMostrarDispositivos()">Add</ion-button>
+                <ion-button expand="block" (click)="limpiar(); buscarYMostrarDispositivos();">Buscar</ion-button>
                 <ion-list>
                 <ion-item *ngFor="let device of newDevices;let j = index" (click)="darDeAlta(j)">
                     <ion-icon slot="start" name="bluetooth"></ion-icon>

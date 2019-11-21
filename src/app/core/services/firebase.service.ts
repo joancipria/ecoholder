@@ -148,9 +148,14 @@ export class Firebase {
 
 
 
-   public guardarDispositivo(dispositivo: any){
-
-
+   public guardarDispositivo(uuid: string, dispositivo: any){
+        const ref = this.db.doc('users/' + uuid);
+      ref.collection('devices').doc(dispositivo.id).set({
+         alias: dispositivo.name,
+         date: Date.now(),
+         id: dispositivo.id
+      })
+      
    }
 
 }
