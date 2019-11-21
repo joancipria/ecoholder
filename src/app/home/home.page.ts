@@ -3,6 +3,7 @@ import { Chart } from 'chart.js';
 import { ReceptorBLE } from '../core/services/receptorBLE.service';
 import { Firebase } from '../core/services/firebase.service';
 import { Platform } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 
 
 @Component({
@@ -17,7 +18,8 @@ export class HomePage implements OnInit {
   constructor(
     private ble: ReceptorBLE,
     public plt: Platform,
-    private firebase: Firebase
+    private firebase: Firebase,
+    private alertCtrl: AlertController,
 
   ) {
     if (plt.is('android')) {
@@ -77,12 +79,44 @@ export class HomePage implements OnInit {
     const chart = new Chart(ctx, {
       data,
       type: 'doughnut',
-      borderWidth: 20,
+      borderWidth: 5,
       options: {
         rotation: 1 * Math.PI,
         circumference: 1 * Math.PI,
-        cutoutPercentage: 70
+        cutoutPercentage: 65
       }
+    });
+  }
+
+  // --------------------------------------------------------------
+  // Abre ventana con consejos
+  // -> f() ->
+  // Diana Hernández Soler
+  // --------------------------------------------------------------
+  public mostrarConsejos() {
+    const txt = '<ul><li><h6>Ventilar la casa a diario</h6>Aunque parece una obviedad, es muy importante una adecuada ventilación para mejorar la calidad del aire interior</li>' + 
+    '<li><h6>Tener plantas de interior</h6>ayuda a renovar el aire interior de forma natural y efectiva</li> ' +
+    '<li><h6>No fumar en espacios cerrados  </h6>  Encuentra la temperatura exacta para mantener la casa fresca y no abuses de su uso, dado que consume mucha energía.</li>' +
+    '<li><h6>Ventilar bien la cocina</h6>y salir a la terraza o, si la casa lo permite, habilitar una zona para fumadores que esté aislada del resto del hogar y que pueda ventilarse con facilidad. Ahora, bien, si puedes fumar lo más lejos de tu hogar, mucho mejor</li>' +
+    '<li><h6>Usar purificadores de aire  </h6>  Encuentra la temperatura exacta para mantener la casa fresca y no abuses de su uso, dado que consume mucha energía.</li>' +
+    '<li><h6>usa de manera racional el aire acondicionado</h6>Encuentra la temperatura exacta para mantener la casa fresca y no abuses de su uso, dado que consume mucha energía.</li></ul>';
+    this.mostrarVentana(txt, 'CONSEJOS');
+  }
+
+  // -------------------------------------------------------------------
+  // Genera una ventana (pop-up) personalizada
+  // texto: string, subtexto: string -> f() -> void
+  // Diana Hernández Soler
+  // -------------------------------------------------------------------
+  private mostrarVentana(texto: string, subtexto: string) {
+    const aleart = this.alertCtrl.create({
+    message: texto,
+    subHeader: subtexto,
+      buttons: [
+        { text: 'CERRAR', role: 'cancel'}
+      ]
+    }).then(alert => {
+    alert.present();
     });
   }
 

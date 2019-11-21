@@ -19,8 +19,12 @@
 
                         <div style="display: block"><canvas id="yudhatp-chart" style="z-index:2;"></canvas>
                             <ion-avatar><img class="avatar" [src]="userImg" /></ion-avatar>
-                            <section style="font-size:.8 rem">
-                                <ion-icon name="alert" style="zoom:1.5;"> </ion-icon>¡Ten cuidado! Tu nivel de exposición empieza a ser elevado </section>
+                            <section style="font-size:.8 rem;">
+                                <ion-icon name="alert"> </ion-icon> ¡Ten Cuidado! <br />Tu nivel de exposición empieza a ser elevado
+                                <div style="float:right">
+                                    <ion-button fill="outline" color="primary" size="small" (click)="mostrarConsejos()">CONSEJOS</ion-button>
+                                </div>
+                            </section>
                         </div>
 
                     </ion-card-content>
