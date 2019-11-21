@@ -147,8 +147,8 @@ export class Firebase {
    // }
 
 
-   
-   public guardarDispositivo(dispositivo: ){
+
+   public guardarDispositivo(dispositivo: any){
 
 
    }
