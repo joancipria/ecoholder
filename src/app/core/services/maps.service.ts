@@ -314,15 +314,14 @@ export class Maps {
    // Diana Hernández Soler
    // ----------------------------------------------------------------------------------
    public obtenerCasillas(filas: number, columnas: number) {
-      // tslint:disable-next-line: forin
-      //  for (let x in this.rectangleLng) {
-      //    for (let y in this.rectangleLng[x]) {
-      //       if (this.rectangleLng[x][y].setMap) {
-      //          this.rectangleLng[x][y].setMap(null);
-      //          this.rectangleLng[x][y] = null;
-      //       }
-      //    }
-      // }
+       for (let x in this.rectangleLng) {
+         for (let y in this.rectangleLng[x]) {
+            if (this.rectangleLng[x][y].setMap) {
+               this.rectangleLng[x][y].setMap(null);
+               this.rectangleLng[x][y] = null;
+            }
+         }
+      }
        const leftSideDist = this.marker2.getPosition().lng() - this.marker1.getPosition().lng();
        const belowSideDist = this.marker2.getPosition().lat() - this.marker1.getPosition().lat();
 
