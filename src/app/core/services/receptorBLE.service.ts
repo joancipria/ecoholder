@@ -136,7 +136,7 @@ export class ReceptorBLE {
     }
 
 
-   //---------------------------------------------------------------------------------------------------------------------------
+   // ---------------------------------------------------------------------------------------------------------------------------
    //                                       comprobarMovimientoParaEnviar() 
    //          Autor: Vicent Borja Roca
    //          Descripción: Se inicializan dos temporizadores:
@@ -165,8 +165,6 @@ export class ReceptorBLE {
         this.hayQueActualizarMedicionesYEnviarlasAlServidor();
         this.gps.latAnterior = this.gps.lat;  
         this.gps.lngAnterior = this.gps.lng;
-
-
     }, 1800000)
 
 }

@@ -31,16 +31,14 @@ export class Maps {
    // Variables para la cuadrícula
    public rectangle: any;
    public rectangleLng = [];
+   public matrizColores = [];
    public marker1: any;
    public marker2: any;
-
 
    constructor(
       private gps: LocalizadorGPS,
       public firebase: Firebase,
-   ) {
-
-   }
+   ) {}
 
    // Inizializa el mapa sobre el elemento del DOM indidcado
    public async inicializarMapa(mapElement, searchElement) {
@@ -86,6 +84,9 @@ export class Maps {
 
       // Renderizar mapa calor
       this.renderizarMapaCalor();
+
+      // Generamos la matriz de colores
+      this.generarMatrizColores();
 
       // Configuramos googleAutocomplete
       const defaultBounds = new google.maps.LatLngBounds(posicionActual);
@@ -276,11 +277,9 @@ export class Maps {
 
          // Mostramos en el mapa el polígono a cudricular
          this.rectangle = new google.maps.Rectangle({
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
+            strokeColor: '#FFF',
+            strokeOpacity: .2,
             strokeWeight: 2,
-            fillColor: '#FF0000',
-            fillOpacity: 0.35,
             map: this.mapa,
             bounds: new google.maps.LatLngBounds(
                this.marker1.getPosition(),
@@ -309,59 +308,93 @@ export class Maps {
       });
    }
 
-
+   // ----------------------------------------------------------------------------------
+   // Genera las cuadriculas interiores
+   // filas: number, columnas: number -> f() ->
+   // Diana Hernández Soler
+   // ----------------------------------------------------------------------------------
    public obtenerCasillas(filas: number, columnas: number) {
       // tslint:disable-next-line: forin
-      for (let x in this.rectangleLng) {
-         for (let y in this.rectangleLng[x]) {
-            if (this.rectangleLng[x][y].setMap) {
-               this.rectangleLng[x][y].setMap(null)
-               this.rectangleLng[x][y] = null;
-            }
-         }
-      }
-      const leftSideDist = this.marker2.getPosition().lng() - this.marker1.getPosition().lng();
-      const belowSideDist = this.marker2.getPosition().lat() - this.marker1.getPosition().lat();
- 
-      const dividerLat = columnas;
-      const dividerLng = filas;
-      const excLat = belowSideDist / dividerLat;
-      const excLng = leftSideDist / dividerLng;
- 
-      const m1Lat = this.marker1.getPosition().lat();
-      const m1Lng = this.marker1.getPosition().lng();
+      //  for (let x in this.rectangleLng) {
+      //    for (let y in this.rectangleLng[x]) {
+      //       if (this.rectangleLng[x][y].setMap) {
+      //          this.rectangleLng[x][y].setMap(null);
+      //          this.rectangleLng[x][y] = null;
+      //       }
+      //    }
+      // }
+       const leftSideDist = this.marker2.getPosition().lng() - this.marker1.getPosition().lng();
+       const belowSideDist = this.marker2.getPosition().lat() - this.marker1.getPosition().lat();
 
-      for (let i = 0; i < dividerLat; i++) {
-     if (!this.rectangleLng[i]) { this.rectangleLng[i] = []; }
-     for (let j = 0; j < dividerLng; j++) {
-       if (!this.rectangleLng[i][j]) { this.rectangleLng[i][j] = {}; }
- 
- 
-       this.rectangleLng[i][j] = new google.maps.Rectangle({
-         strokeColor: '#FFFFFF',
-         strokeOpacity: 0.8,
-         strokeWeight: 2,
-         fillColor: '#FF0000',
-         fillOpacity: 0.1,
-         map: this.mapa,
-         bounds: new google.maps.LatLngBounds(
-           new google.maps.LatLng(m1Lat + (excLat * i), m1Lng + (excLng * j)),
-           new google.maps.LatLng(m1Lat + (excLat * (i + 1)), m1Lng + (excLng * (j + 1))))
-       });
-     } // for j Lng
-   } // for i Lat
-}
+       const dividerLat = columnas;
+       const dividerLng = filas;
+       const excLat = belowSideDist / dividerLat;
+       const excLng = leftSideDist / dividerLng;
+
+       const m1Lat = this.marker1.getPosition().lat();
+       const m1Lng = this.marker1.getPosition().lng();
+
+       for (let i = 0; i < dividerLat; i++) {
+         if (!this.rectangleLng[i]) { this.rectangleLng[i] = []; }
+         for (let j = 0; j < dividerLng; j++) {
+            if (!this.rectangleLng[i][j]) { this.rectangleLng[i][j] = {}; }
+            this.rectangleLng[i][j] = new google.maps.Rectangle({
+            strokeColor: '#FFF',
+            strokeOpacity: .2,
+            strokeWeight: 2,
+            fillColor: this.matrizColores[i][j],
+            fillOpacity: 0.8,
+            map: this.mapa,
+            bounds: new google.maps.LatLngBounds(
+                  new google.maps.LatLng(m1Lat + (excLat * i), m1Lng + (excLng * j)),
+                  new google.maps.LatLng(m1Lat + (excLat * (i + 1)), m1Lng + (excLng * (j + 1))))
+            });
+         } // for j Lng
+      } // for i Lat
+   }
 
    public toggleCuadricula() {
       this.toggle(this.rectangle);
       this.toggle(this.marker1);
       this.toggle(this.marker2);
 
-      for (let i = 0; i < 5; i++) {
-         for (let j = 0; j < 5; j++) {
+      for (let i = 0; i < 20; i++) {
+         for (let j = 0; j < 20; j++) {
             this.toggle(this.rectangleLng[i][j]);
          }
       }
+   }
+
+   // ---------------------------------------------------------------
+   // Genera una matriz del colores
+   // -> f() -> void
+   // Diana Hernández Soler
+   // ---------------------------------------------------------------
+   private generarMatrizColores(): void {
+
+      this.firebase.obtenerUltimoMapa().subscribe(res => {
+      const datos = this.parsearDatos(res);
+      const grid = JSON.parse(datos[0].grid);
+      console.table(grid);
+
+      for (let i = 0; i < grid.length; i++) {
+         if (!this.matrizColores[i]) { this.matrizColores[i] = []; }
+         for (let j = 0; j < grid[0].length; j++) {
+               if (!this.matrizColores[i][j]) { this.matrizColores[i][j] = {}; }
+               const v = grid[i][j];
+               if (v > 400) {
+                  this.matrizColores[i][j] = '#FF0000';
+               } else if (v > 350 && v < 400) {
+                  this.matrizColores[i][j] = '#FF8000';
+               } else if (v < 350 && v > 300) {
+                  this.matrizColores[i][j] = '#D7DF01';
+               } else {
+                  this.matrizColores[i][j] = '#3ADF00';
+               }
+            }
+         }
+      console.table(this.matrizColores);
+      });
    }
 
    // ---------------------------------------------------------------

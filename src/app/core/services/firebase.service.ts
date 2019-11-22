@@ -137,6 +137,15 @@ export class Firebase {
       return this.db.doc('gridMaps/IQ8yXEdYnouVPbNZvCEc').valueChanges();
    }
 
+   // -----------------------------------------------------
+   // Obtiene información del último mapa generado
+   //  -> f() -> {date: string, arrayValores: []}
+   // Diana Hernández Soler
+   // -----------------------------------------------------
+   public obtenerUltimoMapa() {
+      return this.db.collection('maps', ref => ref.orderBy('date', 'desc').limit(1)).valueChanges();
+   }
+
    // // -----------------------------------------------------
    // // Guarda información de la cuadrícula
    // //  {city, PointA, PointB, rows, columns, date} -> f() ->
