@@ -38,7 +38,7 @@ export class Maps {
    constructor(
       private gps: LocalizadorGPS,
       public firebase: Firebase,
-   ) {}
+   ) { }
 
    // Inizializa el mapa sobre el elemento del DOM indidcado
    public async inicializarMapa(mapElement, searchElement) {
@@ -278,32 +278,34 @@ export class Maps {
          // Mostramos en el mapa el polígono a cudricular
          this.rectangle = new google.maps.Rectangle({
             strokeColor: '#FFF',
-            strokeOpacity: .2,
+            strokeOpacity: .8,
             strokeWeight: 2,
+            fillColor: '#3ADF00',
+            fillOpacity: 0.1,
             map: this.mapa,
             bounds: new google.maps.LatLngBounds(
                this.marker1.getPosition(),
                this.marker2.getPosition())
-          });
+         });
 
          this.rectangleLng = [];
 
          // Creamos y mostramos el grid
-         this.obtenerCasillas(info.rows, info.columns);
+         this.obtenerCasillas(info.rows, info.columns, true);
 
          let leftSideDist = Math.round((this.marker2.getPosition().lng() - this.marker1.getPosition().lng()) * 10000) / 100;
-         let belowSideDist =  Math.round((this.marker2.getPosition().lat() - this.marker1.getPosition().lat()) * 10000) / 100;
+         let belowSideDist = Math.round((this.marker2.getPosition().lat() - this.marker1.getPosition().lat()) * 10000) / 100;
 
          google.maps.event.addListener(this.marker1, 'dragend', () => {
             this.rectangle.setBounds(new google.maps.LatLngBounds(this.marker1.getPosition(), this.marker2.getPosition()));
             leftSideDist = Math.round((this.marker2.getPosition().lng() - this.marker1.getPosition().lng()) * 10000) / 100;
-            this.obtenerCasillas(info.rows, info.columns);
+            this.obtenerCasillas(info.rows, info.columns, false);
          });
 
          google.maps.event.addListener(this.marker2, 'dragend', () => {
             this.rectangle.setBounds(new google.maps.LatLngBounds(this.marker1.getPosition(), this.marker2.getPosition()));
             belowSideDist = Math.round((this.marker2.getPosition().lat() - this.marker1.getPosition().lat()) * 10000) / 100;
-            this.obtenerCasillas(info.rows, info.columns);
+            this.obtenerCasillas(info.rows, info.columns, false);
          });
       });
    }
@@ -313,38 +315,44 @@ export class Maps {
    // filas: number, columnas: number -> f() ->
    // Diana Hernández Soler
    // ----------------------------------------------------------------------------------
-   public obtenerCasillas(filas: number, columnas: number) {
-       for (let x in this.rectangleLng) {
-         for (let y in this.rectangleLng[x]) {
-            if (this.rectangleLng[x][y].setMap) {
-               this.rectangleLng[x][y].setMap(null);
-               this.rectangleLng[x][y] = null;
+   public obtenerCasillas(filas: number, columnas: number, firsTime: boolean): void {
+
+      // Limpiamos el array que representa la cuadrícula
+      if (!firsTime) {
+         // tslint:disable-next-line: forin
+         for (let x in this.rectangleLng) {
+            for (let y in this.rectangleLng[x]) {
+               if (this.rectangleLng[x][y].setMap) {
+                  this.rectangleLng[x][y].setMap(null);
+                  this.rectangleLng[x][y] = null;
+               }
             }
          }
       }
-       const leftSideDist = this.marker2.getPosition().lng() - this.marker1.getPosition().lng();
-       const belowSideDist = this.marker2.getPosition().lat() - this.marker1.getPosition().lat();
 
-       const dividerLat = columnas;
-       const dividerLng = filas;
-       const excLat = belowSideDist / dividerLat;
-       const excLng = leftSideDist / dividerLng;
+      const leftSideDist = this.marker2.getPosition().lng() - this.marker1.getPosition().lng();
+      const belowSideDist = this.marker2.getPosition().lat() - this.marker1.getPosition().lat();
 
-       const m1Lat = this.marker1.getPosition().lat();
-       const m1Lng = this.marker1.getPosition().lng();
+      const dividerLat = columnas;
+      const dividerLng = filas;
+      const excLat = belowSideDist / dividerLat;
+      const excLng = leftSideDist / dividerLng;
 
-       for (let i = 0; i < dividerLat; i++) {
+      const m1Lat = this.marker1.getPosition().lat();
+      const m1Lng = this.marker1.getPosition().lng();
+
+      for (let i = 0; i < dividerLat; i++) {
          if (!this.rectangleLng[i]) { this.rectangleLng[i] = []; }
          for (let j = 0; j < dividerLng; j++) {
             if (!this.rectangleLng[i][j]) { this.rectangleLng[i][j] = {}; }
             this.rectangleLng[i][j] = new google.maps.Rectangle({
-            strokeColor: '#FFF',
-            strokeOpacity: .2,
-            strokeWeight: 2,
-            fillColor: this.matrizColores[i][j],
-            fillOpacity: 0.8,
-            map: this.mapa,
-            bounds: new google.maps.LatLngBounds(
+               strokeColor: '#FFF',
+               strokeOpacity: .8,
+               strokeWeight: 2,
+               fillColor: this.matrizColores[i][j] || '#3ADF00',
+               fillOpacity: 0.7,
+               map: this.mapa,
+               bounds: new google.maps.LatLngBounds(
                   new google.maps.LatLng(m1Lat + (excLat * i), m1Lng + (excLng * j)),
                   new google.maps.LatLng(m1Lat + (excLat * (i + 1)), m1Lng + (excLng * (j + 1))))
             });
@@ -372,27 +380,34 @@ export class Maps {
    private generarMatrizColores(): void {
 
       this.firebase.obtenerUltimoMapa().subscribe(res => {
-      const datos = this.parsearDatos(res);
-      const grid = JSON.parse(datos[0].grid);
-      console.table(grid);
 
-      for (let i = 0; i < grid.length; i++) {
-         if (!this.matrizColores[i]) { this.matrizColores[i] = []; }
-         for (let j = 0; j < grid[0].length; j++) {
+         // Parseamos los datos
+         const datos = this.parsearDatos(res);
+         const grid = JSON.parse(datos[0].grid);
+         console.table(grid);
+
+         // Creamos una matriz nueva que en lugar de valores tendra colores
+         for (let i = 0; i < grid.length; i++) {
+            if (!this.matrizColores[i]) { this.matrizColores[i] = []; }
+            for (let j = 0; j < grid[0].length; j++) {
                if (!this.matrizColores[i][j]) { this.matrizColores[i][j] = {}; }
                const v = grid[i][j];
+               // Por defecto es verde
+               this.matrizColores[i][j] = null;
+
                if (v > 400) {
                   this.matrizColores[i][j] = '#FF0000';
-               } else if (v > 350 && v < 400) {
+               }
+               if (v > 350 && v < 400) {
                   this.matrizColores[i][j] = '#FF8000';
-               } else if (v < 350 && v > 300) {
+               }
+               if (v < 350 && v > 300) {
                   this.matrizColores[i][j] = '#D7DF01';
-               } else {
-                  this.matrizColores[i][j] = '#3ADF00';
                }
             }
          }
-      console.table(this.matrizColores);
+
+         console.table(this.matrizColores);
       });
    }
 
