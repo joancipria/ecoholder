@@ -18,6 +18,8 @@ import * as firebase from 'firebase/app';
 
 @Injectable()
 export class Firebase {
+   private uuid: string;
+
    constructor(
       private db: AngularFirestore,
       private servidor: ServidorFake,
@@ -61,6 +63,7 @@ export class Firebase {
 
    // Login / Iniciar sesión
    public login(value) {
+      this.uuid = this.informacionUsuario().uid;
       return new Promise<any>((resolve, reject) => {
          firebase.auth().signInWithEmailAndPassword(value.email, value.password)
             .then(
@@ -113,8 +116,8 @@ export class Firebase {
    // uuid: string -> f() -> dispostivo: { id: string, alias: string, date: number }
    // Diana Hernández Soler
    // -----------------------------------------------------
-   public obtenerDevices(uuid: string) {
-      const measuresRef = this.db.doc('users/' + uuid);
+   public obtenerDevices() {
+      const measuresRef = this.db.doc('users/' + this.uuid);
       return measuresRef.collection('devices').valueChanges();
    }
 
@@ -123,8 +126,8 @@ export class Firebase {
    // uuid: string, id: string -> f() -> void
    // Diana Hernández Soler
    // -----------------------------------------------------
-   public eliminarDispositivo(uuid: string, id: string) {
-      const measuresRef = this.db.doc('users/' + uuid);
+   public eliminarDispositivo(id: string) {
+      const measuresRef = this.db.doc('users/' + this.uuid);
       measuresRef.collection('devices').doc(id).delete();
    }
 
@@ -157,8 +160,8 @@ export class Firebase {
 
 
 
-   public guardarDispositivo(uuid: string, dispositivo: any){
-        const ref = this.db.doc('users/' + uuid);
+   public guardarDispositivo(dispositivo: any){
+        const ref = this.db.doc('users/' + this.uuid);
       ref.collection('devices').doc(dispositivo.id).set({
          alias: dispositivo.name,
          date: Date.now(),
