@@ -13,8 +13,8 @@ export class SettingsPage implements OnInit {
 
   userEmail: string;
   userUuid: string;
-  devices: any[] = [];
-  newDevices: any[] = [];
+  devices: any[]=[];
+  newDevices: any[]=[];
   constructor(
     private navCtrl: NavController,
     private firebase: Firebase,
@@ -76,13 +76,13 @@ export class SettingsPage implements OnInit {
     const alert = this.alertCtrl.create({
       message: 'Esta acción no se puede deshacer',
       subHeader: '¿Está seguro que quiere eliminar el dispositivo ' + this.devices[index].alias + '?',
-      buttons: [
-        { text: 'SI', handler: () => this.firebase.eliminarDispositivo(this.userUuid, id) },
-        { text: 'NO', role: 'cancel', handler: () => console.log('Ha pulsado NO') }
-      ]
-    }).then(alert => {
+        buttons: [
+          { text: 'SI', handler: () => this.firebase.eliminarDispositivo(this.userUuid, id) },
+          { text: 'NO', role: 'cancel', handler: () => console.log('Ha pulsado NO') }
+        ]
+      }).then(alert => {
       alert.present();
-    });
+      });
 
     // Implemenación con mostrarConfirmacion()
     // const handler =  this.firebase.eliminarDispositivo(this.userUuid, id);
@@ -100,14 +100,14 @@ export class SettingsPage implements OnInit {
   // -------------------------------------------------------------------
   private mostrarConfirmacion(texto: string, subtexto: string, handlerAction: any) {
     const aleart = this.alertCtrl.create({
-      message: texto,
-      subHeader: subtexto,
+    message: texto,
+    subHeader: subtexto,
       buttons: [
         { text: 'SI', handler: () => handlerAction },
         { text: 'NO', role: 'cancel', handler: () => console.log('Ha pulsado NO') }
       ]
     }).then(alert => {
-      alert.present();
+    alert.present();
     });
   }
 
@@ -120,66 +120,89 @@ export class SettingsPage implements OnInit {
     const rawData = JSON.stringify(data);
     return JSON.parse(rawData);
   }
-
+ // ----------------------------------------------------------------
+  // Función que se encarga de presentar la ventana de carga,
+  // la función recibe un numero como convenio para diferenciar 
+  // que tipo de ventana se representa:
+  //  1 --> Buscando dispositivos  2 --> Sincronizar con el dispositvo + mensaje
+  //                tipoCarga -> f() -> 
+  //
+   //                  Vicent Borja Roca    
+  // ----------------------------------------------------------------
 
   async presentLoading(tipoCarga: any) {
 
-    if (tipoCarga == 1) {
-      var cargando = await this.loading.create({
-        message: 'Buscando...',
-        duration: 2000
-      });
-      await cargando.present();
+    if(tipoCarga == 1){
+    var cargando = await this.loading.create({
+      message: 'Buscando...',
+      duration: 2000
+    });
+    await cargando.present();
 
-      const { role, data } = await cargando.onDidDismiss();
-    }
-    if (tipoCarga == 2) {
-      var cargando = await this.loading.create({
-        message: 'Sincronizando...',
-        duration: 3000
-      });
-      await cargando.present();
+  const { role, data } = await cargando.onDidDismiss();
+  }
+  if(tipoCarga == 2){
+    var cargando = await this.loading.create({
+      message: 'Sincronizando...',
+      duration: 3000
+    });
+    await cargando.present();
 
-      const { role, data } = await cargando.onDidDismiss();
+    const { role, data } = await cargando.onDidDismiss();
 
-      const alert = this.alertCtrl.create({
-        message: "Dispositivo sincronizado satisfactoriamente",
+    const alert = this.alertCtrl.create({
+      message: "Dispositivo sincronizado satisfactoriamente",
         buttons: [
           { text: 'Confirmar', role: 'cancel', handler: () => console.log('sincronizado') }
         ]
       }).then(alert => {
-        alert.present();
+      alert.present();
       });
-
-    }
-    console.log('Loading dismissed!');
+    
   }
+  console.log('Loading dismissed!');
+}
 
+  // ----------------------------------------------------------------
+  // Llama a escanearDispositivos() y guarda los dispositivos escaneados
+  //    en la lista newDevices()
+  //                 -> f() -> 
+  //
+   //                  Vicent Borja Roca
+  // ----------------------------------------------------------------
 
-
-  buscarYMostrarDispositivos() {
+ buscarYMostrarDispositivos(){
 
     this.newDevices = [];
     this.presentLoading(1);
     this.newDevices = this.beacon.escanearDispositivos();
-
+    
     console.log(this.newDevices);
     //Mostrar los dispositivos
 
-  }
+}
 
-  darDeAlta(index: string) {
+  // -----------------------------------------------------------------------------
+  //  Guardo un dispositivo en la bbdd cuando el usuario lo elige de la lista
+  //  de dispositivos detectados de la interfaz.
+  //  
+  //    index:string(la 'key' que identifica el dispositivo) -> f() -> 
+  //
+   //               Vicent Borja Roca
+  // ------------------------------------------------------------------------------
 
-    const id = this.newDevices[index].id;
+ darDeAlta(index: string){
 
-    console.log("dar de alta a: " + id);
+  const id = this.newDevices[index].id;
 
-    this.presentLoading(2);
+  console.log("dar de alta a: " + id);
 
-    this.ngZone.run(() => {
-      this.firebase.guardarDispositivo(this.userUuid, this.newDevices[index]);
+this.presentLoading(2);
+
+  this.ngZone.run(()=>{
+    this.firebase.guardarDispositivo(this.userUuid, this.newDevices[index]);
     })
+    
+}
 
-
-  }
 }

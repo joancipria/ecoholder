@@ -73,6 +73,15 @@ export class Beacon {
         return promise;
     }
 
+  // ----------------------------------------------------------------
+  // Escanea los dispositivos bluetooth cercanos y los devuelve
+  // 
+  //                 -> f() -> newDevices: array[devices]
+  //
+   //                  Vicent Borja Roca
+  // ----------------------------------------------------------------
+
+
     escanearDispositivos() {
         this.newDevices = [];
         this.ble.scan([], 15).subscribe(
@@ -81,6 +90,15 @@ export class Beacon {
 
         return this.newDevices;
     }
+
+  // ----------------------------------------------------------------
+  // 
+  //    Por cada dispositivo escaneado lo valido y hago push a la lista
+  //    newDevices
+  //             device: object -> f() -> 
+  //
+   //                  Vicent Borja Roca
+  // ----------------------------------------------------------------
 
     onDispositvoEncontrado(device) {
         console.log('Discovered' + JSON.stringify(device, null, 2));
