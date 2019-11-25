@@ -13,17 +13,26 @@
 
             <ion-select-option value="SO2">SO2</ion-select-option>
 
-                <ion-select-option value="CO2">CO2</ion-select-option>
+            <ion-select-option value="CO2">CO2</ion-select-option>
 
-                    <ion-select-option value="NOX">NOX</ion-select-option>
+            <ion-select-option value="NOX">NOX</ion-select-option>
         </ion-select>
     </ion-item>
     <div id="map" #map style="height:100%;">
     </div>
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="mostrarGrid()">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button>
-            <ion-icon name="grid">
+            <ion-icon name="more">
             </ion-icon>
         </ion-fab-button>
+
+        <ion-fab-list side="top">
+            <ion-fab-button (click)="mostrarGrid()">
+                <ion-icon name="eye-off"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button (click)="toggleSelectorContaminante()">
+                <ion-icon name="funnel"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
     </ion-fab>
 </ion-content>

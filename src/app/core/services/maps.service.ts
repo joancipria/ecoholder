@@ -262,17 +262,11 @@ export class Maps {
 
          // Creamos los dos marcadores del area a cuadricular
          this.marker1 = new google.maps.Marker({
-            position: new google.maps.LatLng(info.PointA.split(',')[0], info.PointA.split(',')[1]),
-            map: this.mapa,
-            draggable: true,
-            title: 'Esquina inferior izquierda'
+            position: new google.maps.LatLng(info.PointA.split(',')[0], info.PointA.split(',')[1])
          });
 
          this.marker2 = new google.maps.Marker({
-            position: new google.maps.LatLng(info.PointB.split(',')[0], info.PointB.split(',')[1]),
-            map: this.mapa,
-            draggable: true,
-            title: 'Esquina superior derecha'
+            position: new google.maps.LatLng(info.PointB.split(',')[0], info.PointB.split(',')[1])
          });
 
          // Mostramos en el mapa el polígono a cudricular
@@ -292,21 +286,6 @@ export class Maps {
 
          // Creamos y mostramos el grid
          this.obtenerCasillas(info.rows, info.columns, true);
-
-         let leftSideDist = Math.round((this.marker2.getPosition().lng() - this.marker1.getPosition().lng()) * 10000) / 100;
-         let belowSideDist = Math.round((this.marker2.getPosition().lat() - this.marker1.getPosition().lat()) * 10000) / 100;
-
-         google.maps.event.addListener(this.marker1, 'dragend', () => {
-            this.rectangle.setBounds(new google.maps.LatLngBounds(this.marker1.getPosition(), this.marker2.getPosition()));
-            leftSideDist = Math.round((this.marker2.getPosition().lng() - this.marker1.getPosition().lng()) * 10000) / 100;
-            this.obtenerCasillas(info.rows, info.columns, false);
-         });
-
-         google.maps.event.addListener(this.marker2, 'dragend', () => {
-            this.rectangle.setBounds(new google.maps.LatLngBounds(this.marker1.getPosition(), this.marker2.getPosition()));
-            belowSideDist = Math.round((this.marker2.getPosition().lat() - this.marker1.getPosition().lat()) * 10000) / 100;
-            this.obtenerCasillas(info.rows, info.columns, false);
-         });
       });
    }
 
@@ -350,7 +329,7 @@ export class Maps {
                strokeOpacity: .8,
                strokeWeight: 2,
                fillColor: this.matrizColores[i][j] || '#3ADF00',
-               fillOpacity: 0.7,
+               fillOpacity: 0.3,
                map: this.mapa,
                bounds: new google.maps.LatLngBounds(
                   new google.maps.LatLng(m1Lat + (excLat * i), m1Lng + (excLng * j)),
@@ -362,8 +341,8 @@ export class Maps {
 
    public toggleCuadricula() {
       this.toggle(this.rectangle);
-      this.toggle(this.marker1);
-      this.toggle(this.marker2);
+      //this.toggle(this.marker1);
+      //this.toggle(this.marker2);
 
       for (let i = 0; i < 20; i++) {
          for (let j = 0; j < 20; j++) {
