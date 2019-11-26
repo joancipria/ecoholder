@@ -339,7 +339,7 @@ export class Maps {
       } // for i Lat
    }
 
-   public toggleCuadricula() {
+   public toggleCuadricula():boolean {
       this.toggle(this.rectangle);
       //this.toggle(this.marker1);
       //this.toggle(this.marker2);
@@ -349,6 +349,8 @@ export class Maps {
             this.toggle(this.rectangleLng[i][j]);
          }
       }
+
+      return this.rectangle.getMap();
    }
 
    // ---------------------------------------------------------------

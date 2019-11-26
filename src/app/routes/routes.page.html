@@ -28,7 +28,8 @@
 
         <ion-fab-list side="top">
             <ion-fab-button (click)="mostrarGrid()">
-                <ion-icon name="eye-off"></ion-icon>
+                <ion-icon name="eye" *ngIf="!cuadricula"></ion-icon>
+                <ion-icon name="eye-off" *ngIf="cuadricula"></ion-icon>
             </ion-fab-button>
             <ion-fab-button (click)="toggleSelectorContaminante()">
                 <ion-icon name="funnel"></ion-icon>

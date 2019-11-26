@@ -18,6 +18,7 @@ export class RoutesPage implements OnInit {
   showSelectContaminante: boolean = false;
   @ViewChild('select', { static: false }) select: IonSelect;
   private cuadricula = false;
+  private toggleCuadricula = false;
 
   constructor(
     private router: Router,
@@ -126,6 +127,6 @@ export class RoutesPage implements OnInit {
       this.cuadricula = true;
       return;
     }
-    this.maps.toggleCuadricula();
+    this.toggleCuadricula = this.maps.toggleCuadricula();
   }
 }
