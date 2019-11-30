@@ -1,3 +1,11 @@
+/*********************************************************************
+@name home.page.ts
+@description Lógica correspondiente a la vista "Home" 
+@author Joan Ciprià Moreno Teodoro
+@date 10/09/2019
+@license GPLv3
+*********************************************************************/
+
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { ReceptorBLE } from '../core/services/receptorBLE.service';

@@ -1,3 +1,11 @@
+/*********************************************************************
+@name register.page.ts
+@description Lógica correspondiente a la vista "Register" 
+@author Joan Ciprià Moreno Teodoro
+@date 10/09/2019
+@license GPLv3
+*********************************************************************/
+
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Firebase } from '../core/services/firebase.service';
