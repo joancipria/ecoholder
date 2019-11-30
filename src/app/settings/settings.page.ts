@@ -6,12 +6,18 @@
 @license GPLv3
 *********************************************************************/
 
+// Librerías de angular/ionic
 import { Component, OnInit } from '@angular/core';
 import { NavController, AlertController } from '@ionic/angular';
-import { Firebase } from '../core/services/firebase.service';
-import { Beacon } from '../core/services/beacon.service';
 import { NgZone } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
+
+// Firebase 
+import { Firebase } from '../core/services/firebase.service';
+
+// Beacon
+import { Beacon } from '../core/services/beacon.service';
+
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
@@ -21,8 +27,8 @@ export class SettingsPage implements OnInit {
 
   userEmail: string;
   userUuid: string;
-  devices: any[]=[];
-  newDevices: any[]=[];
+  devices: any[] = [];
+  newDevices: any[] = [];
   constructor(
     private navCtrl: NavController,
     private firebase: Firebase,
@@ -43,6 +49,11 @@ export class SettingsPage implements OnInit {
     }
   }
 
+  /**********************************************
+  @description Cerrar sesión
+  @author Joan Ciprià Moreno Teodoro
+  @date 27/10/2019
+  ***********************************************/
   logout() {
     this.firebase.logout()
       .then(res => {
@@ -54,7 +65,12 @@ export class SettingsPage implements OnInit {
       })
   }
 
-  // Obtene imagen de perfil de gravatar
+  /**********************************************
+  @description Obtener imagen de perfil de gravatar
+  @design f() -> (String) Link Gravatar
+  @author Joan Ciprià Moreno Teodoro
+  @date 02/11/2019
+  ***********************************************/
   obtenerImagenGravatar() {
 
     // MD5 (Message-Digest Algorithm) by WebToolkit
@@ -82,20 +98,20 @@ export class SettingsPage implements OnInit {
     const alert = this.alertCtrl.create({
       message: 'Esta acción no se puede deshacer',
       subHeader: '¿Está seguro que quiere eliminar el dispositivo ' + this.devices[index].alias + '?',
-        buttons: [
-          { text: 'SI', handler: () => this.firebase.eliminarDispositivo(id) },
-          { text: 'NO', role: 'cancel', handler: () => console.log('Ha pulsado NO') }
-        ]
-      }).then(alert => {
+      buttons: [
+        { text: 'SI', handler: () => this.firebase.eliminarDispositivo(id) },
+        { text: 'NO', role: 'cancel', handler: () => console.log('Ha pulsado NO') }
+      ]
+    }).then(alert => {
       alert.present();
-      });
+    });
 
-    // Implemenación con mostrarConfirmacion()
-    // const handler =  this.firebase.eliminarDispositivo(this.userUuid, id);
-    // this.mostrarConfirmacion(
-    //   'Esta acción no se puede deshacer',
-    //   '¿Está seguro que quiere eliminar el dispositivo ' + this.devices[index].alias + '?',
-    //   handler);
+    /*Implemenación con mostrarConfirmacion()
+    const handler = this.firebase.eliminarDispositivo(this.userUuid, id);
+    this.mostrarConfirmacion(
+      'Esta acción no se puede deshacer',
+      '¿Está seguro que quiere eliminar el dispositivo ' + this.devices[index].alias + '?',
+      handler);*/
   }
 
   // -------------------------------------------------------------------
@@ -106,76 +122,76 @@ export class SettingsPage implements OnInit {
   // -------------------------------------------------------------------
   private mostrarConfirmacion(texto: string, subtexto: string, handlerAction: any) {
     const aleart = this.alertCtrl.create({
-    message: texto,
-    subHeader: subtexto,
+      message: texto,
+      subHeader: subtexto,
       buttons: [
         { text: 'SI', handler: () => handlerAction },
         { text: 'NO', role: 'cancel', handler: () => console.log('Ha pulsado NO') }
       ]
     }).then(alert => {
-    alert.present();
+      alert.present();
     });
   }
 
- // ----------------------------------------------------------------
+  // ----------------------------------------------------------------
   // Función que se encarga de presentar la ventana de carga,
   // la función recibe un numero como convenio para diferenciar 
   // que tipo de ventana se representa:
   //  1 --> Buscando dispositivos  2 --> Sincronizar con el dispositvo + mensaje
   //                tipoCarga -> f() -> 
   //
-   //                  Vicent Borja Roca    
+  //                  Vicent Borja Roca    
   // ----------------------------------------------------------------
 
   async presentLoading(tipoCarga: any) {
 
-    if(tipoCarga == 1){
-    var cargando = await this.loading.create({
-      message: 'Buscando...',
-      duration: 2000
-    });
-    await cargando.present();
+    if (tipoCarga == 1) {
+      var cargando = await this.loading.create({
+        message: 'Buscando...',
+        duration: 2000
+      });
+      await cargando.present();
 
-  const { role, data } = await cargando.onDidDismiss();
-  }
-  if(tipoCarga == 2){
-    var cargando = await this.loading.create({
-      message: 'Sincronizando...',
-      duration: 3000
-    });
-    await cargando.present();
+      const { role, data } = await cargando.onDidDismiss();
+    }
+    if (tipoCarga == 2) {
+      var cargando = await this.loading.create({
+        message: 'Sincronizando...',
+        duration: 3000
+      });
+      await cargando.present();
 
-    const { role, data } = await cargando.onDidDismiss();
+      const { role, data } = await cargando.onDidDismiss();
 
-    const alert = this.alertCtrl.create({
-      message: "Dispositivo sincronizado satisfactoriamente",
+      const alert = this.alertCtrl.create({
+        message: "Dispositivo sincronizado satisfactoriamente",
         buttons: [
           { text: 'Confirmar', role: 'cancel', handler: () => console.log('sincronizado') }
         ]
       }).then(alert => {
-      alert.present();
+        alert.present();
       });
-    
+
+    }
+    console.log('Loading dismissed!');
   }
-  console.log('Loading dismissed!');
-}
 
   // ----------------------------------------------------------------
   // Llama a escanearDispositivos() y guarda los dispositivos escaneados
   //    en la lista newDevices()
   //                 -> f() -> 
   //
-   //                  Vicent Borja Roca
+  //                  Vicent Borja Roca
   // ----------------------------------------------------------------
 
- buscarYMostrarDispositivos(){
+  buscarYMostrarDispositivos() {
 
     this.newDevices = [];
     this.presentLoading(1);
     this.newDevices = this.beacon.escanearDispositivos();
     console.log(this.newDevices);
 
-}
+  }
 
   // -----------------------------------------------------------------------------
   //  Guardo un dispositivo en la bbdd cuando el usuario lo elige de la lista
@@ -183,21 +199,21 @@ export class SettingsPage implements OnInit {
   //  
   //    index:string(la 'key' que identifica el dispositivo) -> f() -> 
   //
-   //               Vicent Borja Roca
+  //               Vicent Borja Roca
   // ------------------------------------------------------------------------------
 
- darDeAlta(index: string){
+  darDeAlta(index: string) {
 
-  const id = this.newDevices[index].id;
+    const id = this.newDevices[index].id;
 
-  console.log("dar de alta a: " + id);
+    console.log("dar de alta a: " + id);
 
-this.presentLoading(2);
+    this.presentLoading(2);
 
-  this.ngZone.run(()=>{
-    this.firebase.guardarDispositivo(this.newDevices[index]);
+    this.ngZone.run(() => {
+      this.firebase.guardarDispositivo(this.newDevices[index]);
     })
-    
-}
+
+  }
 
 }
