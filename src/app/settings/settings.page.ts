@@ -70,7 +70,7 @@ export class SettingsPage implements OnInit {
   // -------------------------------------------------------------------
   mostrarDispositivosVinculados() {
     this.firebase.obtenerDevices().subscribe(res => {
-      this.devices = this.parsearDatos(res);
+      this.devices = res;
     });
   }
 
@@ -117,15 +117,6 @@ export class SettingsPage implements OnInit {
     });
   }
 
-  // ----------------------------------------------------------------
-  // Pequeño hack para poder leer los datos de firebase.
-  // No se como se puede leer directamete sin que de fallo
-  // data: Observable<Item> FirestoreData(?) -> f() -> json
-  // ----------------------------------------------------------------
-  private parsearDatos(data: any) {
-    const rawData = JSON.stringify(data);
-    return JSON.parse(rawData);
-  }
  // ----------------------------------------------------------------
   // Función que se encarga de presentar la ventana de carga,
   // la función recibe un numero como convenio para diferenciar 
