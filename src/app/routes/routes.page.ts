@@ -7,6 +7,10 @@ import { ReceptorBLE } from "../core/services/receptorBLE.service";
 import { Firebase } from '../core/services/firebase.service';
 import { Maps } from '../core/services/maps.service';
 
+// tutorial
+import { ModalController } from '@ionic/angular';
+import * as introJs from 'intro.js/intro.js';
+
 @Component({
   selector: 'app-routes',
   templateUrl: './routes.page.html',
@@ -33,6 +37,10 @@ export class RoutesPage implements OnInit {
   }
 
   ngOnInit() {
+    // Raquel. Aqui se inicia el tutorial
+    introJs().start().oncomplete(() => {
+      this.navCtrl.navigateForward('/app/tabs/photos?multi-page=true');
+    });
   }
 
   // Wait for dom

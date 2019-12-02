@@ -1,11 +1,11 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>Settings</ion-title>
-        <ion-button class="logoutButton" size="small" color="danger" slot="end" (click)="logout()">Log out</ion-button>
+        <ion-title data-step="1" data-intro="Ajusta tus ajustes!">Settings</ion-title>
+        <ion-button data-step="4" data-intro="Con este botón puedes cerrar sesión. (no lo pulses, quédate con nosotros!" class="logoutButton" size="small" color="danger" slot="end" (click)="logout()">Log out</ion-button>
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content data-step="5" data-intro="Ya puedes empezar a descontaminarte!! Nos vemos!">
     <ion-grid>
         <ion-row>
             <ion-col size="3">
@@ -28,7 +28,7 @@
 
 
 
-                <ion-list>
+                <ion-list data-step="2" data-intro="Una lista de todos tus ecoHolders">
                     <ion-list-header>Mis EcoHolders</ion-list-header>
                     <ion-item *ngFor="let device of devices;let i = index">
                         <ion-icon slot="start" name="bluetooth"></ion-icon>
@@ -53,7 +53,7 @@
             <ion-col size="0" size-sm="3">
             </ion-col>
             <ion-col size="12" size-sm="6">
-                <ion-button expand="block" (click)="buscarYMostrarDispositivos();">Buscar</ion-button>
+                <ion-button expand="block" (click)="buscarYMostrarDispositivos();" data-step="3" data-intro="Añade los ecoHolders que quieras!">Buscar</ion-button>
                 <ion-list>
                     <ion-item *ngFor="let device of newDevices;let j = index" (click)="darDeAlta(j)">
                         <ion-icon slot="start" name="bluetooth"></ion-icon>

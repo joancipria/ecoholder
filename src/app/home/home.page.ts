@@ -5,6 +5,12 @@ import { Firebase } from '../core/services/firebase.service';
 import { Platform } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 
+// tutorial Raquel
+import { NavController, ModalController } from '@ionic/angular';
+//import * as introJs from 'intro.js/intro.js';
+//const introJs = require("node_modules/intro.js/intro.js");
+import * as introJs from "../../../node_modules/intro.js/intro.js";
+
 
 @Component({
   selector: 'app-home',
@@ -20,6 +26,7 @@ export class HomePage implements OnInit {
     public plt: Platform,
     private firebase: Firebase,
     private alertCtrl: AlertController,
+    private navCtrl: NavController
 
   ) {
     if (plt.is('android')) {
@@ -30,6 +37,11 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.showChart();
     this.userImg = this.obtenerImagenGravatar();
+
+    // Raquel. Aqui se inicia el tutorial
+    introJs().start().oncomplete(() => {
+      this.navCtrl.navigateForward('/app/tabs/routes?multi-page=true');
+    });
 
   }
 

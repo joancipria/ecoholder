@@ -4,6 +4,12 @@ import { Firebase } from '../core/services/firebase.service';
 import { Beacon } from '../core/services/beacon.service';
 import { NgZone } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
+
+//tutorial
+import { ModalController } from '@ionic/angular';
+import * as introJs from 'intro.js/intro.js';
+
+
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
@@ -33,6 +39,12 @@ export class SettingsPage implements OnInit {
       this.mostrarDispositivosVinculados();
       this.newDevices = [];
     }
+
+    // Raquel. Aqui se inicia el tutorial
+    introJs().start().oncomplete(() => {
+      this.navCtrl.navigateForward('/app/tabs/home?multi-page=true');
+    });
+
   }
 
   logout() {

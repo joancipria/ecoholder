@@ -63,7 +63,6 @@ export class Firebase {
 
    // Login / Iniciar sesión
    public login(value) {
-      this.uuid = this.informacionUsuario().uid;
       return new Promise<any>((resolve, reject) => {
          firebase.auth().signInWithEmailAndPassword(value.email, value.password)
             .then(
@@ -117,6 +116,7 @@ export class Firebase {
    // Diana Hernández Soler
    // -----------------------------------------------------
    public obtenerDevices() {
+      this.uuid = this.informacionUsuario().uid;
       const measuresRef = this.db.doc('users/' + this.uuid);
       return measuresRef.collection('devices').valueChanges();
    }
@@ -127,6 +127,7 @@ export class Firebase {
    // Diana Hernández Soler
    // -----------------------------------------------------
    public eliminarDispositivo(id: string) {
+      this.uuid = this.informacionUsuario().uid;
       const measuresRef = this.db.doc('users/' + this.uuid);
       measuresRef.collection('devices').doc(id).delete();
    }
@@ -161,6 +162,7 @@ export class Firebase {
 
 
    public guardarDispositivo(dispositivo: any){
+      this.uuid = this.informacionUsuario().uid;
         const ref = this.db.doc('users/' + this.uuid);
       ref.collection('devices').doc(dispositivo.id).set({
          alias: dispositivo.name,
