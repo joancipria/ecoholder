@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title data-step="1" data-intro="Ajusta tus ajustes!">Settings</ion-title>
+        <ion-title data-step="1" data-intro="Te mostramos la página donde se encuentran tus EcoHolders, además de tu perfil de usuario.">Settings</ion-title>
         <ion-button data-step="4" data-intro="Con este botón puedes cerrar sesión. (no lo pulses, quédate con nosotros!" class="logoutButton" size="small" color="danger" slot="end" (click)="logout()">Log out</ion-button>
     </ion-toolbar>
 </ion-header>
@@ -28,7 +28,7 @@
 
 
 
-                <ion-list data-step="2" data-intro="Una lista de todos tus ecoHolders">
+                <ion-list data-step="2" data-intro="Una lista de todos tus ecoHolders. Aqu te mostramos todos los dispositivos que tienes en tu perfil a los cuales tienes acceso.">
                     <ion-list-header>Mis EcoHolders</ion-list-header>
                     <ion-item *ngFor="let device of devices;let i = index">
                         <ion-icon slot="start" name="bluetooth"></ion-icon>
@@ -53,7 +53,7 @@
             <ion-col size="0" size-sm="3">
             </ion-col>
             <ion-col size="12" size-sm="6">
-                <ion-button expand="block" (click)="buscarYMostrarDispositivos();" data-step="3" data-intro="Añade los ecoHolders que quieras!">Buscar</ion-button>
+                <ion-button expand="block" (click)="buscarYMostrarDispositivos();" data-step="3" data-intro="Añade los ecoHolders que quieras! Busca los dispostivos cercanos y añade el tuyo a tu lista. Así podrás empezar a tomar medidas">Buscar</ion-button>
                 <ion-list>
                     <ion-item *ngFor="let device of newDevices;let j = index" (click)="darDeAlta(j)">
                         <ion-icon slot="start" name="bluetooth"></ion-icon>

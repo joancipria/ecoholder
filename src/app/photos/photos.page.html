@@ -6,7 +6,7 @@
 
 <ion-content>
   <ion-grid>
-      <ion-card>
+      <ion-card data-step="2" data-intro="Aqui te mostramos una pequeña explicación de qué puedes hacer con tus fotos">
           <ion-card-header>
               <ion-card-subtitle>¿Quiere saber que aire respira al empezar el dia?</ion-card-subtitle>
           </ion-card-header>
@@ -19,9 +19,9 @@
         </ion-card>
     <ion-row>
       <ion-col size="6">
-        <ion-card data-step="2" data-intro="Aqui se muestran las fotos que has guardado">
+        <ion-card data-step="3" data-intro="Puedes ver todas las fotos que has guardado. Cada vez que hagas una fotografía puedes guardarla y aparecerá aqui.">
           <img [src]="foto" *ngIf="foto" />
-          <ion-card-header data-step="3" data-intro="Información de cada foto">
+          <ion-card-header data-step="4" data-intro="¡Pero no nos basta solo con la foto! Te mostramos información de cada una, para que puedas saber todo de ella">
             <ion-card-subtitle>05/11/2019</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
@@ -33,7 +33,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-fab data-step="4" data-intro="¿Quiere saber que aire respira al empezar el dia? Haga una foto al horizonte y nuestros expertos la evaluarán para ofrecerle la mejor información sobre las partículas que respira día a día " vertical="bottom" horizontal="end" slot="fixed" (click)="hacerFoto()" vertical="bottom" horizontal="end" slot="fixed" (click)="hacerFoto()">
+  <ion-fab data-step="5" data-intro="¿Quiere saber que aire respira al empezar el dia? Haga una foto al horizonte y nuestros expertos la evaluarán para ofrecerle la mejor información sobre las partículas que respira día a día " vertical="bottom" horizontal="end" slot="fixed" (click)="hacerFoto()" vertical="bottom" horizontal="end" slot="fixed" (click)="hacerFoto()">
     <ion-fab-button>
       <ion-icon name="camera">
       </ion-icon>

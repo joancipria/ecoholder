@@ -37,10 +37,10 @@
 
               },
               {
-                "input": "src/global.scss"
+                "input": "node_modules/intro.js/introjs.css"
               },
               {
-                "input": "node_modules/intro.js/introjs.css"
+                "input": "src/global.scss"
               }
             ],
             "scripts": []
