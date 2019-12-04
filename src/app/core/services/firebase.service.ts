@@ -121,6 +121,24 @@ export class Firebase {
       return measuresRef.collection('devices').valueChanges();
    }
 
+   // Sin subscribe
+   public getDevices(){
+      let devices = [];
+      return new Promise((resolve, reject) => {
+         this.db.doc('users/' + this.uuid).collection('devices').get()
+            .toPromise()
+             .then(snapshot => {
+                 snapshot.forEach(doc => {
+                    devices.push(doc.data());
+                 });
+                 return resolve(devices);
+             })
+             .catch(err => {
+                 console.log('Error getting documents', err);
+             });
+     });
+   }
+
    // -----------------------------------------------------
    // Elimina el dispostivo con el id dado del usuario logueado
    // uuid: string, id: string -> f() -> void

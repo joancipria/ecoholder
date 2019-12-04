@@ -184,11 +184,12 @@ export class SettingsPage implements OnInit {
   //                  Vicent Borja Roca
   // ----------------------------------------------------------------
 
-  buscarYMostrarDispositivos() {
+  async buscarYMostrarDispositivos() {
 
     this.newDevices = [];
     this.presentLoading(1);
-    this.newDevices = this.beacon.escanearDispositivos();
+    await this.beacon.escanearDispositivos();
+    this.newDevices = this.beacon.newDevices;
     console.log(this.newDevices);
 
   }
