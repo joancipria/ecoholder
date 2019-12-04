@@ -56,12 +56,15 @@ import { Camera } from '@ionic-native/camera/ngx';
 //Push
 import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
 
+// Directions moddal
+import { DirectionsPage } from './routes/directions/directions.page';
+
 firebase.initializeApp(environment.firebaseConfig);
 
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [AppComponent,DirectionsPage],
+  entryComponents: [DirectionsPage],
   imports: [
     BrowserModule, 
     IonicModule.forRoot(),

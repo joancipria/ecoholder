@@ -8,7 +8,10 @@
 
 import { Component, NgZone, ViewChild, OnInit } from "@angular/core";
 import { Router } from '@angular/router';
-import { AlertController, ToastController, NavController, Platform, IonSelect } from "@ionic/angular";
+import { AlertController, ToastController, NavController, Platform, IonSelect, ModalController } from "@ionic/angular";
+
+// Directions moddal
+import { DirectionsPage } from './directions/directions.page';
 
 // Services
 import { ReceptorBLE } from "../core/services/receptorBLE.service";
@@ -37,7 +40,8 @@ export class RoutesPage implements OnInit {
     private ngZone: NgZone,
     public firebase: Firebase,
     public maps: Maps,
-    public plt: Platform
+    public plt: Platform,
+    public modalController: ModalController
   ) {
   }
 
@@ -136,5 +140,16 @@ export class RoutesPage implements OnInit {
       return;
     }
     this.toggleCuadricula = this.maps.toggleCuadricula();
+  }
+
+  public async mostrarDirections() {
+    const modal = await this.modalController.create({
+      component: DirectionsPage
+    });
+    return await modal.present();
+  }
+
+  public async cerrarDirections(){
+    await this.modalController.dismiss();
   }
 }
