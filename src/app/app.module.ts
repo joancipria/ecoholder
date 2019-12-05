@@ -49,6 +49,9 @@ import * as firebase from 'firebase';
 //Camara
 import { Camera } from '@ionic-native/camera/ngx';
 
+//Push
+import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
+
 firebase.initializeApp(environment.firebaseConfig);
 
 
@@ -80,7 +83,8 @@ firebase.initializeApp(environment.firebaseConfig);
     Camera,
     IBeacon,Beacon,Device,
     LocationAccuracy,
-    AndroidPermissions
+    AndroidPermissions, 
+    Push
   ],
   bootstrap: [AppComponent]
 })
