@@ -81,7 +81,6 @@ export class Maps {
 
       // Renderizar directions
       this.directionsRenderer.setMap(this.mapa);
-      console.log(panelElement)
       this.directionsRenderer.setPanel(panelElement);
 
       // Renderizar mapa calor
