@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavParams} from "@ionic/angular";
 
 @Component({
   selector: 'app-directions',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DirectionsPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private navParams: NavParams) { 
+  }
 
   ngOnInit() {
   }
 
+  public cerrarDirections() {
+    this.navParams.data.parentRef.cerrarDirections();
+  }
 }
