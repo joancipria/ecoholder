@@ -1,6 +1,17 @@
+/*********************************************************************
+@name routes.page.ts
+@description Lógica correspondiente a la vista "Routes" 
+@author Joan Ciprià Moreno Teodoro
+@date 10/09/2019
+@license GPLv3
+*********************************************************************/
+
 import { Component, NgZone, ViewChild, OnInit } from "@angular/core";
 import { Router } from '@angular/router';
-import { AlertController, ToastController, NavController, Platform, IonSelect } from "@ionic/angular";
+import { AlertController, ToastController, NavController, Platform, IonSelect, ModalController } from "@ionic/angular";
+
+// Directions moddal
+import { DirectionsPage } from './directions/directions.page';
 
 // Services
 import { ReceptorBLE } from "../core/services/receptorBLE.service";
@@ -20,9 +31,12 @@ import { Storage } from '@ionic/storage';
 export class RoutesPage implements OnInit {
   @ViewChild('map', { static: false }) element;
   @ViewChild('search', { static: false }) elementSearch;
+  @ViewChild('directionsButton', { static: false }) elementDirectionsButton;
   showSelectContaminante: boolean = false;
   @ViewChild('select', { static: false }) select: IonSelect;
   private cuadricula = false;
+  private toggleCuadricula = false;
+  private directionsModal: any;
 
   constructor(
     private router: Router,
@@ -34,6 +48,7 @@ export class RoutesPage implements OnInit {
     public firebase: Firebase,
     public maps: Maps,
     public plt: Platform,
+    public modalController: ModalController
     private storage: Storage
   ) {
   }
@@ -54,11 +69,21 @@ export class RoutesPage implements OnInit {
   }
 
   // Wait for dom
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
+    // Crear modal
+    this.directionsModal = await this.modalController.create({
+      component: DirectionsPage,
+      backdropDismiss: false,
+      componentProps: {parentRef: this}
+    });
+    this.directionsModal.style = "display: none;" // Ocultar por defecto
+    this.directionsModal.present();
+
     this.plt.ready().then(() => {
       // Load just once
-      this.maps.inicializarMapa(this.element, this.elementSearch);
+      this.maps.inicializarMapa(this.element, this.elementSearch, this.directionsModal.childNodes[1], this.elementDirectionsButton);
     });
+
   }
 
   // ----------------------------------------------------------------------
@@ -116,11 +141,6 @@ export class RoutesPage implements OnInit {
     }
   }
 
-  calcRoute(destination) {
-    this.maps.calcularRuta(destination);
-  }
-
-
   // ----------------------------------------------------------------------
   // Mostrar / Ocultar el select de contaminante
   // -> f() ->
@@ -144,6 +164,14 @@ export class RoutesPage implements OnInit {
       this.cuadricula = true;
       return;
     }
-    this.maps.toggleCuadricula();
+    this.toggleCuadricula = this.maps.toggleCuadricula();
+  }
+
+  public mostrarDirections() {
+    this.directionsModal.style.display = "flex";
+  }
+
+  public cerrarDirections() {
+    this.directionsModal.style.display = "none";
   }
 }

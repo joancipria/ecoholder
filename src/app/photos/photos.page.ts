@@ -1,3 +1,11 @@
+/*********************************************************************
+@name photos.page.ts
+@description Lógica correspondiente a la vista "Photos" 
+@author Joan Ciprià Moreno Teodoro
+@date 10/09/2019
+@license GPLv3
+*********************************************************************/
+
 import { Component, OnInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 

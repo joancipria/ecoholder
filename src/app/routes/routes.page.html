@@ -20,7 +20,10 @@
     </ion-item>
     <div id="map" #map style="height:100%;" data-step="3" data-intro="Visualiza tu mapa con todo tipo de detalles. Con un simple vistazo puedes saber la cantidad de gas que hay en toda la zona gracias al mapa de calor que creamos para ti. Coge tu sensor, sal a la calle y analiza todos tus datos. Además te damos la ruta más corta o menos contaminada hacia tu destino. ¿A qué esperas?">
     </div>
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed" data-step="4" data-intro=" Muestra el mapa de calor y elige el contaminante! ">
+    <ion-button id="directionsButton" #directionsButton (click)="mostrarDirections()" class="directionsButton" shape="round">
+        <ion-icon name="map"></ion-icon> Directions
+    </ion-button>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button>
             <ion-icon name="more">
             </ion-icon>
@@ -28,7 +31,8 @@
 
         <ion-fab-list side="top">
             <ion-fab-button (click)="mostrarGrid()">
-                <ion-icon name="eye-off"></ion-icon>
+                <ion-icon name="grid" *ngIf="!cuadricula"></ion-icon>
+                <ion-icon name="thermometer" *ngIf="cuadricula"></ion-icon>
             </ion-fab-button>
             <ion-fab-button (click)="toggleSelectorContaminante()">
                 <ion-icon name="funnel"></ion-icon>

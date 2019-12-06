@@ -43,26 +43,33 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Google maps
 import { Maps } from './core/services/maps.service';
 
+// Local Storage
+import { LocalStorage } from "./core/services/localStorage.service";
+import { IonicStorageModule } from '@ionic/storage';
+
 // Import firebase and load config
 import * as firebase from 'firebase';
 
 //Camara
 import { Camera } from '@ionic-native/camera/ngx';
 
-// Storage
-import { IonicStorageModule } from '@ionic/storage';
+//Push
+import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
+
+// Directions moddal
+import { DirectionsPage } from './routes/directions/directions.page';
 
 firebase.initializeApp(environment.firebaseConfig);
 
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [AppComponent,DirectionsPage],
+  entryComponents: [DirectionsPage],
   imports: [
     BrowserModule, 
-    IonicModule.forRoot(), 
+    IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
-    AppRoutingModule, 
+    AppRoutingModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
      AngularFirestoreModule,
@@ -77,6 +84,7 @@ firebase.initializeApp(environment.firebaseConfig);
     Geolocation,
     LocalizadorGPS,
     ReceptorBLE,
+    LocalStorage,
     BLE,
     ServidorFake,
     HttpClientModule,
@@ -85,8 +93,8 @@ firebase.initializeApp(environment.firebaseConfig);
     Camera,
     IBeacon,Beacon,Device,
     LocationAccuracy,
-    AndroidPermissions
-
+    AndroidPermissions, 
+    Push
   ],
   bootstrap: [AppComponent]
 })
