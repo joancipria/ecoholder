@@ -8,6 +8,7 @@
 
 // Librerías de angular/ionic
 import { Injectable } from '@angular/core';
+import { Platform } from '@ionic/angular';
 
 // Servicios propios
 // GPS
@@ -38,6 +39,7 @@ export class Maps {
    constructor(
       private gps: LocalizadorGPS,
       public firebase: Firebase,
+      public platform: Platform
    ) { }
 
    // Inizializa el mapa sobre el elemento del DOM indidcado
@@ -50,13 +52,26 @@ export class Maps {
       );
 
       // Opciones del mapa
-      const mapOptions = {
-         center: posicionActual,
-         zoom: 13,
-         mapTypeId: google.maps.MapTypeId.ROADMAP,
-         zoomControl: false,
-         streetViewControl: false,
-      };
+      let mapOptions;
+      if (this.platform.is('cordova')) {
+         // Móvil
+         mapOptions = {
+            center: posicionActual,
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            disableDefaultUI: true
+         };
+      } else {
+         // PC
+         mapOptions = {
+            center: posicionActual,
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            zoomControl: true,
+            streetViewControl: false
+         };
+      }
+
 
       // Mostramos la estación de medida de Gandía en el mapa
       this.mostrarEstacionDeMedida();
@@ -342,7 +357,7 @@ export class Maps {
       } // for i Lat
    }
 
-   public toggleCuadricula():boolean {
+   public toggleCuadricula(): boolean {
       this.toggle(this.rectangle);
       //this.toggle(this.marker1);
       //this.toggle(this.marker2);
