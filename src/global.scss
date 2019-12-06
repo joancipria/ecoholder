@@ -24,3 +24,11 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+.adp{
+    position: absolute;
+    z-index: 9999;
+    top: 58px;
+    margin: 9px;
+    overflow: auto;
+    max-height: 100%;
+}
