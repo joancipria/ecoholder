@@ -8,6 +8,7 @@ import { LoadingController } from '@ionic/angular';
 //tutorial
 import { ModalController } from '@ionic/angular';
 import * as introJs from 'intro.js/intro.js';
+import { Storage } from '@ionic/storage';
 
 
 @Component({
@@ -27,7 +28,8 @@ export class SettingsPage implements OnInit {
     private alertCtrl: AlertController,
     private beacon: Beacon,
     private ngZone: NgZone,
-    private loading: LoadingController
+    private loading: LoadingController,
+    private storage: Storage
   ) { }
 
   ngOnInit() {
@@ -40,11 +42,18 @@ export class SettingsPage implements OnInit {
       this.newDevices = [];
     }
 
-    // Raquel. Aqui se inicia el tutorial
-    introJs().start().oncomplete(() => {
-      this.navCtrl.navigateForward('/app/tabs/home?multi-page=true');
-    });
+    // Raquel. Se utiliza el storage para saber si es la primera vez que entra el usuario.
+    this.storage.get('first_time').then((val) => {
+      if (val == null){
+        console.log('Es la primera vez');
+        this.storage.set('first_time', 'done');
 
+        // Aqui se inicia el tutorial
+        introJs().start().oncomplete(() => {
+          this.navCtrl.navigateForward('/app/tabs/home?multi-page=true');
+        });
+      }
+    });
   }
 
   logout() {

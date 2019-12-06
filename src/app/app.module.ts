@@ -49,6 +49,9 @@ import * as firebase from 'firebase';
 //Camara
 import { Camera } from '@ionic-native/camera/ngx';
 
+// Storage
+import { IonicStorageModule } from '@ionic/storage';
+
 firebase.initializeApp(environment.firebaseConfig);
 
 
@@ -58,13 +61,14 @@ firebase.initializeApp(environment.firebaseConfig);
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 
+    IonicStorageModule.forRoot(),
     AppRoutingModule, 
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
      AngularFirestoreModule,
      AngularFireAuthModule,
-     ReactiveFormsModule,
-     Storage
+     ReactiveFormsModule
+
   ],
   providers: [
     StatusBar,
@@ -82,6 +86,7 @@ firebase.initializeApp(environment.firebaseConfig);
     IBeacon,Beacon,Device,
     LocationAccuracy,
     AndroidPermissions
+
   ],
   bootstrap: [AppComponent]
 })

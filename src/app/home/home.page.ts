@@ -7,9 +7,8 @@ import { AlertController } from '@ionic/angular';
 
 // tutorial Raquel
 import { NavController, ModalController } from '@ionic/angular';
-//import * as introJs from 'intro.js/intro.js';
-//const introJs = require("node_modules/intro.js/intro.js");
-import * as introJs from "../../../node_modules/intro.js/intro.js";
+import * as introJs from "../../..//node_modules/intro.js/intro";
+import { Storage } from '@ionic/storage';
 
 
 @Component({
@@ -26,23 +25,38 @@ export class HomePage implements OnInit {
     public plt: Platform,
     private firebase: Firebase,
     private alertCtrl: AlertController,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private storage: Storage
 
   ) {
     if (plt.is('android')) {
       this.ble.inizializar();
     }
   }
+  
 
   ngOnInit() {
+
+    this.storage.set('Data', 'Holi Raquel').then(_=> {
+      console.log('Backup done!');    
+    }, error => {
+      console.log('erreur : ', JSON.stringify(error))
+    });
     this.showChart();
     this.userImg = this.obtenerImagenGravatar();
 
-    // Raquel. Aqui se inicia el tutorial
-    introJs().start().oncomplete(() => {
-      this.navCtrl.navigateForward('/app/tabs/routes?multi-page=true');
-    });
+    // Raquel. Se utiliza el storage para saber si es la primera vez que entra el usuario.
+    this.storage.get('first_time').then((val) => {
+      if (val == null){
+        console.log('Es la primera vez');
+        this.storage.set('first_time', 'done');
 
+        // Aqui se inicia el tutorial
+        introJs().start().oncomplete(() => {
+          this.navCtrl.navigateForward('/app/tabs/routes?multi-page=true');
+        });
+      }
+    });
   }
 
   showChart() {
