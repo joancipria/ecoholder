@@ -43,6 +43,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Google maps
 import { Maps } from './core/services/maps.service';
 
+// Local Storage
+import { LocalStorage } from "./core/services/localStorage.service";
+import { IonicStorageModule } from '@ionic/storage';
+
 // Import firebase and load config
 import * as firebase from 'firebase';
 
@@ -60,8 +64,9 @@ firebase.initializeApp(environment.firebaseConfig);
   entryComponents: [],
   imports: [
     BrowserModule, 
-    IonicModule.forRoot(), 
-    AppRoutingModule, 
+    IonicModule.forRoot(),
+    IonicStorageModule.forRoot(),
+    AppRoutingModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
      AngularFirestoreModule,
@@ -75,6 +80,7 @@ firebase.initializeApp(environment.firebaseConfig);
     Geolocation,
     LocalizadorGPS,
     ReceptorBLE,
+    LocalStorage,
     BLE,
     ServidorFake,
     HttpClientModule,

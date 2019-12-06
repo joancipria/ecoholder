@@ -9,6 +9,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { ReceptorBLE } from '../core/services/receptorBLE.service';
+import { LocalStorage } from '../core/services/localStorage.service';
 import { Firebase } from '../core/services/firebase.service';
 import { Platform } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
@@ -28,6 +29,7 @@ export class HomePage implements OnInit {
     public plt: Platform,
     private firebase: Firebase,
     private alertCtrl: AlertController,
+    private storage: LocalStorage
 
   ) {
     if (plt.is('android')) {
@@ -39,12 +41,19 @@ export class HomePage implements OnInit {
     this.showChart();
     this.userImg = this.obtenerImagenGravatar();
 
+    // Pruebas del Local Storage
+    console.log('=========== TEST LOCAL STORAGE ========================');
+    this.storage.set('pruebaClave', 'pruebaValor');
+    this.storage.set('pruebaClave2', 'pruebaValor2');
+    this.storage.get('pruebaClave').then(val => console.log('desde home acceso a la variable pruebaClave', val));
+    this.storage.get('pruebaClave2').then(val => console.log('desde home acceso a la variable pruebaClave2', val));
+
   }
 
   showChart() {
     const ctx = (document.getElementById('yudhatp-chart') as any).getContext('2d');
     const data = {
-      datasets: [ {
+      datasets: [{
         data: [
           0,
           0,
@@ -102,12 +111,12 @@ export class HomePage implements OnInit {
   // Diana Hernández Soler
   // --------------------------------------------------------------
   public mostrarConsejos() {
-    const txt = '<ul><li><h6>Ventilar la casa a diario</h6>Aunque parece una obviedad, es muy importante una adecuada ventilación para mejorar la calidad del aire interior</li>' + 
-    '<li><h6>Tener plantas de interior</h6>ayuda a renovar el aire interior de forma natural y efectiva</li> ' +
-    '<li><h6>No fumar en espacios cerrados  </h6>  Encuentra la temperatura exacta para mantener la casa fresca y no abuses de su uso, dado que consume mucha energía.</li>' +
-    '<li><h6>Ventilar bien la cocina</h6>y salir a la terraza o, si la casa lo permite, habilitar una zona para fumadores que esté aislada del resto del hogar y que pueda ventilarse con facilidad. Ahora, bien, si puedes fumar lo más lejos de tu hogar, mucho mejor</li>' +
-    '<li><h6>Usar purificadores de aire  </h6>  Encuentra la temperatura exacta para mantener la casa fresca y no abuses de su uso, dado que consume mucha energía.</li>' +
-    '<li><h6>usa de manera racional el aire acondicionado</h6>Encuentra la temperatura exacta para mantener la casa fresca y no abuses de su uso, dado que consume mucha energía.</li></ul>';
+    const txt = '<ul><li><h6>Ventilar la casa a diario</h6>Aunque parece una obviedad, es muy importante una adecuada ventilación para mejorar la calidad del aire interior</li>' +
+      '<li><h6>Tener plantas de interior</h6>ayuda a renovar el aire interior de forma natural y efectiva</li> ' +
+      '<li><h6>No fumar en espacios cerrados  </h6>  Encuentra la temperatura exacta para mantener la casa fresca y no abuses de su uso, dado que consume mucha energía.</li>' +
+      '<li><h6>Ventilar bien la cocina</h6>y salir a la terraza o, si la casa lo permite, habilitar una zona para fumadores que esté aislada del resto del hogar y que pueda ventilarse con facilidad. Ahora, bien, si puedes fumar lo más lejos de tu hogar, mucho mejor</li>' +
+      '<li><h6>Usar purificadores de aire  </h6>  Encuentra la temperatura exacta para mantener la casa fresca y no abuses de su uso, dado que consume mucha energía.</li>' +
+      '<li><h6>usa de manera racional el aire acondicionado</h6>Encuentra la temperatura exacta para mantener la casa fresca y no abuses de su uso, dado que consume mucha energía.</li></ul>';
     this.mostrarVentana(txt, 'CONSEJOS');
   }
 
@@ -118,13 +127,13 @@ export class HomePage implements OnInit {
   // -------------------------------------------------------------------
   private mostrarVentana(texto: string, subtexto: string) {
     const aleart = this.alertCtrl.create({
-    message: texto,
-    subHeader: subtexto,
+      message: texto,
+      subHeader: subtexto,
       buttons: [
-        { text: 'CERRAR', role: 'cancel'}
+        { text: 'CERRAR', role: 'cancel' }
       ]
     }).then(alert => {
-    alert.present();
+      alert.present();
     });
   }
 
