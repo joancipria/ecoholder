@@ -41,7 +41,7 @@ export class Maps {
    ) { }
 
    // Inizializa el mapa sobre el elemento del DOM indidcado
-   public async inicializarMapa(mapElement, searchElement) {
+   public async inicializarMapa(mapElement, searchElement, panelElement) {
 
       // Obtener posición actual
       const posicionActual = new google.maps.LatLng(
@@ -81,6 +81,8 @@ export class Maps {
 
       // Renderizar directions
       this.directionsRenderer.setMap(this.mapa);
+      console.log(panelElement)
+      this.directionsRenderer.setPanel(panelElement);
 
       // Renderizar mapa calor
       this.renderizarMapaCalor();
