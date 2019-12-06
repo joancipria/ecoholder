@@ -150,10 +150,10 @@ export class RoutesPage implements OnInit {
   }
 
   public mostrarDirections() {
-    this.directionsModal.style="display: flex;";
+    this.directionsModal.style.display = "flex";
   }
 
   public cerrarDirections() {
-    this.directionsModal.style="display: none;";
+    this.directionsModal.style.display = "none";
   }
 }
