@@ -41,7 +41,7 @@ export class Maps {
    ) { }
 
    // Inizializa el mapa sobre el elemento del DOM indidcado
-   public async inicializarMapa(mapElement, searchElement, panelElement) {
+   public async inicializarMapa(mapElement, searchElement, panelElement, directionsButtonElement) {
 
       // Obtener posición actual
       const posicionActual = new google.maps.LatLng(
@@ -104,6 +104,8 @@ export class Maps {
       this.googleAutocomplete.addListener('place_changed', () => {
          const place = this.googleAutocomplete.getPlace(); // obtenemos sitio seleccionado
          this.calcularRuta(place.name + ' ' + place.formatted_address); // calculamos ruta
+         console.log(directionsButtonElement);
+         directionsButtonElement.el.style.display = "flex"; // Mostramos botón
       });
 
    }
