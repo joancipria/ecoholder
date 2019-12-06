@@ -53,13 +53,16 @@ export class Maps {
 
       // Opciones del mapa
       let mapOptions;
-      if (this.platform.is('cordova')) {
+      if (this.platform.is('android')) {
          // Móvil
          mapOptions = {
             center: posicionActual,
             zoom: 13,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
-            disableDefaultUI: true
+            mapTypeControl: true,
+            zoomControl: false,
+            fullscreenControl: false,
+            streetViewControl: false
          };
       } else {
          // PC
@@ -67,10 +70,16 @@ export class Maps {
             center: posicionActual,
             zoom: 13,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: true,
             zoomControl: true,
+            zoomControlOptions: {
+               position: google.maps.ControlPosition.TOP_RIGHT
+            },
+            fullscreenControl: false,
             streetViewControl: false
          };
       }
+      console.log("opciones",mapOptions);
 
 
       // Mostramos la estación de medida de Gandía en el mapa
@@ -119,7 +128,6 @@ export class Maps {
       this.googleAutocomplete.addListener('place_changed', () => {
          const place = this.googleAutocomplete.getPlace(); // obtenemos sitio seleccionado
          this.calcularRuta(place.name + ' ' + place.formatted_address); // calculamos ruta
-         console.log(directionsButtonElement);
          directionsButtonElement.el.style.display = "flex"; // Mostramos botón
       });
 
