@@ -8,7 +8,7 @@
 
 import { Component, NgZone, ViewChild, OnInit } from "@angular/core";
 import { Router } from '@angular/router';
-import { AlertController, ToastController, NavController, Platform, IonSelect, ModalController } from "@ionic/angular";
+import { AlertController, ToastController, NavController, Platform, IonSelect } from "@ionic/angular";
 
 // Directions moddal
 import { DirectionsPage } from './directions/directions.page';

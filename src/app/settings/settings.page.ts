@@ -43,7 +43,7 @@ export class SettingsPage implements OnInit {
     private beacon: Beacon,
     private ngZone: NgZone,
     private loading: LoadingController,
-    private storage: Storage
+    private storage: Storage,
     private helper: Helper
   ) { }
 

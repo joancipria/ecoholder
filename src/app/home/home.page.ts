@@ -47,12 +47,6 @@ export class HomePage implements OnInit {
   
 
   ngOnInit() {
-
-    this.storage.set('Data', 'Holi Raquel').then(_=> {
-      console.log('Backup done!');    
-    }, error => {
-      console.log('erreur : ', JSON.stringify(error))
-    });
     this.showChart();
     this.userImg = this.helper.obtenerImagenGravatar();
     // Test Local Storage
