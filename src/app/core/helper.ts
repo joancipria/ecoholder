@@ -16,7 +16,7 @@ export class Helper {
         private storage: LocalStorage,
         private firebase: Firebase
     ) { }
-
+    public esLaPrimeraVez = false;
     /**********************************************************************************
     @description Devueve true si es la primera vez que entra en la aplicación
     @design  -> f() -> boolean
@@ -29,11 +29,11 @@ export class Helper {
             if (uid !== 'si') {
                 this.storage.set(uid, 'si');
                // console.log('TLS Es la primera vez que el usuario entra desde este dispostivo');
-                return true;
+                this.esLaPrimeraVez = true;
             }
         });
          // console.log('TLS El usuario ya ha entrado a la APP desde este dispositivo');
-        return false;
+        return this.esLaPrimeraVez;
 
     }
 
