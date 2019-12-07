@@ -63,11 +63,13 @@ export class Firebase {
 
    // Login / Iniciar sesión
    public login(value) {
-      this.uuid = this.informacionUsuario().uid;
       return new Promise<any>((resolve, reject) => {
          firebase.auth().signInWithEmailAndPassword(value.email, value.password)
             .then(
-               res => resolve(res),
+               res => {
+                  this.uuid = this.informacionUsuario().uid;
+                  resolve(res);
+               },
                err => reject(err));
       });
    }
@@ -122,21 +124,21 @@ export class Firebase {
    }
 
    // Sin subscribe
-   public getDevices(){
+   public getDevices() {
       let devices = [];
       return new Promise((resolve, reject) => {
          this.db.doc('users/' + this.uuid).collection('devices').get()
             .toPromise()
-             .then(snapshot => {
-                 snapshot.forEach(doc => {
-                    devices.push(doc.data());
-                 });
-                 return resolve(devices);
-             })
-             .catch(err => {
-                 console.log('Error getting documents', err);
-             });
-     });
+            .then(snapshot => {
+               snapshot.forEach(doc => {
+                  devices.push(doc.data());
+               });
+               return resolve(devices);
+            })
+            .catch(err => {
+               console.log('Error getting documents', err);
+            });
+      });
    }
 
    // -----------------------------------------------------
@@ -176,16 +178,25 @@ export class Firebase {
    //   this.servidor.guardarInfoCuadricula(datos);
    // }
 
+   /**********************************************************************************
+    @description Devuelve info (nombre y teléfono) del usuario logueado
+    @design  -> f() -> {name: string, phone: number}
+    @author Diana Hernández Soler
+    @date 04/12/2019
+    **********************************************************************************/
+   public getInfoCurrentUser() {
+      return this.db.doc('users/' + this.uuid).valueChanges();
+   }
 
 
-   public guardarDispositivo(dispositivo: any){
-        const ref = this.db.doc('users/' + this.uuid);
+   public guardarDispositivo(dispositivo: any) {
+      const ref = this.db.doc('users/' + this.uuid);
       ref.collection('devices').doc(dispositivo.id).set({
          alias: dispositivo.name,
          date: Date.now(),
          id: dispositivo.id
-      })
-      
+      });
+
    }
 
 }

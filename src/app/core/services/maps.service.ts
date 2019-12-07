@@ -16,6 +16,9 @@ import { LocalizadorGPS } from '../../core/services/LocalizadorGPS.service';
 // Firebase
 import { Firebase } from '../../core/services/firebase.service';
 
+// Helper
+import { Helper } from '../../core/helper';
+
 
 declare var google;
 
@@ -38,6 +41,7 @@ export class Maps {
    constructor(
       private gps: LocalizadorGPS,
       public firebase: Firebase,
+      private helper: Helper
    ) { }
 
    // Inizializa el mapa sobre el elemento del DOM indidcado
@@ -203,7 +207,7 @@ export class Maps {
       this.firebase.obtenerEstacionDeMedida().subscribe((res: any) => {
 
          // Parsearmos los datos recibidos de Firestore para su correcta visualización
-         const station = this.parsearDatos(res);
+         const station = this.helper.parsearDatos(res);
 
          // Creación del objeto LatLng de Google Maps con las coordenadas de la estación
          const LocalizacionEstacion = new google.maps.LatLng(
@@ -256,7 +260,7 @@ export class Maps {
       this.firebase.obtenerInfoCuadricula().subscribe((res: any) => {
 
          // Parseramos los datos de Firestore
-         const info = this.parsearDatos(res);
+         const info = this.helper.parsearDatos(res);
          console.log('raw', res);
          console.log('parse', info);
 
@@ -363,7 +367,7 @@ export class Maps {
       this.firebase.obtenerUltimoMapa().subscribe(res => {
 
          // Parseamos los datos
-         const datos = this.parsearDatos(res);
+         const datos = this.helper.parsearDatos(res);
          const grid = JSON.parse(datos[0].grid);
          console.table(grid);
 
@@ -399,16 +403,5 @@ export class Maps {
    // ---------------------------------------------------------------
    private toggle(elemento: any) {
       elemento.setMap(elemento.getMap() ? null : this.mapa);
-   }
-
-
-   // ----------------------------------------------------------------
-   // Pequeño hack para poder leer los datos de firebase.
-   // No se como se puede leer directamete sin que de fallo
-   // data: Observable<Item> FirestoreData(?) -> f() -> json
-   // ----------------------------------------------------------------
-   private parsearDatos(data: any) {
-      const rawData = JSON.stringify(data);
-      return JSON.parse(rawData);
    }
 }

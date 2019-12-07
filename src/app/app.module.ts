@@ -10,9 +10,9 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 // BLE
-import { ReceptorBLE } from "./core/services/receptorBLE.service";
+import { ReceptorBLE } from './core/services/receptorBLE.service';
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
-import { Beacon } from "./core/services/beacon.service";
+import { Beacon } from './core/services/beacon.service';
 import { Device } from '@ionic-native/device/ngx';
 import { BLE } from '@ionic-native/ble/ngx';
 
@@ -21,12 +21,12 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 // GPS
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { LocalizadorGPS } from "./core/services/LocalizadorGPS.service";
+import { LocalizadorGPS } from './core/services/LocalizadorGPS.service';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 
 
 // Servidor Fake
-import { ServidorFake } from "./core/services/servidorFake.service";
+import { ServidorFake } from './core/services/servidorFake.service';
 import { HttpClientModule } from '@angular/common/http';
 
 // Firebase
@@ -44,17 +44,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Maps } from './core/services/maps.service';
 
 // Local Storage
-import { LocalStorage } from "./core/services/localStorage.service";
+import { LocalStorage } from './core/services/localStorage.service';
 import { IonicStorageModule } from '@ionic/storage';
 
 // Import firebase and load config
 import * as firebase from 'firebase';
 
-//Camara
+// Camara
 import { Camera } from '@ionic-native/camera/ngx';
 
-//Push
+// Push
 import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
+
+// Helper
+import { Helper } from './core/helper';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -63,7 +66,7 @@ firebase.initializeApp(environment.firebaseConfig);
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
-    BrowserModule, 
+    BrowserModule,
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
     AppRoutingModule,
@@ -81,15 +84,18 @@ firebase.initializeApp(environment.firebaseConfig);
     LocalizadorGPS,
     ReceptorBLE,
     LocalStorage,
+    Helper,
     BLE,
     ServidorFake,
     HttpClientModule,
     Firebase,
     Maps,
     Camera,
-    IBeacon,Beacon,Device,
+    IBeacon,
+    Beacon,
+    Device,
     LocationAccuracy,
-    AndroidPermissions, 
+    AndroidPermissions,
     Push
   ],
   bootstrap: [AppComponent]
