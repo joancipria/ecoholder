@@ -22,6 +22,7 @@ import { Maps } from '../core/services/maps.service';
 import { ModalController } from '@ionic/angular';
 import * as introJs from 'intro.js/intro.js';
 import { LocalStorage } from '../core/services/localStorage.service';
+import { Helper } from '../core/helper';
 
 @Component({
   selector: 'app-routes',
@@ -35,7 +36,7 @@ export class RoutesPage implements OnInit {
   showSelectContaminante: boolean = false;
   @ViewChild('select', { static: false }) select: IonSelect;
   private cuadricula = false;
-  private toggleCuadricula = false;
+  private toggleCuadricula:boolean = false;
   private directionsModal: any;
 
   constructor(
@@ -49,7 +50,8 @@ export class RoutesPage implements OnInit {
     public maps: Maps,
     public plt: Platform,
     public modalController: ModalController,
-    private storage: LocalStorage
+    private storage: LocalStorage,
+    private helper: Helper
   ) {
   }
 
@@ -59,7 +61,7 @@ export class RoutesPage implements OnInit {
     this.storage.get(uid).then((val: any) => {
       if (val !== 'si') {
 
-        // Se inicia el tutorial
+        // Aqui se inicia el tutorial
         introJs().start().oncomplete(() => {
           this.navCtrl.navigateForward('/app/tabs/photos?multi-page=true');
         });

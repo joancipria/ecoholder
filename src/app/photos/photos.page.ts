@@ -30,10 +30,15 @@ export class PhotosPage implements OnInit {
     private camera: Camera,
     private navCtrl: NavController,
     private storage: LocalStorage,
+    private helper: Helper,
     private firebase: Firebase
   ) { }
 
   ngOnInit() {
+    // Raquel. Comprobación primera vez
+    const uid = this.firebase.informacionUsuario().uid;
+    this.storage.get(uid).then((val: any) => {
+      if (val !== 'si') {
 
 
     // Raquel. Comprobar primera vez del usuario
@@ -49,14 +54,14 @@ export class PhotosPage implements OnInit {
     });
   }
 
-  hacerFoto() {
-    const options: CameraOptions = {
-      destinationType: this.camera.DestinationType.DATA_URL
-    }
-    this.camera.getPicture(options).then((imageData) => {
-      this.foto = 'data:image/jpeg;base64,' + imageData;
-    }, (err) => {
-      console.log(err);
-    });
+hacerFoto() {
+  const options: CameraOptions = {
+    destinationType: this.camera.DestinationType.DATA_URL
   }
+  this.camera.getPicture(options).then((imageData) => {
+    this.foto = 'data:image/jpeg;base64,' + imageData;
+  }, (err) => {
+    console.log(err);
+  });
+}
 }

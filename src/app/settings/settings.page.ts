@@ -57,7 +57,7 @@ export class SettingsPage implements OnInit {
       this.newDevices = [];
     }
 
-    //Raquel. Comprobar primera vez del usuario
+    // Raquel. Comprobación primera vez
     const uid = this.firebase.informacionUsuario().uid;
     this.storage.get(uid).then((val: any) => {
       if (val !== 'si') {
