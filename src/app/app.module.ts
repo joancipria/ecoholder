@@ -34,7 +34,6 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 import { Firebase } from './core/services/firebase.service';
-import { Routes } from './core/services/routes.service';
 
 // Auth
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -99,8 +98,7 @@ firebase.initializeApp(environment.firebaseConfig);
     Device,
     LocationAccuracy,
     AndroidPermissions,
-    Push,
-    Routes
+    Push
   ],
   bootstrap: [AppComponent]
 })

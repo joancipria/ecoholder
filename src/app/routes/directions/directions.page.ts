@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavParams } from "@ionic/angular";
+import { NavParams} from "@ionic/angular";
 
 @Component({
   selector: 'app-directions',
@@ -9,7 +9,7 @@ import { NavParams } from "@ionic/angular";
 export class DirectionsPage implements OnInit {
 
   constructor(
-    private navParams: NavParams) {
+    private navParams: NavParams) { 
   }
 
   ngOnInit() {
@@ -17,14 +17,5 @@ export class DirectionsPage implements OnInit {
 
   public cerrarDirections() {
     this.navParams.data.parentRef.cerrarDirections();
-  }
-
-  public openGoogleMaps() {
-    let destination = this.navParams.data.parentRef.maps.destination;
-    let coords = destination.lat+","+destination.lng;
-    this.navParams.data.parentRef.empezarRuta();
-
-    let label = encodeURI('My Label');
-    window.open('geo:0,0?q=' + coords + '(' + label + ')', '_system');
   }
 }
