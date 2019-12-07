@@ -26,7 +26,7 @@ export class LocalStorage {
     public get(key: string) {
         return new Promise((valor) => {
             this.storage.get(key).then((_valor: string) => {
-                console.log('Desde servicio LocalStorage se ha recuperado la variable: ' + key);
+                console.log('TLS localStorage.service.get():' + key);
                 valor(_valor);
             });
         });
@@ -40,7 +40,7 @@ export class LocalStorage {
     *********************************************************************************/
     public set(key: string, val: string): void {
         this.platform.ready().then(() => {
-            console.log('Desde Servicio LocalStorage se ha guardado: ' + key + ':' + val);
+            console.log('TLS localStorage.service.set(): ' + key + ':' + val);
             this.storage.set(key, val);
         });
     }
