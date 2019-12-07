@@ -13,7 +13,9 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 // Tutorial
 import { NavController, ModalController } from '@ionic/angular';
 import * as introJs from 'intro.js/intro.js';
-import { Storage } from '@ionic/storage';
+import { Firebase } from '../core/services/firebase.service';
+import { LocalStorage } from '../core/services/localStorage.service';
+import { Helper } from '../core/helper';
 
 @Component({
   selector: 'app-photos',
@@ -27,22 +29,22 @@ export class PhotosPage implements OnInit {
   constructor(
     private camera: Camera,
     private navCtrl: NavController,
-    private storage: Storage
+    private storage: LocalStorage,
+    private firebase: Firebase
   ) { }
 
   ngOnInit() {
 
 
-    // Raquel. Se utiliza el storage para saber si es la primera vez que entra el usuario.
-    this.storage.get('first_time').then((val) => {
-      if (val == null){
-        console.log('Es la primera vez');
-        this.storage.set('first_time', 'done');
+    // Raquel. Comprobar primera vez del usuario
+    const uid = this.firebase.informacionUsuario().uid;
+    this.storage.get(uid).then((val: any) => {
+      if (val !== 'si') {
 
-        //Aqui se inicia el tutorial
+        // Se inicia el tutorial
         introJs().start().oncomplete(() => {
-      this.navCtrl.navigateForward('/app/tabs/settings?multi-page=true');
-    });
+          this.navCtrl.navigateForward('/app/tabs/settings?multi-page=true');
+        });
       }
     });
   }
