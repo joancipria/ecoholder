@@ -40,12 +40,6 @@ export class PhotosPage implements OnInit {
     this.storage.get(uid).then((val: any) => {
       if (val !== 'si') {
 
-
-    // Raquel. Comprobar primera vez del usuario
-    const uid = this.firebase.informacionUsuario().uid;
-    this.storage.get(uid).then((val: any) => {
-      if (val !== 'si') {
-
         // Se inicia el tutorial
         introJs().start().oncomplete(() => {
           this.navCtrl.navigateForward('/app/tabs/settings?multi-page=true');

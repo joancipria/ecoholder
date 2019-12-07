@@ -43,7 +43,7 @@ export class HomePage implements OnInit {
       this.ble.inizializar();
     }
   }
-  
+
 
   ngOnInit() {
     this.showChart();
@@ -54,18 +54,14 @@ export class HomePage implements OnInit {
     this.storage.get(uid).then((val: any) => {
       if (val !== 'si') {
 
-    // Comprobar primera vez del usuario
-    const uid = this.firebase.informacionUsuario().uid;
-    this.storage.get(uid).then((val: any) => {
-      if (val !== 'si') {
-
-        // Se inicia el tutorial
-        introJs().start().oncomplete(() => {
-          this.navCtrl.navigateForward('/app/tabs/routes?multi-page=true');
+            // Se inicia el tutorial
+            introJs().start().oncomplete(() => {
+              this.navCtrl.navigateForward('/app/tabs/routes?multi-page=true');
+            });
+          }
         });
       }
-    });
-  }
+
 
   showChart() {
     const ctx = (document.getElementById('yudhatp-chart') as any).getContext('2d');
