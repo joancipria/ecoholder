@@ -42,7 +42,7 @@ export class Maps {
    constructor(
       private gps: LocalizadorGPS,
       public firebase: Firebase,
-      private helper: Helper
+      private helper: Helper,
       public platform: Platform
    ) { }
 
