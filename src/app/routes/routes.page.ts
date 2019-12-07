@@ -16,6 +16,7 @@ import { DirectionsPage } from './directions/directions.page';
 // Services
 import { ReceptorBLE } from "../core/services/receptorBLE.service";
 import { Firebase } from '../core/services/firebase.service';
+import { Routes } from '../core/services/routes.service';
 import { Maps } from '../core/services/maps.service';
 
 // tutorial
@@ -48,6 +49,7 @@ export class RoutesPage implements OnInit {
     public firebase: Firebase,
     public maps: Maps,
     public plt: Platform,
+    public routes: Routes,
     public modalController: ModalController
     private storage: Storage
   ) {
@@ -173,5 +175,9 @@ export class RoutesPage implements OnInit {
 
   public cerrarDirections() {
     this.directionsModal.style.display = "none";
+  }
+
+  public empezarRuta() {
+    this.routes.empezarRuta();
   }
 }
