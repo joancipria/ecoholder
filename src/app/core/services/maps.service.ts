@@ -31,6 +31,7 @@ export class Maps {
    public directionsRenderer: any;
    public googleAutocomplete: any;
    public lastMeasuresStation: any;
+   public mapMarkers = [];
 
    // Variables para la cuadrícula
    public rectangle: any;
@@ -83,7 +84,6 @@ export class Maps {
             streetViewControl: false
          };
       }
-      console.log("opciones",mapOptions);
 
 
       // Mostramos la estación de medida de Gandía en el mapa
@@ -109,6 +109,7 @@ export class Maps {
 
       // Renderizar directions
       this.directionsRenderer.setMap(this.mapa);
+      this.directionsRenderer.setOptions({ suppressMarkers: true });
       this.directionsRenderer.setPanel(panelElement);
 
       // Renderizar mapa calor
@@ -210,6 +211,33 @@ export class Maps {
       this.directionsService.route(request, (result, status) => {
          if (status == 'OK') {
             this.directionsRenderer.setDirections(result);
+            this.renderizarMarcadorDestino(end);
+         }
+      });
+   }
+
+   private renderizarMarcadorDestino(sitio){
+      // Limpiar marker anterior
+      if(this.mapMarkers.length > 0){
+         this.mapMarkers[0].setMap(null);
+         console.log("este",this.mapMarkers[0])
+      }
+
+      let geocoder = new google.maps.Geocoder();
+      let address = sitio;
+      geocoder.geocode({ 'address': address }, (results, status) => {
+         if (status == google.maps.GeocoderStatus.OK) {
+            // Marker destino
+            let marker = new google.maps.Marker({
+               position: new google.maps.LatLng(
+                  results[0].geometry.location.lat(),
+                  results[0].geometry.location.lng()
+               ),
+               map: this.mapa,
+               title: sitio.split(",")[0]
+            });
+            this.mapMarkers.push(marker);
+            marker.setMap(this.mapa);
          }
       });
    }
