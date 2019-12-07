@@ -48,7 +48,7 @@ export class RoutesPage implements OnInit {
     public firebase: Firebase,
     public maps: Maps,
     public plt: Platform,
-    public modalController: ModalController
+    public modalController: ModalController,
     private storage: Storage
   ) {
   }
