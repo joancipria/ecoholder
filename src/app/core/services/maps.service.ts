@@ -8,6 +8,7 @@
 
 // Librerías de angular/ionic
 import { Injectable } from '@angular/core';
+import { Platform } from '@ionic/angular';
 
 // Servicios propios
 // GPS
@@ -42,10 +43,11 @@ export class Maps {
       private gps: LocalizadorGPS,
       public firebase: Firebase,
       private helper: Helper
+      public platform: Platform
    ) { }
 
    // Inizializa el mapa sobre el elemento del DOM indidcado
-   public async inicializarMapa(mapElement, searchElement) {
+   public async inicializarMapa(mapElement, searchElement, panelElement, directionsButtonElement) {
 
       // Obtener posición actual
       const posicionActual = new google.maps.LatLng(
@@ -54,13 +56,35 @@ export class Maps {
       );
 
       // Opciones del mapa
-      const mapOptions = {
-         center: posicionActual,
-         zoom: 13,
-         mapTypeId: google.maps.MapTypeId.ROADMAP,
-         zoomControl: false,
-         streetViewControl: false,
-      };
+      let mapOptions;
+      if (this.platform.is('android')) {
+         // Móvil
+         mapOptions = {
+            center: posicionActual,
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: true,
+            zoomControl: false,
+            fullscreenControl: false,
+            streetViewControl: false
+         };
+      } else {
+         // PC
+         mapOptions = {
+            center: posicionActual,
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: true,
+            zoomControl: true,
+            zoomControlOptions: {
+               position: google.maps.ControlPosition.TOP_RIGHT
+            },
+            fullscreenControl: false,
+            streetViewControl: false
+         };
+      }
+      console.log("opciones",mapOptions);
+
 
       // Mostramos la estación de medida de Gandía en el mapa
       this.mostrarEstacionDeMedida();
@@ -85,6 +109,7 @@ export class Maps {
 
       // Renderizar directions
       this.directionsRenderer.setMap(this.mapa);
+      this.directionsRenderer.setPanel(panelElement);
 
       // Renderizar mapa calor
       this.renderizarMapaCalor();
@@ -107,6 +132,7 @@ export class Maps {
       this.googleAutocomplete.addListener('place_changed', () => {
          const place = this.googleAutocomplete.getPlace(); // obtenemos sitio seleccionado
          this.calcularRuta(place.name + ' ' + place.formatted_address); // calculamos ruta
+         directionsButtonElement.el.style.display = "flex"; // Mostramos botón
       });
 
    }
@@ -343,7 +369,7 @@ export class Maps {
       } // for i Lat
    }
 
-   public toggleCuadricula():boolean {
+   public toggleCuadricula(): boolean {
       this.toggle(this.rectangle);
       //this.toggle(this.marker1);
       //this.toggle(this.marker2);

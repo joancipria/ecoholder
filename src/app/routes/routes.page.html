@@ -20,6 +20,9 @@
     </ion-item>
     <div id="map" #map style="height:100%;">
     </div>
+    <ion-button id="directionsButton" #directionsButton (click)="mostrarDirections()" class="directionsButton" shape="round">
+        <ion-icon name="map"></ion-icon> Directions
+    </ion-button>
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button>
             <ion-icon name="more">
