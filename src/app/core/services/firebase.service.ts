@@ -201,17 +201,28 @@ export class Firebase {
 
    }
 
-   public empezarRuta(horaInicio: Number,posicionInicio: any ) {
+   public empezarRuta(posicionInicio: any ) {
       const ref = this.db.doc('users/' + this.uuid);
 
       return new Promise((resolve, reject) => {
          ref.collection('routes').add({
-            startTime:horaInicio,
+            startTime: +new Date(),
             startPoint: JSON.stringify(posicionInicio),
          }).then(ref => {
              console.log('Added document with ID: ', ref.id);
              return resolve(ref.id);
          });
+     });
+   }
+
+   public finalizarRuta(routeId: any,posicionFinal: any ) {
+      const ref = this.db.doc('users/' + this.uuid+'/routes/'+routeId.toString());
+
+      return new Promise((resolve, reject) => {
+         ref.set({
+            finishTime:+new Date(),
+            finishPoint: JSON.stringify(posicionFinal),
+         },{merge: true})
      });
    }
 

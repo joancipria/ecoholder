@@ -28,16 +28,20 @@ export class Routes {
     }
 
     public async empezarRuta(){
-        let horaInicio = +new Date();
         let posicionInicio = {
             lat: this.gps.lat,
             lng: this.gps.lng
         };
 
-        this.idRutaActual = await this.firebase.empezarRuta(horaInicio,posicionInicio);
+        this.idRutaActual = await this.firebase.empezarRuta(posicionInicio);
     }
 
     public finalizarRuta(){
-        
+        let posicionFinal = {
+            lat: this.gps.lat,
+            lng: this.gps.lng
+        };
+
+        this.firebase.finalizarRuta(this.idRutaActual,posicionFinal);
     }
 }

@@ -169,4 +169,8 @@ export class RoutesPage implements OnInit {
   public empezarRuta() {
     this.routes.empezarRuta();
   }
+
+  public finalizarRuta() {
+    this.routes.finalizarRuta();
+  }
 }

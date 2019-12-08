@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { NavParams } from "@ionic/angular";
 
 @Component({
@@ -8,8 +8,10 @@ import { NavParams } from "@ionic/angular";
 })
 export class DirectionsPage implements OnInit {
 
+  rutaEnMarcha: boolean = false;
+
   constructor(
-    private navParams: NavParams) {
+    private navParams: NavParams, public ngZone: NgZone) {
   }
 
   ngOnInit() {
@@ -23,8 +25,17 @@ export class DirectionsPage implements OnInit {
     let destination = this.navParams.data.parentRef.maps.destination;
     let coords = destination.lat+","+destination.lng;
     this.navParams.data.parentRef.empezarRuta();
+    this.ngZone.run(() => {
+      this.rutaEnMarcha = true;
+    });
 
     let label = encodeURI('My Label');
     window.open('geo:0,0?q=' + coords + '(' + label + ')', '_system');
+  }
+  public finalizarRuta(){
+    this.navParams.data.parentRef.finalizarRuta();
+    this.ngZone.run(() => {
+      this.rutaEnMarcha = false;
+    });
   }
 }
