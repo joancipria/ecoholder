@@ -19,13 +19,14 @@ export class Helper {
     ) { }
 
     /**********************************************************************************
-    @description Si es la primera vez muestra Tutorial
-    @design  elemento HTML que contentra el tutorial, next: String ( pagina siguiente del tutorial ) -> f() -> void
+    @description Si es la primera vez muestra el Tutorial
+    @design  elemento HTML que contentra el tutorial,
+    next: String ( pagina siguiente del tutorial ) -> f() -> void
     @author Diana Hernández Soler
     @date 04/12/2019
     **********************************************************************************/
-    public MostrarTutorial(navCtrl: any, next: string, final: boolean): void {
-        const urlNext = '/app/tabs/' + next + '?multi-page=true';
+    public MostrarTutorial(navCtrl: any, siguientePagina: string): void {
+        const urlNext = '/app/tabs/' + siguientePagina + '?multi-page=true';
         const uid = this.firebase.informacionUsuario().uid;
         this.storage.get(uid).then((val: any) => {
             if (val !== 'si') {
@@ -33,7 +34,8 @@ export class Helper {
                 introJs().start().oncomplete(() => {
                     navCtrl.navigateForward(urlNext);
                 });
-                (final) ? this.storage.set(uid, 'si') : this.storage.set(uid, 'en progreso');
+                // Si es la última parte del tutorial, se guarda 'si' para que no vuelva a salir el tutorial
+                (siguientePagina === 'home') ? this.storage.set(uid, 'si') : this.storage.set(uid, 'en progreso');
             }
         });
 
