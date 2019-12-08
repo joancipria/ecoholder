@@ -88,9 +88,9 @@ export class HomePage implements OnInit {
         ],
       }],
       labels: [
-        'Bueno',
-        'Moderado',
-        'Alto'
+        'Ok',
+        'Warning',
+        'Danger'
       ]
     };
 
