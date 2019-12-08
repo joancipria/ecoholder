@@ -19,29 +19,40 @@ import { Firebase } from '../../core/services/firebase.service';
 @Injectable()
 export class Routes {
     private idRutaActual: any;
+    private waypoints = [];
 
     constructor(
         private firebase: Firebase,
         private gps: LocalizadorGPS,
-    ) { 
+    ) {
 
     }
 
-    public async empezarRuta(){
+    public async empezarRuta() {
+        this.waypoints = [];
         let posicionInicio = {
             lat: this.gps.lat,
             lng: this.gps.lng
         };
 
         this.idRutaActual = await this.firebase.empezarRuta(posicionInicio);
+        setInterval(() => { this.registrarWaypoint() }, 10000);
     }
 
-    public finalizarRuta(){
+    public finalizarRuta() {
         let posicionFinal = {
             lat: this.gps.lat,
             lng: this.gps.lng
         };
 
-        this.firebase.finalizarRuta(this.idRutaActual,posicionFinal);
+        this.firebase.finalizarRuta(this.idRutaActual, posicionFinal, this.waypoints);
+    }
+
+    public registrarWaypoint() {
+        let waypoint = {
+            lat: this.gps.lat,
+            lng: this.gps.lng
+        };
+        this.waypoints.push(waypoint);
     }
 }
