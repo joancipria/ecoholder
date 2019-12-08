@@ -111,7 +111,7 @@
             "cordova-plugin-geolocation": {},
             "cordova-plugin-googlemaps": {
                 "API_KEY_FOR_ANDROID": "AIzaSyAGs7A2TWsI4DBPekp19f9TWz1RA0D-pTI",
-                "PLAY_SERVICES_VERSION": "16.+",
+                "PLAY_SERVICES_VERSION": "+",
                 "ANDROID_SUPPORT_V4_VERSION": "27.+"
             },
             "com.unarin.cordova.beacon": {},
@@ -120,7 +120,7 @@
             },
             "cordova-plugin-android-permissions": {},
             "cordova-plugin-request-location-accuracy": {
-                "PLAY_SERVICES_LOCATION_VERSION": "16.+"
+                "PLAY_SERVICES_LOCATION_VERSION": "+"
             },
             "phonegap-plugin-push": {
                 "SENDER_ID": "838602587969"
