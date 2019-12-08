@@ -8,7 +8,8 @@
 
 import { Injectable } from '@angular/core';
 
-// GPS
+// --- Servicios propios ---
+// Gps
 import { LocalizadorGPS } from '../../core/services/LocalizadorGPS.service';
 
 // Firebase
