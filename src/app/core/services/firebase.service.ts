@@ -227,4 +227,18 @@ export class Firebase {
      });
    }
 
+   public agregarRutaAfavoritas(destination: any, alias: String){
+      const ref = this.db.doc('users/' + this.uuid);
+
+      return new Promise((resolve, reject) => {
+         ref.collection('favDestinations').add({
+            alias: alias,
+            destinationPoint: JSON.stringify(destination),
+         }).then(ref => {
+             console.log('Added document with ID: ', ref.id);
+             return resolve(ref.id);
+         });
+     });
+   }
+
 }

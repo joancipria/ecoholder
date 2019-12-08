@@ -38,4 +38,8 @@ export class DirectionsPage implements OnInit {
       this.rutaEnMarcha = false;
     });
   }
+
+  public agregarRutaAfavoritas(){
+    this.navParams.data.parentRef.agregarRutaAfavoritas();
+  }
 }
