@@ -4,11 +4,12 @@
       <ion-buttons slot="end">
         <ion-button (click)="cerrarDirections()">Close</ion-button>
         <ion-button *ngIf="!rutaEnMarcha" color="primary" (click)="openGoogleMaps()">
-          Go<ion-icon name="navigate"></ion-icon>
+          Go
         </ion-button>
         <ion-button *ngIf="rutaEnMarcha" color="danger" (click)="finalizarRuta()">
           Finish
         </ion-button>
+        <ion-button > <ion-icon color="warning" name="star-outline"></ion-icon></ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
