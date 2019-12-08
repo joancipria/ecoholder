@@ -201,4 +201,18 @@ export class Firebase {
 
    }
 
+   public empezarRuta(horaInicio: Number,posicionInicio: any ) {
+      const ref = this.db.doc('users/' + this.uuid);
+
+      return new Promise((resolve, reject) => {
+         ref.collection('routes').add({
+            startTime:horaInicio,
+            startPoint: JSON.stringify(posicionInicio),
+         }).then(ref => {
+             console.log('Added document with ID: ', ref.id);
+             return resolve(ref.id);
+         });
+     });
+   }
+
 }

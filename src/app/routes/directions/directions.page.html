@@ -1,10 +1,13 @@
 <ion-header translucent>
-  <ion-toolbar>
-    <ion-title>Directions</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="cerrarDirections()">Close</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-<ion-content fullscreen>
-</ion-content>
+    <ion-toolbar>
+      <ion-title>Directions</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="cerrarDirections()">Close</ion-button>
+        <ion-button color="primary" (click)="openGoogleMaps()">
+          Go<ion-icon name="navigate"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content fullscreen>
+  </ion-content>

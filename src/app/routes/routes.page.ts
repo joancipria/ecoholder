@@ -17,6 +17,8 @@ import { DirectionsPage } from './directions/directions.page';
 import { ReceptorBLE } from "../core/services/receptorBLE.service";
 import { Firebase } from '../core/services/firebase.service';
 import { Maps } from '../core/services/maps.service';
+import { Routes } from '../core/services/routes.service';
+
 
 // tutorial
 import { ModalController } from '@ionic/angular';
@@ -51,7 +53,8 @@ export class RoutesPage implements OnInit {
     public plt: Platform,
     public modalController: ModalController,
     private storage: LocalStorage,
-    private helper: Helper
+    private helper: Helper,
+    public routes: Routes
   ) {
   }
 
@@ -174,5 +177,8 @@ export class RoutesPage implements OnInit {
 
   public cerrarDirections() {
     this.directionsModal.style.display = "none";
+  }
+  public empezarRuta() {
+    this.routes.empezarRuta();
   }
 }

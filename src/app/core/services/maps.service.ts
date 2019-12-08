@@ -32,6 +32,7 @@ export class Maps {
    public googleAutocomplete: any;
    public lastMeasuresStation: any;
    public mapMarkers = [];
+   public destination: any;
 
    // Variables para la cuadrícula
    public rectangle: any;
@@ -236,6 +237,10 @@ export class Maps {
                map: this.mapa,
                title: sitio.split(",")[0]
             });
+            this.destination = {
+               lat: results[0].geometry.location.lat(),
+               lng: results[0].geometry.location.lng()
+            };
             this.mapMarkers.push(marker);
             marker.setMap(this.mapa);
          }
