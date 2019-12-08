@@ -152,30 +152,31 @@ export class Maps {
    private renderizarMapaCalor() {
       // Callback de firebase
       this.firebase.obtenerMedidas()
-         .subscribe(data => {
+         .subscribe((data: any) => {
+            console.log(data);
 
-            // Datos de firebase
-            // console.log('Data from firebase', data);
 
-            // Pequeño hack para poder leer los datos de firebase.
-            // No se como se puede leer directamete sin que de fallo
-            const rawData = JSON.stringify(data);
-            const measures = JSON.parse(rawData);
+            // const measures = this.helper.parsearDatos(data);
+            // // Datos de firebase
+            //             console.log('Data from firebase', data);
 
             // Array datos heatmap
             const heatMapData = [];
 
             // Recorremos medidas
-            for (let i = 0; i < measures.length; i++) {
-               const coords = {
-                  location: new google.maps.LatLng(
-                     measures[i].latitude,
-                     measures[i].longitude
-                  ),
-                  weight: measures[i].value
+            for (let i = 0; i < data.length; i++) {
+               if (!isNaN(data[i].latitude) && !isNaN(data[i].latitude)) {
+                  const coords = {
+                     location: new google.maps.LatLng(
+                        data[i].latitude || data[i].lat,
+                        data[i].longitude || data[i].long
+                     ),
+                     weight: data[i].value
+                  }
+                  // Rellenamos array heatmap con las medidas
+                  heatMapData.push(coords);
+
                }
-               // Rellenamos array heatmap con las medidas
-               heatMapData.push(coords);
             }
 
             // Renderizamos mapa calor
@@ -217,11 +218,11 @@ export class Maps {
       });
    }
 
-   private renderizarMarcadorDestino(sitio){
+   private renderizarMarcadorDestino(sitio) {
       // Limpiar marker anterior
-      if(this.mapMarkers.length > 0){
+      if (this.mapMarkers.length > 0) {
          this.mapMarkers[0].setMap(null);
-         console.log("este",this.mapMarkers[0])
+         console.log("este", this.mapMarkers[0])
       }
 
       let geocoder = new google.maps.Geocoder();
@@ -320,8 +321,8 @@ export class Maps {
 
          // Parseramos los datos de Firestore
          const info = this.helper.parsearDatos(res);
-         console.log('raw', res);
-         console.log('parse', info);
+         // console.log('raw', res);
+         // console.log('parse', info);
 
          // Creamos los dos marcadores del area a cuadricular
          this.marker1 = new google.maps.Marker({
@@ -404,8 +405,6 @@ export class Maps {
 
    public toggleCuadricula(): boolean {
       this.toggle(this.rectangle);
-      //this.toggle(this.marker1);
-      //this.toggle(this.marker2);
 
       for (let i = 0; i < 20; i++) {
          for (let j = 0; j < 20; j++) {
@@ -451,7 +450,7 @@ export class Maps {
             }
          }
 
-         console.table(this.matrizColores);
+         // console.table(this.matrizColores);
       });
    }
 

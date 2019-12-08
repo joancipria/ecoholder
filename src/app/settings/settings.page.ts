@@ -1,6 +1,6 @@
 /*********************************************************************
 @name settings.page.ts
-@description Lógica correspondiente a la vista "Settings" 
+@description Lógica correspondiente a la vista "Settings"
 @author Joan Ciprià Moreno Teodoro
 @date 10/09/2019
 @license GPLv3
@@ -13,16 +13,11 @@ import { NgZone } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { Helper } from '../core/helper';
 
-// Firebase 
+// Firebase
 import { Firebase } from '../core/services/firebase.service';
 
 // Beacon
 import { Beacon } from '../core/services/beacon.service';
-
-//tutorial
-import { ModalController } from '@ionic/angular';
-import * as introJs from 'intro.js/intro.js';
-import { LocalStorage } from '../core/services/localStorage.service';
 
 
 @Component({
@@ -36,6 +31,7 @@ export class SettingsPage implements OnInit {
   userUuid: string;
   devices: any[] = [];
   newDevices: any[] = [];
+  public userDefaultPic = 'assets/img/userDefaultPic.jpg';
   constructor(
     private navCtrl: NavController,
     private firebase: Firebase,
@@ -43,7 +39,6 @@ export class SettingsPage implements OnInit {
     private beacon: Beacon,
     private ngZone: NgZone,
     private loading: LoadingController,
-    private storage: LocalStorage,
     private helper: Helper
   ) { }
 
@@ -55,19 +50,11 @@ export class SettingsPage implements OnInit {
       // Mostramos los dispositivos vinculados
       this.mostrarDispositivosVinculados();
       this.newDevices = [];
+
+      // Raquel. Mostrar tutorial si es la primera vez
+      this.helper.MostrarTutorial(this.navCtrl, 'home', true);
     }
 
-    // Raquel. Comprobación primera vez
-    const uid = this.firebase.informacionUsuario().uid;
-    this.storage.get(uid).then((val: any) => {
-      if (val !== 'si') {
-
-        // Se inicia el tutorial
-        introJs().start().oncomplete(() => {
-          this.navCtrl.navigateForward('/app/tabs/home?multi-page=true');
-        });
-      }
-    });
   }
 
   /**********************************************
@@ -83,7 +70,7 @@ export class SettingsPage implements OnInit {
       })
       .catch(error => {
         console.log(error);
-      })
+      });
   }
 
   // -------------------------------------------------------------------
@@ -114,12 +101,12 @@ export class SettingsPage implements OnInit {
 
   // ----------------------------------------------------------------
   // Función que se encarga de presentar la ventana de carga,
-  // la función recibe un numero como convenio para diferenciar 
+  // la función recibe un numero como convenio para diferenciar
   // que tipo de ventana se representa:
   //  1 --> Buscando dispositivos  2 --> Sincronizar con el dispositvo + mensaje
-  //                tipoCarga -> f() -> 
+  //                tipoCarga -> f() ->
   //
-  //                  Vicent Borja Roca    
+  //                  Vicent Borja Roca
   // ----------------------------------------------------------------
 
   async presentLoading(tipoCarga: any) {

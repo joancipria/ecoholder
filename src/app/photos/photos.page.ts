@@ -12,9 +12,6 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 // Tutorial
 import { NavController, ModalController } from '@ionic/angular';
-import * as introJs from 'intro.js/intro.js';
-import { Firebase } from '../core/services/firebase.service';
-import { LocalStorage } from '../core/services/localStorage.service';
 import { Helper } from '../core/helper';
 
 @Component({
@@ -29,23 +26,12 @@ export class PhotosPage implements OnInit {
   constructor(
     private camera: Camera,
     private navCtrl: NavController,
-    private storage: LocalStorage,
-    private helper: Helper,
-    private firebase: Firebase
+    private helper: Helper
   ) { }
 
   ngOnInit() {
-    // Raquel. Comprobación primera vez
-    const uid = this.firebase.informacionUsuario().uid;
-    this.storage.get(uid).then((val: any) => {
-      if (val !== 'si') {
-
-        // Se inicia el tutorial
-        introJs().start().oncomplete(() => {
-          this.navCtrl.navigateForward('/app/tabs/settings?multi-page=true');
-        });
-      }
-    });
+    // Raquel. Mostrar tutorial si es la primera vez
+    this.helper.MostrarTutorial(this.navCtrl, 'settings', false);
   }
 
 hacerFoto() {

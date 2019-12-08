@@ -22,8 +22,6 @@ import { Routes } from '../core/services/routes.service';
 
 // tutorial
 import { ModalController } from '@ionic/angular';
-import * as introJs from 'intro.js/intro.js';
-import { LocalStorage } from '../core/services/localStorage.service';
 import { Helper } from '../core/helper';
 
 @Component({
@@ -52,24 +50,14 @@ export class RoutesPage implements OnInit {
     public maps: Maps,
     public plt: Platform,
     public modalController: ModalController,
-    private storage: LocalStorage,
     private helper: Helper,
     public routes: Routes
   ) {
   }
 
   ngOnInit() {
-    // Raquel. Comprobar primera vez del usuario
-    const uid = this.firebase.informacionUsuario().uid;
-    this.storage.get(uid).then((val: any) => {
-      if (val !== 'si') {
-
-        // Aqui se inicia el tutorial
-        introJs().start().oncomplete(() => {
-          this.navCtrl.navigateForward('/app/tabs/photos?multi-page=true');
-        });
-      }
-    });
+  // Raquel. Mostrar tutorial si es la primera vez
+  this.helper.MostrarTutorial(this.navCtrl, 'photos', false);
   }
 
   // Wait for dom
