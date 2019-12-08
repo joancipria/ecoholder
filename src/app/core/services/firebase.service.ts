@@ -215,13 +215,14 @@ export class Firebase {
      });
    }
 
-   public finalizarRuta(routeId: any,posicionFinal: any ) {
+   public finalizarRuta(routeId: any,posicionFinal: any, waypoints: any ) {
       const ref = this.db.doc('users/' + this.uuid+'/routes/'+routeId.toString());
 
       return new Promise((resolve, reject) => {
          ref.set({
             finishTime:+new Date(),
             finishPoint: JSON.stringify(posicionFinal),
+            waypoints: JSON.stringify(waypoints)
          },{merge: true})
      });
    }
