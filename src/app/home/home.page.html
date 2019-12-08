@@ -25,29 +25,15 @@
                         <div style="display: block"><canvas id="yudhatp-chart" style="z-index:2;"></canvas>
                             <ion-avatar><img class="avatar" [src]="userImg" /></ion-avatar>
                             <section style="font-size:.8 rem;">
-                                <ion-grid>
-                                    <ion-row>
-                                        <ion-col>
-                                            <div>
-                                                <ion-chip color="danger">
-                                                    <ion-label>Danger</ion-label>
-                                                </ion-chip><br>Be careful! your exposure
-                                                level has been high
-                                                today!
-                                            </div>
-                                        </ion-col>
-                                        <ion-col>
 
-                                        </ion-col>
-                                        <ion-col>
-                                            <div>
-                                                <ion-button class="button" fill="outline" color="primary" size="small"
-                                                    (click)="mostrarConsejos()">
-                                                    Tips</ion-button>
-                                            </div>
-                                        </ion-col>
-                                    </ion-row>
-                                </ion-grid>
+                                <ion-chip color="danger">
+                                    <ion-label>Danger</ion-label>
+                                </ion-chip><br>Be careful! your exposure
+                                level has been high
+                                today!
+                                <ion-button class="button tips-button" fill="outline" color="primary" size="small"
+                                    (click)="mostrarConsejos()">
+                                    Tips</ion-button>
                             </section>
                         </div>
 
