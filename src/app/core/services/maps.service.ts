@@ -17,6 +17,9 @@ import { LocalizadorGPS } from '../../core/services/LocalizadorGPS.service';
 // Firebase
 import { Firebase } from '../../core/services/firebase.service';
 
+// Helper
+import { Helper } from '../../core/helper';
+
 
 declare var google;
 
@@ -28,6 +31,7 @@ export class Maps {
    public directionsRenderer: any;
    public googleAutocomplete: any;
    public lastMeasuresStation: any;
+   public mapMarkers = [];
 
    // Variables para la cuadrícula
    public rectangle: any;
@@ -39,6 +43,7 @@ export class Maps {
    constructor(
       private gps: LocalizadorGPS,
       public firebase: Firebase,
+      private helper: Helper,
       public platform: Platform
    ) { }
 
@@ -79,7 +84,6 @@ export class Maps {
             streetViewControl: false
          };
       }
-      console.log("opciones",mapOptions);
 
 
       // Mostramos la estación de medida de Gandía en el mapa
@@ -105,6 +109,7 @@ export class Maps {
 
       // Renderizar directions
       this.directionsRenderer.setMap(this.mapa);
+      this.directionsRenderer.setOptions({ suppressMarkers: true });
       this.directionsRenderer.setPanel(panelElement);
 
       // Renderizar mapa calor
@@ -206,6 +211,33 @@ export class Maps {
       this.directionsService.route(request, (result, status) => {
          if (status == 'OK') {
             this.directionsRenderer.setDirections(result);
+            this.renderizarMarcadorDestino(end);
+         }
+      });
+   }
+
+   private renderizarMarcadorDestino(sitio){
+      // Limpiar marker anterior
+      if(this.mapMarkers.length > 0){
+         this.mapMarkers[0].setMap(null);
+         console.log("este",this.mapMarkers[0])
+      }
+
+      let geocoder = new google.maps.Geocoder();
+      let address = sitio;
+      geocoder.geocode({ 'address': address }, (results, status) => {
+         if (status == google.maps.GeocoderStatus.OK) {
+            // Marker destino
+            let marker = new google.maps.Marker({
+               position: new google.maps.LatLng(
+                  results[0].geometry.location.lat(),
+                  results[0].geometry.location.lng()
+               ),
+               map: this.mapa,
+               title: sitio.split(",")[0]
+            });
+            this.mapMarkers.push(marker);
+            marker.setMap(this.mapa);
          }
       });
    }
@@ -229,7 +261,7 @@ export class Maps {
       this.firebase.obtenerEstacionDeMedida().subscribe((res: any) => {
 
          // Parsearmos los datos recibidos de Firestore para su correcta visualización
-         const station = this.parsearDatos(res);
+         const station = this.helper.parsearDatos(res);
 
          // Creación del objeto LatLng de Google Maps con las coordenadas de la estación
          const LocalizacionEstacion = new google.maps.LatLng(
@@ -282,7 +314,7 @@ export class Maps {
       this.firebase.obtenerInfoCuadricula().subscribe((res: any) => {
 
          // Parseramos los datos de Firestore
-         const info = this.parsearDatos(res);
+         const info = this.helper.parsearDatos(res);
          console.log('raw', res);
          console.log('parse', info);
 
@@ -389,7 +421,7 @@ export class Maps {
       this.firebase.obtenerUltimoMapa().subscribe(res => {
 
          // Parseamos los datos
-         const datos = this.parsearDatos(res);
+         const datos = this.helper.parsearDatos(res);
          const grid = JSON.parse(datos[0].grid);
          console.table(grid);
 
@@ -425,16 +457,5 @@ export class Maps {
    // ---------------------------------------------------------------
    private toggle(elemento: any) {
       elemento.setMap(elemento.getMap() ? null : this.mapa);
-   }
-
-
-   // ----------------------------------------------------------------
-   // Pequeño hack para poder leer los datos de firebase.
-   // No se como se puede leer directamete sin que de fallo
-   // data: Observable<Item> FirestoreData(?) -> f() -> json
-   // ----------------------------------------------------------------
-   private parsearDatos(data: any) {
-      const rawData = JSON.stringify(data);
-      return JSON.parse(rawData);
    }
 }

@@ -8,7 +8,7 @@
 
 import { Component, NgZone, ViewChild, OnInit } from "@angular/core";
 import { Router } from '@angular/router';
-import { AlertController, ToastController, NavController, Platform, IonSelect, ModalController } from "@ionic/angular";
+import { AlertController, ToastController, NavController, Platform, IonSelect } from "@ionic/angular";
 
 // Directions moddal
 import { DirectionsPage } from './directions/directions.page';
@@ -17,6 +17,12 @@ import { DirectionsPage } from './directions/directions.page';
 import { ReceptorBLE } from "../core/services/receptorBLE.service";
 import { Firebase } from '../core/services/firebase.service';
 import { Maps } from '../core/services/maps.service';
+
+// tutorial
+import { ModalController } from '@ionic/angular';
+import * as introJs from 'intro.js/intro.js';
+import { LocalStorage } from '../core/services/localStorage.service';
+import { Helper } from '../core/helper';
 
 @Component({
   selector: 'app-routes',
@@ -30,7 +36,7 @@ export class RoutesPage implements OnInit {
   showSelectContaminante: boolean = false;
   @ViewChild('select', { static: false }) select: IonSelect;
   private cuadricula = false;
-  private toggleCuadricula = false;
+  private toggleCuadricula:boolean = false;
   private directionsModal: any;
 
   constructor(
@@ -43,11 +49,24 @@ export class RoutesPage implements OnInit {
     public firebase: Firebase,
     public maps: Maps,
     public plt: Platform,
-    public modalController: ModalController
+    public modalController: ModalController,
+    private storage: LocalStorage,
+    private helper: Helper
   ) {
   }
 
   ngOnInit() {
+    // Raquel. Comprobar primera vez del usuario
+    const uid = this.firebase.informacionUsuario().uid;
+    this.storage.get(uid).then((val: any) => {
+      if (val !== 'si') {
+
+        // Aqui se inicia el tutorial
+        introJs().start().oncomplete(() => {
+          this.navCtrl.navigateForward('/app/tabs/photos?multi-page=true');
+        });
+      }
+    });
   }
 
   // Wait for dom

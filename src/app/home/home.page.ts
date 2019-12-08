@@ -14,6 +14,11 @@ import { Firebase } from '../core/services/firebase.service';
 import { Platform } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 
+// tutorial Raquel
+import { NavController, ModalController } from '@ionic/angular';
+import * as introJs from "../../..//node_modules/intro.js/intro";
+import { Helper } from '../core/helper';
+
 
 @Component({
   selector: 'app-home',
@@ -29,7 +34,9 @@ export class HomePage implements OnInit {
     public plt: Platform,
     private firebase: Firebase,
     private alertCtrl: AlertController,
-    private storage: LocalStorage
+    private navCtrl: NavController,
+    private storage: LocalStorage,
+    private helper: Helper
 
   ) {
     if (plt.is('android')) {
@@ -37,18 +44,24 @@ export class HomePage implements OnInit {
     }
   }
 
+
   ngOnInit() {
     this.showChart();
     this.userImg = this.obtenerImagenGravatar();
 
-    // Pruebas del Local Storage
-    console.log('=========== TEST LOCAL STORAGE ========================');
-    this.storage.set('pruebaClave', 'pruebaValor');
-    this.storage.set('pruebaClave2', 'pruebaValor2');
-    this.storage.get('pruebaClave').then(val => console.log('desde home acceso a la variable pruebaClave', val));
-    this.storage.get('pruebaClave2').then(val => console.log('desde home acceso a la variable pruebaClave2', val));
+    // Raquel. Comprobación primera vez
+    const uid = this.firebase.informacionUsuario().uid;
+    this.storage.get(uid).then((val: any) => {
+      if (val !== 'si') {
 
-  }
+            // Se inicia el tutorial
+            introJs().start().oncomplete(() => {
+              this.navCtrl.navigateForward('/app/tabs/routes?multi-page=true');
+            });
+          }
+        });
+      }
+
 
   showChart() {
     const ctx = (document.getElementById('yudhatp-chart') as any).getContext('2d');

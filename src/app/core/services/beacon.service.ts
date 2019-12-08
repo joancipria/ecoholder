@@ -86,7 +86,7 @@ export class Beacon {
   @date 30/11/2019
   ***********************************************/
     public escanearDispositivos() {
-        let scanTime = 15;
+        let scanTime = 3;
 
         return new Promise((resolve, reject) => {
             this.newDevices = [];
@@ -142,10 +142,10 @@ export class Beacon {
         console.log("Dispositivos dados de alta y cerca:",targetDevices);
         
         // Para los dispositivos disponibles, obtener el más cercano
-        let rssi = 0;
+        let rssi = 999;
         if(targetDevices.length > 0){
             for (let i = 0; i < targetDevices.length; i++) {
-               if( Math.abs(targetDevices[i].rssi) > rssi){
+               if( Math.abs(targetDevices[i].rssi) < rssi){
                     beacon = targetDevices[i];
                     rssi = Math.abs(targetDevices[i].rssi);
                }

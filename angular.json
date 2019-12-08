@@ -34,6 +34,10 @@
             "styles": [
               {
                 "input": "src/theme/variables.scss"
+
+              },
+              {
+                "input": "node_modules/intro.js/introjs.css"
               },
               {
                 "input": "src/global.scss"
