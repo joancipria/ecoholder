@@ -121,9 +121,13 @@ export class Helper {
     public testLocalStorage() {
 
         console.log('=========== TEST LOCAL STORAGE ========================');
+        // Guardamos una variable
         this.storage.set('pruebaClave', 'pruebaValor');
+        // La mostramos por consola
         this.storage.get('pruebaClave').then(val => console.log('TLS acceso a la variable pruebaClave => ', val));
+        // Cambiamos el valor de la variable anterior
         this.storage.set('pruebaClave2', 'hola');
+        // La mostramos por consola
         this.storage.get('pruebaClave').then(val => console.log('TLS se ha camabiado el valor de pruebaClave a => ', val));
     }
 
