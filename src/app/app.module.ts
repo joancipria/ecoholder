@@ -58,8 +58,12 @@ import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
 
 // Helper
 import { Helper } from './core/helper';
+
 // Directions moddal
 import { DirectionsPage } from './routes/directions/directions.page';
+
+// Info modal
+import { InformationPage } from './home/information/information.page';
 
 import { Routes } from './core/services/routes.service';
 
@@ -67,8 +71,8 @@ firebase.initializeApp(environment.firebaseConfig);
 
 
 @NgModule({
-  declarations: [AppComponent,DirectionsPage],
-  entryComponents: [DirectionsPage],
+  declarations: [AppComponent,DirectionsPage, InformationPage],
+  entryComponents: [DirectionsPage, InformationPage],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

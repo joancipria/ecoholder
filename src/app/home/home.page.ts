@@ -12,6 +12,9 @@ import { ReceptorBLE } from '../core/services/receptorBLE.service';
 import { Platform } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 
+// Information moddal
+import { InformationPage } from './information/information.page';
+
 // tutorial Raquel
 import { NavController, ModalController } from '@ionic/angular';
 import { Helper } from '../core/helper';
@@ -31,8 +34,8 @@ export class HomePage implements OnInit {
     public plt: Platform,
     private alertCtrl: AlertController,
     private navCtrl: NavController,
-    private helper: Helper
-
+    private helper: Helper,
+    public modalController: ModalController
   ) {
     if (plt.is('android')) {
       this.ble.inizializar();
@@ -118,5 +121,11 @@ export class HomePage implements OnInit {
     this.helper.mostrarVentana(this.alertCtrl, txt, 'CONSEJOS');
   }
 
+  public async abrirInfo(){
+    const modal = await this.modalController.create({
+      component: InformationPage
+    });
+    return await modal.present();
+  }
 
 }

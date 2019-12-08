@@ -12,6 +12,9 @@
             <ion-col size="12" size-lg="6">
                 <ion-card data-step= "2" data-intro= "Aqui podrás encontrar la contaminación a la que has sido expuesto en las últimas 24 Horas. La barra te muestra en qué nivel de exposición estás. Además puedes encontrar muchos consejos!">
                     <ion-card-header>
+                        <ion-buttons (click)="abrirInfo()" class="info-button">
+                                <ion-icon name="information-circle"></ion-icon>
+                        </ion-buttons>
                         <ion-card-title>Mi nivel de exposición</ion-card-title>
                         <ion-card-subtitle>Últimas 24 horas</ion-card-subtitle>
                     </ion-card-header>
