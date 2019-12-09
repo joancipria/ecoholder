@@ -124,7 +124,11 @@ export class Firebase {
       return measuresRef.collection('devices').valueChanges();
    }
 
-   // Sin subscribe
+   /**********************************************
+    @description Obtener todos los dispositivos del usuario
+    @author Joan Ciprià Moreno Teodoro
+    @date 27/11/2019
+    ***********************************************/
    public getDevices() {
       let devices = [];
       return new Promise((resolve, reject) => {
@@ -201,44 +205,68 @@ export class Firebase {
 
    }
 
-   public empezarRuta(posicionInicio: any ) {
+   /**********************************************
+    @description Guarda en la BBD el punto de inicio
+    y la hora
+    @author Joan Ciprià Moreno Teodoro
+    @date 09/12/2019
+    ***********************************************/
+   public empezarRuta(posicionInicio: any) {
+      // Documento del usuario
       const ref = this.db.doc('users/' + this.uuid);
+
 
       return new Promise((resolve, reject) => {
          ref.collection('routes').add({
-            startTime: +new Date(),
-            startPoint: JSON.stringify(posicionInicio),
+            startTime: +new Date(), // Timestamp de ahora
+            startPoint: JSON.stringify(posicionInicio), // {lat, lng}
          }).then(ref => {
-             console.log('Added document with ID: ', ref.id);
-             return resolve(ref.id);
+            console.log('Added document with ID: ', ref.id);
+            return resolve(ref.id);
          });
-     });
+      });
    }
 
-   public finalizarRuta(routeId: any,posicionFinal: any, waypoints: any ) {
-      const ref = this.db.doc('users/' + this.uuid+'/routes/'+routeId.toString());
+   /**********************************************
+    @description Guarda en la BBD el punto final,
+    la hora y el conjunto de waypoints de la ruta
+    especificada
+    @author Joan Ciprià Moreno Teodoro
+    @date 09/12/2019
+    ***********************************************/
+   public finalizarRuta(routeId: any, posicionFinal: any, waypoints: any) {
+      // Documento del usuario
+      const ref = this.db.doc('users/' + this.uuid + '/routes/' + routeId.toString());
 
       return new Promise((resolve, reject) => {
          ref.set({
-            finishTime:+new Date(),
-            finishPoint: JSON.stringify(posicionFinal),
-            waypoints: JSON.stringify(waypoints)
-         },{merge: true})
-     });
+            finishTime: +new Date(), // Timestamp de ahora
+            finishPoint: JSON.stringify(posicionFinal),  // {lat, lng}
+            waypoints: JSON.stringify(waypoints)  // [{lat, lng}]
+         }, { merge: true }) // No sobreescribir documento
+      });
    }
 
-   public agregarRutaAfavoritas(destination: any, alias: String){
+
+   /**********************************************
+   @description Guarda en la BDD un destino favorito
+   con un alias
+   @author Joan Ciprià Moreno Teodoro
+   @date 09/12/2019
+   ***********************************************/
+   public agregarRutaAfavoritas(destination: any, alias: String) {
+      // Documento del usuario
       const ref = this.db.doc('users/' + this.uuid);
 
       return new Promise((resolve, reject) => {
          ref.collection('favDestinations').add({
             alias: alias,
-            destinationPoint: JSON.stringify(destination),
+            destinationPoint: JSON.stringify(destination), // {lat, lng}
          }).then(ref => {
-             console.log('Added document with ID: ', ref.id);
-             return resolve(ref.id);
+            console.log('Added document with ID: ', ref.id);
+            return resolve(ref.id);
          });
-     });
+      });
    }
 
 }
