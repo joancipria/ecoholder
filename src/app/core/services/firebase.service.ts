@@ -31,7 +31,11 @@ export class Firebase {
          Peticiones GET
    -----------------------*/
 
-   // Obtener toda la colección "measures"
+   /**********************************************
+   @description Obtener toda la colección "measures"
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public obtenerMedidas() {
       return this.db.collection('measures').valueChanges();
    }
@@ -40,7 +44,11 @@ export class Firebase {
          Firebase AUTH
    -----------------------*/
 
-   // Registrar usuario
+   /**********************************************
+   @description Registrar usuario (Firebase Auth)
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public registrarUsuario(value) {
       return new Promise<any>((resolve, reject) => {
          // Registrar usuario utilizando Firebase Auth
@@ -61,7 +69,11 @@ export class Firebase {
       });
    }
 
-   // Login / Iniciar sesión
+   /**********************************************
+   @description Login / Iniciar sesión (Firebase Auth)
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public login(value) {
       return new Promise<any>((resolve, reject) => {
          firebase.auth().signInWithEmailAndPassword(value.email, value.password)
@@ -74,7 +86,11 @@ export class Firebase {
       });
    }
 
-   // Logout / Cerrar sesión
+   /**********************************************
+   @description Logout / Cerrar sesión (Firebase Auth)
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public logout() {
       return new Promise((resolve, reject) => {
          if (firebase.auth().currentUser) {
