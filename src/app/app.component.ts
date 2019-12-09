@@ -28,6 +28,12 @@ export class AppComponent {
     });
   }
 
+/**********************************************
+@description Crear canal del servicio de notificaciones push
+@design f() 
+@author Juan Andrés Canet Rodriguez
+@date 03/12/2019
+***********************************************/
   hasPermission(){
      //Notificaciones push
     // comprobamos los permisos
@@ -46,6 +52,12 @@ export class AppComponent {
       }
     });
   }
+/**********************************************
+@description Datos de conexion de firebase message
+@design f() 
+@author Juan Andrés Canet Rodriguez
+@date 03/12/2019
+***********************************************/
   pushOptions(){
     // inicializamos la configuración para android y ios
     const options: PushOptions = {
