@@ -26,7 +26,11 @@ export class ServidorFake {
 
    }
 
-   // Guardar medida de Azufre
+   /**********************************************
+   @description Guardar medida de Azufre
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public guardarSo2(so2) {
       // Crear el body de la petición
       let body = new HttpParams()
@@ -39,7 +43,11 @@ export class ServidorFake {
       this.enviarPeticionPost(body, this.measuresURL);
    }
 
-   // Guardar medida de Azufre
+   /**********************************************
+   @description Guardar datos personales del usuario
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/   
    public guardarDatosUsuario(datos) {
       // Crear el body de la petición
       let body = new HttpParams()
@@ -51,7 +59,11 @@ export class ServidorFake {
       this.enviarPeticionPost(body, this.usersURL);
    }
 
-   // Enviar peticiones POST
+   /**********************************************
+   @description Enviar peticiones POST
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    private enviarPeticionPost(body, url) {
       this.http.post(this.serverURL + url, body)
          .subscribe(
