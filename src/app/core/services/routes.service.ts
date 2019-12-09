@@ -32,7 +32,7 @@ export class Routes {
         private firebase: Firebase,
         private gps: LocalizadorGPS,
     ) {
-        this.testRutas()
+        //this.testRutas()
     }
 
     /**********************************************
