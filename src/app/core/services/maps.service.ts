@@ -48,7 +48,11 @@ export class Maps {
       public platform: Platform
    ) { }
 
-   // Inizializa el mapa sobre el elemento del DOM indidcado
+   /**********************************************
+   @description Inizializa el mapa sobre el elemento del DOM indidcado
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public async inicializarMapa(mapElement, searchElement, panelElement, directionsButtonElement) {
 
       // Obtener posición actual
@@ -149,6 +153,12 @@ export class Maps {
 
    }
 
+   /**********************************************
+   @description Renderizar mapa de calor
+   @author Diana
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    private renderizarMapaCalor() {
       // Callback de firebase
       this.firebase.obtenerMedidas()
@@ -195,7 +205,11 @@ export class Maps {
       return this.toggle(this.mapaCalor);
    }
 
-   // Calculamos ruta desde ubicación actual hasta destino
+   /**********************************************
+   @description Calculamos ruta desde ubicación actual hasta destino
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public calcularRuta(destination) {
 
       const latLng = new google.maps.LatLng(
@@ -218,6 +232,11 @@ export class Maps {
       });
    }
 
+   /**********************************************
+   @description Renderiza un marcador en el mapa
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    private renderizarMarcadorDestino(sitio) {
       // Limpiar marker anterior
       if (this.mapMarkers.length > 0) {
