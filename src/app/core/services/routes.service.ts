@@ -81,7 +81,7 @@ export class Routes {
     @author Joan Ciprià Moreno Teodoro
     @date 09/12/2019
     ***********************************************/
-    public registrarWaypoint() {
+    private registrarWaypoint() {
         // Posición actual
         let waypoint = {
             lat: this.gps.lat,
