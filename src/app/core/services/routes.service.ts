@@ -32,7 +32,7 @@ export class Routes {
         private firebase: Firebase,
         private gps: LocalizadorGPS,
     ) {
-
+        this.testRutas()
     }
 
     /**********************************************
@@ -44,7 +44,7 @@ export class Routes {
     public async empezarRuta() {
         // Limpiamos lista de waypoints
         this.waypoints = [];
-        
+
         // Obtenemos punto de inicio
         let posicionInicio = {
             lat: this.gps.lat,
@@ -90,5 +90,34 @@ export class Routes {
 
         // Guardamos posición actual
         this.waypoints.push(waypoint);
+    }
+
+    /**********************************************
+    @description Método para testear el servicio de Rutas
+    @author Joan Ciprià Moreno Teodoro
+    @date 09/12/2019
+    ***********************************************/
+    private testRutas() {
+        // Creamos ruta
+        let idRuta = this.empezarRuta();
+
+        if (idRuta != undefined) {
+            console.log("Ruta creada con ID:", idRuta)
+        } else {
+            console.error("Error al crear la ruta");
+            return;
+        }
+
+        // Esperamos 30 segundos para finalizar la ruta
+        setTimeout(() => {
+            this.finalizarRuta();
+
+            if (this.waypoints.length > 0) {
+                console.log("Ruta finalizada. Waypoints: ", this.waypoints)
+            } else {
+                console.error("Error al finalizar la ruta. Falló a recogida de waypoints:", this.waypoints);
+            }
+        }, 30000);
+
     }
 }
