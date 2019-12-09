@@ -123,7 +123,8 @@ export class HomePage implements OnInit {
 
   public async abrirInfo(){
     const modal = await this.modalController.create({
-      component: InformationPage
+      component: InformationPage,
+      componentProps: {parentRef: this}
     });
     return await modal.present();
   }
