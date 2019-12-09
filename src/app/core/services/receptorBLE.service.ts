@@ -42,6 +42,11 @@ export class ReceptorBLE {
 
     }
 
+    /**********************************************
+   @description Inicializa BLE y empieza a leer
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
     public async inizializar() {
         // Activar ble si no lo está
         if (!this.estaBLEactivado()) {
@@ -65,6 +70,11 @@ export class ReceptorBLE {
         }, 10000);*/
     }
 
+    /**********************************************
+   @description Devuelve true/false si el BLE está activado
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
     public estaBLEactivado() {
         this.ibeacon.isBluetoothEnabled().then(
             success => {
@@ -78,7 +88,11 @@ export class ReceptorBLE {
     }
 
     
-
+   /**********************************************
+   @description Activa el BLE
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
     public activarBLE() {
         this.ibeacon.enableBluetooth().then(
             success => {
@@ -90,6 +104,12 @@ export class ReceptorBLE {
         );
     }
 
+    /**********************************************
+   @description Lee la útima medida, la posición y la hora
+   y actualiza la medida
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
     public async actualizarMediciones() {
         this.ultimaMedida = {
             value: this.so2, // última medida de azufre
@@ -99,6 +119,11 @@ export class ReceptorBLE {
         }
     }
 
+    /**********************************************
+   @description Callback leer beacon
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
     private obtenerMisTramas() {
         // Callback al detectar el beacon
         this.events.subscribe('didRangeBeaconsInRegion', async (data) => {
@@ -117,11 +142,15 @@ export class ReceptorBLE {
 
 
     public getUltima(){
-
         return this.ultimaMedida;
-
     }
 
+    /**********************************************
+   @description Alarma para coger la última medida
+   y enviarla al servidor
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
     public hayQueActualizarMedicionesYEnviarlasAlServidor() {
         this.actualizarMediciones().then(
             succes => {
