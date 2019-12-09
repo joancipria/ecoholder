@@ -33,6 +33,11 @@ export class LocalizadorGPS {
 
    }
 
+   /**********************************************
+   @description Inicializar GPS
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public inicializar() {
       // Si estamos en android
       if (this.plt.is('android')) {
@@ -46,9 +51,11 @@ export class LocalizadorGPS {
 
    }
 
-    
-
-   // Verificar si tenemos permisos para el GPS
+   /**********************************************
+   @description Verificar si tenemos permisos para el GPS
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public verificarPermisosGPS() {
       this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
          result => {
@@ -66,7 +73,11 @@ export class LocalizadorGPS {
       );
    }
 
-   // Pedir permisos para el GPS
+   /**********************************************
+   @description Pedir permisos para el GPS
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public pedirPermisoGPS() {
       this.locationAccuracy.canRequest().then((canRequest: boolean) => {
          if (canRequest) {
@@ -88,7 +99,11 @@ export class LocalizadorGPS {
       });
    }
 
-   // Activar el GPS
+   /**********************************************
+   @description Activar el GPS
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public activarGPS() {
       this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
          () => {
