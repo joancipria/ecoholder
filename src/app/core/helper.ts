@@ -21,7 +21,7 @@ export class Helper {
     /**********************************************************************************
     @description Si es la primera vez muestra el Tutorial
     @design  elemento HTML que contentra el tutorial,
-    next: String ( pagina siguiente del tutorial ) -> f() -> void
+    siguientePagina: String ( pagina siguiente del tutorial ) -> f() -> void
     @author Diana Hernández Soler
     @date 04/12/2019
     **********************************************************************************/
@@ -34,8 +34,8 @@ export class Helper {
                 introJs().start().oncomplete(() => {
                     navCtrl.navigateForward(urlNext);
                 });
-                // Si es la última parte del tutorial, se guarda 'si' para que no vuelva a salir el tutorial
-                (siguientePagina === 'home') ? this.storage.set(uid, 'si') : this.storage.set(uid, 'en progreso');
+                // Si es la última parte del tutorial, se guarda 'si' para que no vuelva a salir el tutorial para ese usuario
+                if (siguientePagina === 'home') { this.storage.set(uid, 'si'); }
             }
         });
 
