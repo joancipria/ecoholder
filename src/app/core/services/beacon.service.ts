@@ -27,9 +27,14 @@ export class Beacon {
     uuid: string = "45505347-2D47-5449-2D45-5155492D3031";
     targetBeacon: any;
 
-    constructor(public platform: Platform, public events: Events, public ibeacon: IBeacon, public device: Device, public ble: BLE, public ngZone: NgZone,private firebase: Firebase) {
+    constructor(public platform: Platform, public events: Events, public ibeacon: IBeacon, public device: Device, public ble: BLE, public ngZone: NgZone, private firebase: Firebase) {
     }
 
+    /**********************************************
+    @description Inicializa el beacon y empieza a leer
+    @author Joan Ciprià Moreno Teodoro
+    @date 25/10/2019
+    ***********************************************/
     public async inicializar() {
         //await this.obtenerBeaconMasProximo();
         //this.uuid = this.targetBeacon.uuid;
@@ -80,42 +85,42 @@ export class Beacon {
         return promise;
     }
 
-  /**********************************************
-  @description Escanear dispositivos BLE cercanos
-  @author Joan Ciprià Moreno Teodoro
-  @date 30/11/2019
-  ***********************************************/
+    /**********************************************
+    @description Escanear dispositivos BLE cercanos
+    @author Joan Ciprià Moreno Teodoro
+    @date 30/11/2019
+    ***********************************************/
     public escanearDispositivos() {
         let scanTime = 3;
 
         return new Promise((resolve, reject) => {
             this.newDevices = [];
-           
+
             this.ble.scan([], scanTime).subscribe(
                 device => this.onDispositvoEncontrado(device)
             );
-            setTimeout(()=>{ 
-                return resolve(this.newDevices); 
-            }, scanTime*1000);            
+            setTimeout(() => {
+                return resolve(this.newDevices);
+            }, scanTime * 1000);
         });
     }
 
-  /**********************************************
-  @description Obtener dispositivos dados de alta (desde firebase)
-  @author Joan Ciprià Moreno Teodoro
-  @date 30/11/2019
-  ***********************************************/
-    public async obtenerMisDispositivos(){
+    /**********************************************
+    @description Obtener dispositivos dados de alta (desde firebase)
+    @author Joan Ciprià Moreno Teodoro
+    @date 30/11/2019
+    ***********************************************/
+    public async obtenerMisDispositivos() {
         this.devices = await this.firebase.getDevices();
         return this.devices;
     }
 
-  /**********************************************
-  @description Comprueba si el beacon continua emitiendo
-  @author Joan Ciprià Moreno Teodoro
-  @date 30/11/2019
-  ***********************************************/
-    public async obtenerBeaconMasProximo(){
+    /**********************************************
+    @description Comprueba si el beacon continua emitiendo
+    @author Joan Ciprià Moreno Teodoro
+    @date 30/11/2019
+    ***********************************************/
+    public async obtenerBeaconMasProximo() {
         let beacon;
 
         // Mis dispositivos dados de alta
@@ -132,23 +137,23 @@ export class Beacon {
 
         // Recorremos los dispositivos disponibles
         for (let i = 0; i < this.newDevices.length; i++) {
-           for (let z = 0; z < myDevices.length; z++) {
-                if(this.newDevices[i].id == myDevices[z].id){
+            for (let z = 0; z < myDevices.length; z++) {
+                if (this.newDevices[i].id == myDevices[z].id) {
                     targetDevices.push(this.newDevices[i]); // Dispositivo dado de alta y disponible
-                }  
-           }
+                }
+            }
         }
 
-        console.log("Dispositivos dados de alta y cerca:",targetDevices);
-        
+        console.log("Dispositivos dados de alta y cerca:", targetDevices);
+
         // Para los dispositivos disponibles, obtener el más cercano
         let rssi = 999;
-        if(targetDevices.length > 0){
+        if (targetDevices.length > 0) {
             for (let i = 0; i < targetDevices.length; i++) {
-               if( Math.abs(targetDevices[i].rssi) < rssi){
+                if (Math.abs(targetDevices[i].rssi) < rssi) {
                     beacon = targetDevices[i];
                     rssi = Math.abs(targetDevices[i].rssi);
-               }
+                }
             }
         }
 
@@ -157,14 +162,14 @@ export class Beacon {
         console.log("target", this.targetBeacon)
     }
 
-  // ----------------------------------------------------------------
-  // 
-  //    Por cada dispositivo escaneado lo valido y hago push a la lista
-  //    newDevices
-  //             device: object -> f() -> 
-  //
-   //                  Vicent Borja Roca
-  // ----------------------------------------------------------------
+    // ----------------------------------------------------------------
+    // 
+    //    Por cada dispositivo escaneado lo valido y hago push a la lista
+    //    newDevices
+    //             device: object -> f() -> 
+    //
+    //                  Vicent Borja Roca
+    // ----------------------------------------------------------------
 
     onDispositvoEncontrado(device) {
         console.log('Discovered' + JSON.stringify(device, null, 2));
