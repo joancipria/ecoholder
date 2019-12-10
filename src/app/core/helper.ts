@@ -128,7 +128,7 @@ export class Helper {
         // La mostramos por consola
         this.storage.get('pruebaClave').then(val => console.log('TLS acceso a la variable pruebaClave => ', val));
         // Cambiamos el valor de la variable anterior
-        this.storage.set('pruebaClave2', 'hola');
+        this.storage.set('pruebaClave', 'hola');
         // La mostramos por consola
         this.storage.get('pruebaClave').then(val => console.log('TLS se ha camabiado el valor de pruebaClave a => ', val));
     }
