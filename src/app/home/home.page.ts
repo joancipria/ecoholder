@@ -19,6 +19,9 @@ import { InformationPage } from './information/information.page';
 import { NavController, ModalController } from '@ionic/angular';
 import { Helper } from '../core/helper';
 
+// Firebase
+import { Firebase } from '../core/services/firebase.service';
+
 
 @Component({
   selector: 'app-home',
@@ -28,6 +31,7 @@ import { Helper } from '../core/helper';
 export class HomePage implements OnInit {
 
   public userImg: string;
+  public sideMenu: boolean = false;
 
   constructor(
     private ble: ReceptorBLE,
@@ -35,11 +39,13 @@ export class HomePage implements OnInit {
     private alertCtrl: AlertController,
     private navCtrl: NavController,
     private helper: Helper,
-    public modalController: ModalController
+    public modalController: ModalController,
+    private firebase: Firebase
   ) {
     if (plt.is('android')) {
       this.ble.inizializar();
     }
+    this.comprobarRol();
   }
 
 
@@ -128,5 +134,13 @@ export class HomePage implements OnInit {
     });
     return await modal.present();
   }
+  
+  private async comprobarRol(){
+    let role = await this.firebase.getRole();
+    console.log("Rol del usuario", role);
 
+    if(role >= 2){
+      this.sideMenu = true;
+    }
+  }
 }

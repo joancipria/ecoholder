@@ -19,12 +19,12 @@ import * as firebase from 'firebase/app';
 @Injectable()
 export class Firebase {
    private uuid: string;
+   public role: Number = 1;
 
    constructor(
       private db: AngularFirestore,
       private servidor: ServidorFake,
    ) {
-
    }
 
    /*----------------------
@@ -69,6 +69,33 @@ export class Firebase {
       });
    }
 
+
+   /**********************************************
+   @description Obtener el rol
+   @author Joan Ciprià Moreno Teodoro
+   @date 26/12/2019
+   ***********************************************/
+   public getRole() {
+      return new Promise<any>((resolve, reject) => {
+         const userRef = this.db.doc('users/' + this.uuid);
+         let getDoc = userRef.get()
+            .toPromise()
+            .then(doc => {
+               if (!doc.exists) {
+                  console.log('No such document!');
+               } else {
+                  console.log('Document data:', doc.data());
+                  this.role = doc.data().role;
+                  resolve(this.role);
+               }
+            })
+            .catch(err => {
+               console.log('Error getting document', err);
+            });
+      });
+   }
+
+
    /**********************************************
    @description Login / Iniciar sesión (Firebase Auth)
    @author Joan Ciprià Moreno Teodoro
@@ -80,6 +107,7 @@ export class Firebase {
             .then(
                res => {
                   this.uuid = this.informacionUsuario().uid;
+                  this.getRole();
                   resolve(res);
                },
                err => reject(err));
