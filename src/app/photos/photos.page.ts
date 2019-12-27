@@ -33,7 +33,7 @@ export class PhotosPage implements OnInit {
 
   ngOnInit() {
     // Raquel. Mostrar tutorial si es la primera vez
-    this.helper.MostrarTutorial(this.navCtrl, 'settings', false);
+    this.helper.MostrarTutorial(this.navCtrl, 'settings');
   }
 
 hacerFoto() {

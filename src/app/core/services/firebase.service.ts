@@ -19,19 +19,23 @@ import * as firebase from 'firebase/app';
 @Injectable()
 export class Firebase {
    private uuid: string;
+   public role: Number = 1;
 
    constructor(
       private db: AngularFirestore,
       private servidor: ServidorFake,
    ) {
-
    }
 
    /*----------------------
          Peticiones GET
    -----------------------*/
 
-   // Obtener toda la colección "measures"
+   /**********************************************
+   @description Obtener toda la colección "measures"
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public obtenerMedidas() {
       return this.db.collection('measures').valueChanges();
    }
@@ -40,7 +44,11 @@ export class Firebase {
          Firebase AUTH
    -----------------------*/
 
-   // Registrar usuario
+   /**********************************************
+   @description Registrar usuario (Firebase Auth)
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public registrarUsuario(value) {
       return new Promise<any>((resolve, reject) => {
          // Registrar usuario utilizando Firebase Auth
@@ -61,20 +69,56 @@ export class Firebase {
       });
    }
 
-   // Login / Iniciar sesión
+
+   /**********************************************
+   @description Obtener el rol
+   @author Joan Ciprià Moreno Teodoro
+   @date 26/12/2019
+   ***********************************************/
+   public getRole() {
+      return new Promise<any>((resolve, reject) => {
+         const userRef = this.db.doc('users/' + this.uuid);
+         let getDoc = userRef.get()
+            .toPromise()
+            .then(doc => {
+               if (!doc.exists) {
+                  console.log('No such document!');
+               } else {
+                  console.log('Document data:', doc.data());
+                  this.role = doc.data().role;
+                  resolve(this.role);
+               }
+            })
+            .catch(err => {
+               console.log('Error getting document', err);
+            });
+      });
+   }
+
+
+   /**********************************************
+   @description Login / Iniciar sesión (Firebase Auth)
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public login(value) {
       return new Promise<any>((resolve, reject) => {
          firebase.auth().signInWithEmailAndPassword(value.email, value.password)
             .then(
                res => {
                   this.uuid = this.informacionUsuario().uid;
+                  this.getRole();
                   resolve(res);
                },
                err => reject(err));
       });
    }
 
-   // Logout / Cerrar sesión
+   /**********************************************
+   @description Logout / Cerrar sesión (Firebase Auth)
+   @author Joan Ciprià Moreno Teodoro
+   @date 10/10/2019
+   ***********************************************/
    public logout() {
       return new Promise((resolve, reject) => {
          if (firebase.auth().currentUser) {
@@ -124,7 +168,11 @@ export class Firebase {
       return measuresRef.collection('devices').valueChanges();
    }
 
-   // Sin subscribe
+   /**********************************************
+    @description Obtener todos los dispositivos del usuario
+    @author Joan Ciprià Moreno Teodoro
+    @date 27/11/2019
+    ***********************************************/
    public getDevices() {
       let devices = [];
       return new Promise((resolve, reject) => {
@@ -201,29 +249,68 @@ export class Firebase {
 
    }
 
-   public empezarRuta(posicionInicio: any ) {
+   /**********************************************
+    @description Guarda en la BBD el punto de inicio
+    y la hora
+    @author Joan Ciprià Moreno Teodoro
+    @date 09/12/2019
+    ***********************************************/
+   public empezarRuta(posicionInicio: any) {
+      // Documento del usuario
       const ref = this.db.doc('users/' + this.uuid);
+
 
       return new Promise((resolve, reject) => {
          ref.collection('routes').add({
-            startTime: +new Date(),
-            startPoint: JSON.stringify(posicionInicio),
+            startTime: +new Date(), // Timestamp de ahora
+            startPoint: JSON.stringify(posicionInicio), // {lat, lng}
          }).then(ref => {
-             console.log('Added document with ID: ', ref.id);
-             return resolve(ref.id);
+            console.log('Added document with ID: ', ref.id);
+            return resolve(ref.id);
          });
-     });
+      });
    }
 
-   public finalizarRuta(routeId: any,posicionFinal: any ) {
-      const ref = this.db.doc('users/' + this.uuid+'/routes/'+routeId.toString());
+   /**********************************************
+    @description Guarda en la BBD el punto final,
+    la hora y el conjunto de waypoints de la ruta
+    especificada
+    @author Joan Ciprià Moreno Teodoro
+    @date 09/12/2019
+    ***********************************************/
+   public finalizarRuta(routeId: any, posicionFinal: any, waypoints: any) {
+      // Documento del usuario
+      const ref = this.db.doc('users/' + this.uuid + '/routes/' + routeId.toString());
 
       return new Promise((resolve, reject) => {
          ref.set({
-            finishTime:+new Date(),
-            finishPoint: JSON.stringify(posicionFinal),
-         },{merge: true})
-     });
+            finishTime: +new Date(), // Timestamp de ahora
+            finishPoint: JSON.stringify(posicionFinal),  // {lat, lng}
+            waypoints: JSON.stringify(waypoints)  // [{lat, lng}]
+         }, { merge: true }) // No sobreescribir documento
+      });
+   }
+
+
+   /**********************************************
+   @description Guarda en la BDD un destino favorito
+   con un alias
+   @author Joan Ciprià Moreno Teodoro
+   @date 09/12/2019
+   ***********************************************/
+   public agregarRutaAfavoritas(destination: any, alias: String) {
+      // Documento del usuario
+      const ref = this.db.doc('users/' + this.uuid);
+
+      return new Promise((resolve, reject) => {
+         ref.collection('favDestinations').add({
+            alias: alias,
+            destinationPoint: JSON.stringify(destination), // {lat, lng}
+         }).then(ref => {
+            console.log('Added document with ID: ', ref.id);
+            return resolve(ref.id);
+         });
+      });
    }
 
 }

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { NavParams } from "@ionic/angular";
+
 
 @Component({
   selector: 'app-information',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InformationPage implements OnInit {
 
-  constructor() { }
+  constructor(private navParams: NavParams, public ngZone: NgZone) { }
 
   ngOnInit() {
+  }
+
+  public cerrarInfo(){
+    this.navParams.data.parentRef.modalController.dismiss();
   }
 
 }

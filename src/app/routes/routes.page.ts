@@ -57,7 +57,7 @@ export class RoutesPage implements OnInit {
 
   ngOnInit() {
   // Raquel. Mostrar tutorial si es la primera vez
-  this.helper.MostrarTutorial(this.navCtrl, 'photos', false);
+  this.helper.MostrarTutorial(this.navCtrl, 'photos');
   }
 
   // Wait for dom
@@ -172,5 +172,9 @@ export class RoutesPage implements OnInit {
 
   public finalizarRuta() {
     this.routes.finalizarRuta();
+  }
+
+  public agregarRutaAfavoritas(){
+    this.firebase.agregarRutaAfavoritas(this.maps.destination, "Casa");
   }
 }
