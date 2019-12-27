@@ -8,6 +8,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { HttpClientModule } from '@angular/common/http';
 
 
 // Tutorial
@@ -26,7 +27,8 @@ export class PhotosPage implements OnInit {
   constructor(
     private camera: Camera,
     private navCtrl: NavController,
-    private helper: Helper
+    private helper: Helper,
+    private http: HttpClientModule
   ) { }
 
   ngOnInit() {

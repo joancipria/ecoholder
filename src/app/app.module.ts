@@ -59,6 +59,12 @@ import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
 // Helper
 import { Helper } from './core/helper';
 
+//File
+import { File } from '@ionic-native/File/ngx';
+
+//WebView
+import { WebView } from '@ionic-native/ionic-webview/ngx';
+
 // Directions moddal
 import { DirectionsPage } from './routes/directions/directions.page';
 
@@ -106,7 +112,10 @@ firebase.initializeApp(environment.firebaseConfig);
     LocationAccuracy,
     AndroidPermissions,
     Push,
-    Routes
+    Routes,
+    Camera,
+    File,
+    WebView
   ],
   bootstrap: [AppComponent]
 })
