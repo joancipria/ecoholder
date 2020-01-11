@@ -61,6 +61,8 @@ export class Maps {
          this.gps.lng
       );
 
+      this.getClosestDate(1578453109928);
+
       // Opciones del mapa
       let mapOptions;
       if (this.platform.is('android')) {
@@ -163,7 +165,7 @@ export class Maps {
       // Callback de firebase
       this.firebase.obtenerMedidas()
          .subscribe((data: any) => {
-            console.log(data);
+           // console.log(data);
 
 
             // const measures = this.helper.parsearDatos(data);
@@ -241,7 +243,7 @@ export class Maps {
       // Limpiar marker anterior
       if (this.mapMarkers.length > 0) {
          this.mapMarkers[0].setMap(null);
-         console.log("este", this.mapMarkers[0])
+         // console.log("este", this.mapMarkers[0])
       }
 
       let geocoder = new google.maps.Geocoder();
@@ -442,34 +444,11 @@ export class Maps {
    private generarMatrizColores(): void {
 
       this.firebase.obtenerUltimoMapa().subscribe(res => {
-
          // Parseamos los datos
          const datos = this.helper.parsearDatos(res);
          const grid = JSON.parse(datos[0].grid);
-         console.table(grid);
-
-         // Creamos una matriz nueva que en lugar de valores tendra colores
-         for (let i = 0; i < grid.length; i++) {
-            if (!this.matrizColores[i]) { this.matrizColores[i] = []; }
-            for (let j = 0; j < grid[0].length; j++) {
-               if (!this.matrizColores[i][j]) { this.matrizColores[i][j] = {}; }
-               const v = grid[i][j];
-               // Por defecto es verde
-               this.matrizColores[i][j] = null;
-
-               if (v > 400) {
-                  this.matrizColores[i][j] = '#FF0000';
-               }
-               if (v > 350 && v < 400) {
-                  this.matrizColores[i][j] = '#FF8000';
-               }
-               if (v < 350 && v > 300) {
-                  this.matrizColores[i][j] = '#D7DF01';
-               }
-            }
-         }
-
-         // console.table(this.matrizColores);
+         // console.table(grid);
+         this.matrizColoresByGrid(grid);
       });
    }
 
@@ -480,5 +459,58 @@ export class Maps {
    // ---------------------------------------------------------------
    private toggle(elemento: any) {
       elemento.setMap(elemento.getMap() ? null : this.mapa);
+   }
+
+   /**********************************************
+   @description pinta la cuadricula con la fecha más cerccana a date
+   @design date: milliseconds -> f() -> void
+   @author Diana Hernández Soler
+   @date 11/01/2020
+   ***********************************************/
+   public getClosestDate(date: number): void {
+      const datos = this.firebase.getPollutionsMap().subscribe(res => {
+         const datos = this.helper.parsearDatos(res);
+         const fechasPosteriores = [];
+         datos.forEach( function(d) {
+            console.log(d.date);
+            if (d.date > date) {
+               fechasPosteriores.push(d.date);
+            }
+         });
+         console.log(fechasPosteriores[0], 'fecha más cercana');
+         const closest = fechasPosteriores[0];
+         this.firebase.getPollutionMap(closest).subscribe((res: any) => {
+            const datos = this.helper.parsearDatos(res);
+            const grid = JSON.parse(datos[0].grid);
+            console.table(grid);
+            this.matrizColoresByGrid(grid);
+
+         });
+      });
+   }
+
+   public matrizColoresByGrid(grid: any): any {
+       // Creamos una matriz nueva que en lugar de valores tendra colores
+       for (let i = 0; i < grid.length; i++) {
+         if (!this.matrizColores[i]) { this.matrizColores[i] = []; }
+         for (let j = 0; j < grid[0].length; j++) {
+            if (!this.matrizColores[i][j]) { this.matrizColores[i][j] = {}; }
+            const v = grid[i][j];
+            // Por defecto es verde
+            this.matrizColores[i][j] = null;
+
+            if (v > 400) {
+               this.matrizColores[i][j] = '#FF0000';
+            }
+            if (v > 350 && v < 400) {
+               this.matrizColores[i][j] = '#FF8000';
+            }
+            if (v < 350 && v > 300) {
+               this.matrizColores[i][j] = '#D7DF01';
+            }
+         }
+      }
+       console.table(this.matrizColores);
+
    }
 }

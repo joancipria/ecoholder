@@ -313,4 +313,17 @@ export class Firebase {
       });
    }
 
+   /**********************************************
+   @description Devuelve info contaminación de una fecha, o de todas las fechas disponibles
+   @design date: number -> f() -> array de [][]
+   @author Diana Hernández Soler
+   @date 11/01/2020
+   ***********************************************/
+   public getPollutionsMap() {
+      return this.db.collection('maps', (ref: any) => ref.orderBy('date', 'desc')).valueChanges();
+}
+
+   public getPollutionMap(date: number) {
+      return this.db.collection('maps', ref => ref.where('date', '==', date)).valueChanges();
+   }
 }
