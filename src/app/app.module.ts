@@ -57,12 +57,6 @@ import { Camera } from '@ionic-native/camera/ngx';
 // Helper
 import { Helper } from './core/helper';
 
-//File
-import { File } from '@ionic-native/File/ngx';
-
-//WebView
-import { WebView } from '@ionic-native/ionic-webview/ngx';
-
 // Directions moddal
 import { DirectionsPage } from './routes/directions/directions.page';
 
