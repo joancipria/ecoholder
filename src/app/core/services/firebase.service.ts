@@ -190,6 +190,29 @@ export class Firebase {
       });
    }
 
+   /**********************************************
+   @description Leer de la base de datos los nodos que están en mal estado
+   @author Raquel Perpiñá Clérigues
+   @date 12/01/2020
+   ***********************************************/
+   public estadoNodo() {
+      return new Promise<any>((resolve, reject) => {
+         const snapshot = this.db.doc('users/' + this.uuid).collection('devices').get()
+            .toPromise()
+            .then((snapshot) => {
+               let nodos = [];
+               snapshot.forEach(doc => {
+                  let device = doc.data();
+
+                  if (device.estado == false) {
+                     nodos.push(device.id);
+                  }
+               });
+               resolve(nodos);
+            })
+      });
+   }
+
    // -----------------------------------------------------
    // Elimina el dispostivo con el id dado del usuario logueado
    // uuid: string, id: string -> f() -> void

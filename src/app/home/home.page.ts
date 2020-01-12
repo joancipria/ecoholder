@@ -22,6 +22,9 @@ import { Helper } from '../core/helper';
 // Firebase
 import { Firebase } from '../core/services/firebase.service';
 
+// Notificaciones
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+
 
 @Component({
   selector: 'app-home',
@@ -32,6 +35,7 @@ export class HomePage implements OnInit {
 
   public userImg: string;
   public sideMenu: boolean = false;
+  public Nodo: any[];
 
   constructor(
     private ble: ReceptorBLE,
@@ -40,7 +44,8 @@ export class HomePage implements OnInit {
     private navCtrl: NavController,
     private helper: Helper,
     public modalController: ModalController,
-    private firebase: Firebase
+    private firebase: Firebase,
+    private localNotifications: LocalNotifications
   ) {
     if (plt.is('android')) {
       this.ble.inizializar();
@@ -52,6 +57,7 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.showChart();
     this.userImg = this.helper.obtenerImagenGravatar();
+    this.notificacion();
     // Raquel. Mostrar tutorial si es la primera vez
     //this.helper.MostrarTutorial(this.navCtrl, 'routes');
   }
@@ -109,6 +115,21 @@ export class HomePage implements OnInit {
         circumference: 1 * Math.PI,
         cutoutPercentage: 65
       }
+    });
+  }
+
+  /**********************************************
+   @description Comprobar si el dispositivo está en mal estado para enviar notificacion
+   @author Raquel Perpiñá Clérigues
+   @date 12/01/2020
+   ***********************************************/
+  public async notificacion(){
+    let nodo = await this.firebase.estadoNodo()
+    console.log('NODO EN MAL ESTADO' + nodo);
+    this.localNotifications.schedule({
+      id: 1,
+      title: 'Estado de los nodos',
+      text: 'Los siguientes nodos se encuentran en mal estado: ' + nodo
     });
   }
 
