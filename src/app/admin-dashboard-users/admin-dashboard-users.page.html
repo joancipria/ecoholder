@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Users</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="row">
+      <ion-col class="col-header">
+        <p>Name</p>
+      </ion-col>
+      <ion-col class="col-header">
+        <p>Telephone</p>
+      </ion-col>
+      <ion-col class="col-header">
+        <p>Role</p>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row" *ngFor="let user of users">
+      <ion-col class="col">
+        {{user.name}}
+      </ion-col>
+      <ion-col class="col">
+        {{user.telephone}}
+      </ion-col>
+      <ion-col class="col">
+        <p *ngIf="user.role == 1">Usuario</p>
+        <p *ngIf="user.role == 2">Administrador</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

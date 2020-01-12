@@ -97,6 +97,63 @@ export class Firebase {
 
 
    /**********************************************
+   @description Obtener el rol
+   @author Joan Ciprià Moreno Teodoro
+   @date 12/01/2020
+   ***********************************************/
+   public getNodes() {
+      if (this.role > 1) {
+         return new Promise<any>((resolve, reject) => {
+            let usersRef = this.db.collection('users');
+            let nodes = [];
+
+            let allCities = usersRef.get()
+               .toPromise()
+               .then(snapshot => {
+                  snapshot.forEach(doc => {
+                     console.log(doc.id, '=>', doc.data());
+                  });
+               })
+               .catch(err => {
+                  console.log('Error getting documents', err);
+               });
+
+            resolve(nodes);
+
+         });
+      } else {
+         console.log("Permission denied")
+      }
+   }
+
+   public getAllusers() {
+      if (this.role > 1) {
+         return new Promise<any>((resolve, reject) => {
+            let usersRef = this.db.collection('users');
+
+            let allUsers = usersRef.get()
+               .toPromise()
+               .then(snapshot => {
+                  let users = [];
+                  snapshot.forEach(doc => {
+                     //console.log(doc.id, '=>', doc.data());
+                     users.push(doc.data());
+                  });
+                  return users;
+               })
+               .then((users)=>{
+                  resolve(users);
+               })
+               .catch(err => {
+                  console.log('Error getting documents', err);
+               });
+         });
+      } else {
+         console.log("Permission denied")
+      }
+   }
+
+   /**********************************************
    @description Login / Iniciar sesión (Firebase Auth)
    @author Joan Ciprià Moreno Teodoro
    @date 10/10/2019
@@ -187,6 +244,29 @@ export class Firebase {
             .catch(err => {
                console.log('Error getting documents', err);
             });
+      });
+   }
+
+   /**********************************************
+   @description Leer de la base de datos los nodos que están en mal estado
+   @author Raquel Perpiñá Clérigues
+   @date 12/01/2020
+   ***********************************************/
+   public estadoNodo() {
+      return new Promise<any>((resolve, reject) => {
+         const snapshot = this.db.doc('users/' + this.uuid).collection('devices').get()
+            .toPromise()
+            .then((snapshot) => {
+               let nodos = [];
+               snapshot.forEach(doc => {
+                  let device = doc.data();
+
+                  if (device.estado == false) {
+                     nodos.push(device.id);
+                  }
+               });
+               resolve(nodos);
+            })
       });
    }
 

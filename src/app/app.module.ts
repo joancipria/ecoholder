@@ -63,7 +63,10 @@ import { DirectionsPage } from './routes/directions/directions.page';
 // Info modal
 import { InformationPage } from './home/information/information.page';
 
-import { Routes } from './core/services/routes.service';
+import { Routes } from './core/services/routes.service'
+
+// Notificaciones
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 firebase.initializeApp(environment.firebaseConfig);
 
@@ -104,7 +107,8 @@ firebase.initializeApp(environment.firebaseConfig);
     Device,
     LocationAccuracy,
     AndroidPermissions,
-    Routes
+    Routes,
+    LocalNotifications
   ],
   bootstrap: [AppComponent]
 })
