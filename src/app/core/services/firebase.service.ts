@@ -131,7 +131,7 @@ export class Firebase {
          return new Promise<any>((resolve, reject) => {
             let usersRef = this.db.collection('users');
 
-            let allCities = usersRef.get()
+            let allUsers = usersRef.get()
                .toPromise()
                .then(snapshot => {
                   let users = [];
