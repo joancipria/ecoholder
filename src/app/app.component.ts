@@ -35,9 +35,14 @@ export class AppComponent {
           icon: "phone-portrait"
         },
         {
-          title: "Dashboard",
+          title: "Maps",
           url: "/dashboard",
-          icon: "apps"
+          icon: "map"
+        },
+        {
+          title: "Nodes",
+          url: "/nodes",
+          icon: "wifi"
         }
       ]
   }
