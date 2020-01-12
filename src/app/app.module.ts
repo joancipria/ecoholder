@@ -65,13 +65,14 @@ import { DirectionsPage } from './routes/directions/directions.page';
 // Info modal
 import { InformationPage } from './home/information/information.page';
 
+
 import { Routes } from './core/services/routes.service';
 
 firebase.initializeApp(environment.firebaseConfig);
 
 
 @NgModule({
-  declarations: [AppComponent,DirectionsPage, InformationPage],
+  declarations: [AppComponent, DirectionsPage, InformationPage],
   entryComponents: [DirectionsPage, InformationPage],
   imports: [
     BrowserModule,

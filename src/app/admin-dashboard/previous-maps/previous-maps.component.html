@@ -1,0 +1,83 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Previous Maps</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-searchbar id="search" #search type="date" (ionChange)="showMap($event)"></ion-searchbar>
+
+    <ion-content>
+        <ion-row class="info" *ngIf="showDivInfo">
+            <ion-col>
+                <ion-card>
+                    <ion-card-content>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-icon class="big-icon" name="calendar"></ion-icon>
+                                </ion-col>
+                                <ion-col>
+                                    <h2>{{ fecha | date:'d MMM, y' }}</h2>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+            <ion-col>
+                <ion-card>
+                    <ion-card-content>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-icon class="big-icon" name="happy"></ion-icon>
+
+                                </ion-col>
+                                <ion-col>
+                                    <h2> {{ average || uppercase }} average </h2>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+            <ion-col>
+                <ion-card>
+                    <ion-card-content>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-icon class="big-icon" name="barcode"></ion-icon>
+
+                                </ion-col>
+                                <ion-col>
+                                    <h2> {{ measuresNumber }} measures </h2>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+
+
+
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+            <ion-col>
+                <ion-card>
+                    <ion-card-content>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-icon class="big-icon" name="wifi"></ion-icon>
+                                </ion-col>
+                                <ion-col>
+                                    <h2> 295 devices </h2>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+        <div id="map" #map style="height:80%;"></div>
+    </ion-content>

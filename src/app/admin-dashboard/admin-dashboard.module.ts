@@ -6,11 +6,16 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { AdminDashboardPage } from './admin-dashboard.page';
+import { PreviousMapsComponent } from './previous-maps/previous-maps.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'gjhhj',
     component: AdminDashboardPage
+  },
+  {
+    path: '',
+    component: PreviousMapsComponent
   }
 ];
 
@@ -21,6 +26,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [AdminDashboardPage]
+  declarations: [AdminDashboardPage, PreviousMapsComponent]
 })
 export class AdminDashboardPageModule {}

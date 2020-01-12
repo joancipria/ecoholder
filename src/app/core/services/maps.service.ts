@@ -41,12 +41,68 @@ export class Maps {
    public marker1: any;
    public marker2: any;
 
+   public numCells: number;
+
    constructor(
       private gps: LocalizadorGPS,
       public firebase: Firebase,
       private helper: Helper,
       public platform: Platform
    ) { }
+
+ public initPreviousMaps(mapElement) {
+      // Obtener posición actual
+      const posicionActual = new google.maps.LatLng(
+         this.gps.lat || 38.971990,
+         this.gps.lng || -0.179660
+      );
+
+      // Opciones del mapa
+      let mapOptions;
+      if (this.platform.is('android')) {
+         // Móvil
+         mapOptions = {
+            center: posicionActual,
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: true,
+            zoomControl: false,
+            fullscreenControl: false,
+            streetViewControl: false
+         };
+      } else {
+         // PC
+         mapOptions = {
+            center: posicionActual,
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: true,
+            zoomControl: true,
+            zoomControlOptions: {
+               position: google.maps.ControlPosition.TOP_RIGHT
+            },
+            fullscreenControl: false,
+            streetViewControl: false
+         };
+      }
+
+
+      // Mostramos la estación de medida de Gandía en el mapa
+      this.mostrarEstacionDeMedida();
+      // Renderizamos mapa en el dom con sus opciones
+      this.mapa = new google.maps.Map(mapElement.nativeElement, mapOptions);
+
+      // Creamos marcador personalizado para la posición actual
+      const marcadorPosicionActual = new google.maps.Marker({
+         position: posicionActual,
+         map: this.mapa,
+         icon: { url: 'assets/maps/locationMarker.png', scaledSize: new google.maps.Size(20, 20) }
+      });
+
+      // Lo mostramos en el mapa
+      marcadorPosicionActual.setMap(this.mapa);
+ }
+
 
    /**********************************************
    @description Inizializa el mapa sobre el elemento del DOM indidcado
@@ -60,8 +116,6 @@ export class Maps {
          this.gps.lat,
          this.gps.lng
       );
-
-      this.getClosestDate(1578453109928);
 
       // Opciones del mapa
       let mapOptions;
@@ -472,26 +526,25 @@ export class Maps {
          const datos = this.helper.parsearDatos(res);
          const fechasPosteriores = [];
          datos.forEach( function(d) {
-            console.log(d.date);
             if (d.date > date) {
                fechasPosteriores.push(d.date);
             }
          });
-         console.log(fechasPosteriores[0], 'fecha más cercana');
          const closest = fechasPosteriores[0];
          this.firebase.getPollutionMap(closest).subscribe((res: any) => {
             const datos = this.helper.parsearDatos(res);
             const grid = JSON.parse(datos[0].grid);
-            console.table(grid);
+            this.numCells = grid.length * grid[0].length;
             this.matrizColoresByGrid(grid);
-
+            this.generarMatrizColores();
+            this.generarCuadricula();
          });
       });
    }
 
    public matrizColoresByGrid(grid: any): any {
        // Creamos una matriz nueva que en lugar de valores tendra colores
-       for (let i = 0; i < grid.length; i++) {
+      for (let i = 0; i < grid.length; i++) {
          if (!this.matrizColores[i]) { this.matrizColores[i] = []; }
          for (let j = 0; j < grid[0].length; j++) {
             if (!this.matrizColores[i][j]) { this.matrizColores[i][j] = {}; }
@@ -510,7 +563,9 @@ export class Maps {
             }
          }
       }
-       console.table(this.matrizColores);
+   }
 
+   public getNumberMeasures(): number {
+      return this.numCells;
    }
 }

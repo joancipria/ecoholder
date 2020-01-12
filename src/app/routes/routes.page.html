@@ -6,16 +6,16 @@
 
 <ion-content>
     <!-- Searchbar with cancel button shown on focus -->
-    <ion-searchbar id="search" #search type="text" placeholder="Pick a destination" data-step= "2" data-intro="Realiza la búsqueda de tu destino. Venga, adéntrate en el mapa :)"></ion-searchbar>
+    <ion-searchbar id="search" #search type="text" placeholder="Pick a destination" data-step="2" data-intro="Realiza la búsqueda de tu destino. Venga, adéntrate en el mapa :)"></ion-searchbar>
     <ion-item hidden="true">
 
         <ion-select #select value="SO2"  ok-text="Ok"  cancel-text="Cancel" (ionChange)="onChangeContaminante($event)">
 
             <ion-select-option value="SO2">SO2</ion-select-option>
 
-            <ion-select-option value="CO2">CO2</ion-select-option>
+                <ion-select-option value="CO2">CO2</ion-select-option>
 
-            <ion-select-option value="NOX">NOX</ion-select-option>
+                    <ion-select-option value="NOX">NOX</ion-select-option>
         </ion-select>
     </ion-item>
     <div id="map" #map style="height:100%;" data-step="3" data-intro="Visualiza tu mapa con todo tipo de detalles. Con un simple vistazo puedes saber la cantidad de gas que hay en toda la zona gracias al mapa de calor que creamos para ti. Coge tu sensor, sal a la calle y analiza todos tus datos. Además te damos la ruta más corta o menos contaminada hacia tu destino. ¿A qué esperas?">
