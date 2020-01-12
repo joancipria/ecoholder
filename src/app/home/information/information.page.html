@@ -10,6 +10,58 @@
 <ion-content>
   <ion-card>
     <ion-card-header>
+      <ion-card-subtitle>Air pollution</ion-card-subtitle>
+      <ion-card-title>Alert Levels</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      Each gas information card indicates 3 exposure levels:
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div>
+              <ion-chip color="success">
+                <ion-label>Ok</ion-label>
+              </ion-chip>
+            </div>
+          </ion-col>
+          <ion-col>
+            <div>
+              <ion-chip color="warning">
+                <ion-label>Warning</ion-label>
+              </ion-chip>
+            </div>
+          </ion-col>
+          <ion-col>
+            <div>
+              <ion-chip color="danger">
+                <ion-label>Danger</ion-label>
+              </ion-chip>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <div>
+             Normal levels of the gas. Relax, it's safe
+            </div>
+          </ion-col>
+          <ion-col>
+            <div>
+              There's some pollution in the air. It's safe but avoid long exposure.
+            </div>
+          </ion-col>
+          <ion-col>
+            <div>
+              Abnormal concentration level. Avoid this zone.
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
       <ion-card-subtitle>Sulfur dioxide</ion-card-subtitle>
       <ion-card-title>SO2</ion-card-title>
     </ion-card-header>
