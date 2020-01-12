@@ -1,4 +1,6 @@
+import { Firebase } from './../core/services/firebase.service';
 import { Component, OnInit } from '@angular/core';
+
 
 @Component({
   selector: 'app-admin-dashboard-nodes',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminDashboardNodesPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private firebase: Firebase
+  ) {
+  }
 
   ngOnInit() {
+    this.firebase.getNodes();
   }
 
 }

@@ -97,6 +97,61 @@ export class Firebase {
 
 
    /**********************************************
+   @description Obtener el rol
+   @author Joan Ciprià Moreno Teodoro
+   @date 12/01/2020
+   ***********************************************/
+   public getNodes() {
+      if (this.role > 1) {
+         return new Promise<any>((resolve, reject) => {
+            let usersRef = this.db.collection('users');
+            let nodes = [];
+
+            let allCities = usersRef.get()
+               .toPromise()
+               .then(snapshot => {
+                  snapshot.forEach(doc => {
+                     console.log(doc.id, '=>', doc.data());
+                  });
+               })
+               .catch(err => {
+                  console.log('Error getting documents', err);
+               });
+
+            resolve(nodes);
+
+         });
+      } else {
+         console.log("Permission denied")
+      }
+   }
+
+   public getUsers() {
+      if (this.role > 1) {
+         return new Promise<any>((resolve, reject) => {
+            let usersRef = this.db.collection('users');
+            let nodes = [];
+
+            let allCities = usersRef.get()
+               .toPromise()
+               .then(snapshot => {
+                  snapshot.forEach(doc => {
+                     console.log(doc.id, '=>', doc.data());
+                  });
+               })
+               .catch(err => {
+                  console.log('Error getting documents', err);
+               });
+
+            resolve(nodes);
+
+         });
+      } else {
+         console.log("Permission denied")
+      }
+   }
+
+   /**********************************************
    @description Login / Iniciar sesión (Firebase Auth)
    @author Joan Ciprià Moreno Teodoro
    @date 10/10/2019

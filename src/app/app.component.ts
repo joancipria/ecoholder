@@ -40,6 +40,11 @@ export class AppComponent {
           icon: "map"
         },
         {
+          title: "Users",
+          url: "/users",
+          icon: "people"
+        },
+        {
           title: "Nodes",
           url: "/nodes",
           icon: "wifi"
