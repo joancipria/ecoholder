@@ -17,6 +17,8 @@ import { HttpClient } from '@angular/common/http';
 import { NavController, ModalController } from '@ionic/angular';
 import { Helper } from '../core/helper';
 
+import { AngularFireStorageModule } from '@angular/fire/storage';
+
 @Component({
   selector: 'app-photos',
   templateUrl: './photos.page.html',
@@ -32,6 +34,7 @@ export class PhotosPage implements OnInit {
     private navCtrl: NavController,
     private helper: Helper,
     private http: HttpClient,
+    private store: AngularFireStorageModule
     //private file: File
   ) { }
 
@@ -48,12 +51,20 @@ export class PhotosPage implements OnInit {
   }
   onUpload(){
     const fd= new FormData();
-    console.log("holamundo");
+
+    //enviar al servidor express
     fd.append('Image', this.selectedFile, this.selectedFile.name);
     this.http.post('http://localhost:3000/api/images', fd)
     .subscribe(res=>{
       console.log(res);
     });
+
+    const id = Math.random().toString(36).substring(2);
+    const file = 
+    //enviar a firestorage
+
+    
+
   }
 hacerFoto() {
   const options: CameraOptions = {

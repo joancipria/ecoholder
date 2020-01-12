@@ -32,6 +32,7 @@ import { HttpClientModule } from '@angular/common/http';
 // Firebase
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 import { Firebase } from './core/services/firebase.service';
 
@@ -85,6 +86,7 @@ firebase.initializeApp(environment.firebaseConfig);
     AngularFireModule.initializeApp(environment.firebaseConfig),
      AngularFirestoreModule,
      AngularFireAuthModule,
+     AngularFireStorageModule,
      ReactiveFormsModule
 
   ],
