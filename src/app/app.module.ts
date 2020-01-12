@@ -53,9 +53,6 @@ import * as firebase from 'firebase';
 // Camara
 import { Camera } from '@ionic-native/camera/ngx';
 
-// Push
-import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
-
 // Helper
 import { Helper } from './core/helper';
 
@@ -111,11 +108,7 @@ firebase.initializeApp(environment.firebaseConfig);
     Device,
     LocationAccuracy,
     AndroidPermissions,
-    Push,
-    Routes,
-    Camera,
-    File,
-    WebView
+    Routes
   ],
   bootstrap: [AppComponent]
 })

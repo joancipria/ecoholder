@@ -53,7 +53,7 @@ export class HomePage implements OnInit {
     this.showChart();
     this.userImg = this.helper.obtenerImagenGravatar();
     // Raquel. Mostrar tutorial si es la primera vez
-    this.helper.MostrarTutorial(this.navCtrl, 'routes');
+    //this.helper.MostrarTutorial(this.navCtrl, 'routes');
   }
 
 

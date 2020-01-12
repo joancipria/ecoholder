@@ -57,7 +57,7 @@ export class RoutesPage implements OnInit {
 
   ngOnInit() {
   // Raquel. Mostrar tutorial si es la primera vez
-  this.helper.MostrarTutorial(this.navCtrl, 'photos');
+  //this.helper.MostrarTutorial(this.navCtrl, 'photos');
   }
 
   // Wait for dom

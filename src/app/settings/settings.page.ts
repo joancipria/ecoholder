@@ -52,7 +52,7 @@ export class SettingsPage implements OnInit {
       this.newDevices = [];
 
       // Raquel. Mostrar tutorial si es la primera vez
-      this.helper.MostrarTutorial(this.navCtrl, 'home');
+      //this.helper.MostrarTutorial(this.navCtrl, 'home');
     }
 
   }
