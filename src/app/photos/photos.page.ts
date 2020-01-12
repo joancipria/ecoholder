@@ -9,9 +9,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { HttpClient } from '@angular/common/http';
-//import { File } from '@ionic-native/File/ngx';
-
-
 
 // Tutorial
 import { NavController, ModalController } from '@ionic/angular';
