@@ -126,25 +126,27 @@ export class Firebase {
       }
    }
 
-   public getUsers() {
+   public getAllusers() {
       if (this.role > 1) {
          return new Promise<any>((resolve, reject) => {
             let usersRef = this.db.collection('users');
-            let nodes = [];
 
             let allCities = usersRef.get()
                .toPromise()
                .then(snapshot => {
+                  let users = [];
                   snapshot.forEach(doc => {
-                     console.log(doc.id, '=>', doc.data());
+                     //console.log(doc.id, '=>', doc.data());
+                     users.push(doc.data());
                   });
+                  return users;
+               })
+               .then((users)=>{
+                  resolve(users);
                })
                .catch(err => {
                   console.log('Error getting documents', err);
                });
-
-            resolve(nodes);
-
          });
       } else {
          console.log("Permission denied")

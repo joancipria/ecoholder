@@ -7,13 +7,14 @@ import { Firebase } from './../core/services/firebase.service';
   styleUrls: ['./admin-dashboard-users.page.scss'],
 })
 export class AdminDashboardUsersPage implements OnInit {
-
+  private users: Array<Object>;
   constructor(
     private firebase: Firebase
   ) { }
 
-  ngOnInit() {
-    this.firebase.getUsers();
+  async ngOnInit() {
+    this.users = await this.firebase.getAllusers();
+    console.log(this.users);
   }
 
 }
