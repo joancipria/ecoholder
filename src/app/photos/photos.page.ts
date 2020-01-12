@@ -48,8 +48,12 @@ export class PhotosPage implements OnInit {
   }
   onUpload(){
     const fd= new FormData();
-    fd.append('image', this.selectedFile, this.selectedFile.name);
-    this.http.post('http://localhost:3000/api/images', fd);
+    console.log("holamundo");
+    fd.append('Image', this.selectedFile, this.selectedFile.name);
+    this.http.post('http://localhost:3000/api/images', fd)
+    .subscribe(res=>{
+      console.log(res);
+    });
   }
 hacerFoto() {
   const options: CameraOptions = {
