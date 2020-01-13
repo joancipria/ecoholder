@@ -59,6 +59,8 @@ export class HomePage implements OnInit {
     this.showChart();
     this.userImg = this.helper.obtenerImagenGravatar();
     this.notificacion();
+    //this.notificarInactividad();
+    //this.notificarDesconexionNodos();
     // Raquel. Mostrar tutorial si es la primera vez
     //this.helper.MostrarTutorial(this.navCtrl, 'routes');
     // Raquel. Lista de rutas favoritas del usuario
@@ -135,6 +137,47 @@ export class HomePage implements OnInit {
       text: 'Los siguientes nodos se encuentran en mal estado: ' + this.nodo
     });
   }
+
+  
+   /**********************************************
+   @description  Notificar al usuario tras un largo periodo de inactividad en el sensor
+   @design medidasUsuario -> f() -> 
+   @author Juan Andres Canet Rodriguez
+   @date 07/01/2020
+   ***********************************************/
+  public async notificarInactividad() {
+    var medidasUsuario;
+
+    this.firebase.obtenerMedidas().subscribe((data: any) => {
+         medidasUsuario = data[0];
+   });
+
+    if (medidasUsuario[0] < 5000){
+      this.localNotifications.schedule({
+        id: 1,
+        title: '¡Hola!, ¿estas ahi?',
+        text: 'Hace algún tiempo que no recibimos medidas de tus sensores'
+      });
+    }
+ } 
+
+  /**********************************************
+   @description  Notificar al usuario desconexion de los nodos
+   @design nodos -> f() -> 
+   @author Juan Andres Canet Rodriguez
+   @date 13/01/2020
+   ***********************************************/
+  public async notificarDesconexionNodos() {
+    var nodos = this.firebase.getNodes();
+
+    if (nodos[0] == null){
+      this.localNotifications.schedule({
+        id: 1,
+        title: 'No tienes nodos conectados',
+        text: 'No estas enviando datos por que no tienes nodos coenctados'
+      });
+    }
+ } 
 
   // --------------------------------------------------------------
   // Abre ventana con consejos

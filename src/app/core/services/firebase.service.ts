@@ -102,23 +102,32 @@ export class Firebase {
    @date 12/01/2020
    ***********************************************/
    public getNodes() {
-      if (this.role > 1) {
-         return new Promise<any>((resolve, reject) => {
+      return new Promise<any>((resolve, reject) => {
+
+         // Comprobamos que se tiene permiso 
+         if (this.role > 1) {
+
+            // Colección usuarios
             let usersRef = this.db.collection('users');
 
+            // Obtenemos todos los usuarios
             let allUsers = usersRef.get()
                .toPromise()
                .then(snapshot => {
                   let nodes = [];
+
+                  // Para cada usuario
                   snapshot.forEach(doc => {
-                     //console.log(doc.id, '=>', doc.data());
+                     // Su colección devices
                      let devicesRef = doc.ref.collection('devices');
+
+                     // Guardamos nombre usuario
                      let user = doc.data().name;
 
+                     // Obtenemos colección devices
                      let allDevices = devicesRef.get()
                         .then(snapshot => {
                            snapshot.forEach(doc => {
-                              //console.log("DEV: "+doc.data());
                               let node = doc.data();
                               node.date = new Date(node.date).toString();
                               node.user = user;
@@ -126,48 +135,63 @@ export class Firebase {
                            });
                         })
                   });
-                  return nodes;
-               })
-               .then(nodes => {
-                  console.log(nodes)
                   resolve(nodes);
                })
                .catch(err => {
                   console.log('Error getting documents', err);
                });
+         } else {
+            reject('Permission denied. Not admin');
+         }
+      })
+         .catch(error => {
+            console.log(error);
          });
-      } else {
-         console.log("Permission denied")
-      }
+
    }
 
    /**********************************************
    @description Obtener todos los usuarios
    @author Joan Ciprià Moreno Teodoro
+   @design () --> (Promise) Array[{name,id...}]
    @date 12/01/2020
    ***********************************************/
    public getAllusers() {
-      if (this.role > 1) {
-         return new Promise<any>((resolve, reject) => {
+      return new Promise<any>((resolve, reject) => {
+
+         // Comprobamos que se tiene permiso 
+         if (this.role > 1) {
+
+            // Colección usuarios
             let usersRef = this.db.collection('users');
 
             let allUsers = usersRef.get()
                .toPromise()
                .then(snapshot => {
+
+                  // Array donde guardamos los usuarios
                   let users = [];
+
+                  // Para cada documento de la colección usuarios
                   snapshot.forEach(doc => {
-                     //console.log(doc.id, '=>', doc.data());
-                     users.push(doc.data());
+                     users.push(doc.data()); // Lo añadimos al array
                   });
+
+                  // Reolvemos promesa con todos los usuarios
                   resolve(users);
                })
                .catch(err => {
                   console.log('Error getting documents', err);
                });
+
+         } else {
+            reject('Permission denied. Not admin');
+         }
+      })
+         .catch(error => {
+            console.log(error);
          });
-      } else {
-         console.log("Permission denied")
-      }
+
    }
 
    /**********************************************
@@ -292,19 +316,19 @@ export class Firebase {
    @author Raquel Perpiñá Clérigues
    @date 12/01/2020
    ***********************************************/
-  public rutasFavoritas(){
-   let rutas = [];
-   return new Promise<any>((resolve, reject) => {
-      const snapshot = this.db.doc('users/' + this.uuid).collection('favDestinations').get()
-         .toPromise()
-         .then((snapshot) => {
-            snapshot.forEach(doc => {
-               rutas.push(doc.data());
-            });
-            resolve(rutas);
-         })
-   });
-  }
+   public rutasFavoritas() {
+      let rutas = [];
+      return new Promise<any>((resolve, reject) => {
+         const snapshot = this.db.doc('users/' + this.uuid).collection('favDestinations').get()
+            .toPromise()
+            .then((snapshot) => {
+               snapshot.forEach(doc => {
+                  rutas.push(doc.data());
+               });
+               resolve(rutas);
+            })
+      });
+   }
 
    // -----------------------------------------------------
    // Elimina el dispostivo con el id dado del usuario logueado
@@ -428,5 +452,44 @@ export class Firebase {
          });
       });
    }
+
+   
+    /**********************************************
+   @description Calibra el nodo del usuario
+   @design medidasOficiales, medidasUsuario -> f() -> numero
+   @author Juan Andres Canet Rodriguez
+   @date 10/01/2020
+   ***********************************************/
+   public async calibrarNodo() {
+      var medidasOficiales;
+      var medidasUsuario;
+
+        this.obtenerUltimasMedidasEstacionOfical().subscribe((data: any) => {
+         for (var i=0; 0<10; i++){
+            medidasOficiales[i] = data[i];
+         }
+      });
+      this.obtenerMedidas().subscribe((data: any) => {
+         for (var i=0; 0<10; i++){
+            medidasUsuario[i] = data[i];
+         }
+      });
+
+      var mediaMedidasOficiales = 0;
+      var mediaMedidasUsuario = 0;
+
+      for (var i=0; 0<10; i++){
+         mediaMedidasOficiales += medidasOficiales[i];
+         mediaMedidasUsuario += medidasUsuario[i];
+      }
+
+      mediaMedidasOficiales = mediaMedidasOficiales/10;
+      mediaMedidasUsuario = mediaMedidasUsuario/10;
+
+      return mediaMedidasOficiales / mediaMedidasUsuario;
+   }  
+
+ 
+
 
 }
