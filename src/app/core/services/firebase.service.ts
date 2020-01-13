@@ -153,6 +153,7 @@ export class Firebase {
    /**********************************************
    @description Obtener todos los usuarios
    @author Joan Ciprià Moreno Teodoro
+   @design () --> (Promise) Array[{name,id...}]
    @date 12/01/2020
    ***********************************************/
    public getAllusers() {

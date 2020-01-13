@@ -133,6 +133,12 @@ export class Helper {
         this.storage.get('pruebaClave').then(val => console.log('TLS se ha camabiado el valor de pruebaClave a => ', val));
     }
 
+    /**********************************************
+   @description Obtener rol del usuario
+   @author Joan Ciprià Moreno Teodoro
+   @design () --> (bool) // True --> admin; False --> No admin
+   @date 12/01/2020
+   ***********************************************/
     public comprobarRol(){
         let role = this.firebase.role;
         console.log("Rol del usuario", role);
