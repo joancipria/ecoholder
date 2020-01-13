@@ -61,6 +61,7 @@ export class HomePage implements OnInit {
     this.notificacion();
     // Raquel. Mostrar tutorial si es la primera vez
     //this.helper.MostrarTutorial(this.navCtrl, 'routes');
+    // Raquel. Lista de rutas favoritas del usuario
     this.cards =  await this.firebase.rutasFavoritas()
   }
 
@@ -127,7 +128,7 @@ export class HomePage implements OnInit {
    ***********************************************/
   public async notificacion(){
     this.nodo = await this.firebase.estadoNodo()
-    console.log('NODO EN MAL ESTADO' + this.nodo);
+    //console.log('NODO EN MAL ESTADO' + this.nodo);
     this.localNotifications.schedule({
       id: 1,
       title: 'Estado de los nodos',
