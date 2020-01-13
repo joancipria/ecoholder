@@ -51,11 +51,11 @@ export class HomePage implements OnInit {
     if (plt.is('android')) {
       this.ble.inizializar();
     }
-    this.comprobarRol();
   }
 
 
   async ngOnInit() {
+    this.sideMenu = this.helper.comprobarRol();
     this.showChart();
     this.userImg = this.helper.obtenerImagenGravatar();
     this.notificacion();
@@ -156,14 +156,5 @@ export class HomePage implements OnInit {
       componentProps: {parentRef: this}
     });
     return await modal.present();
-  }
-  
-  private async comprobarRol(){
-    let role = await this.firebase.getRole();
-    console.log("Rol del usuario", role);
-
-    if(role >= 2){
-      this.sideMenu = true;
-    }
   }
 }

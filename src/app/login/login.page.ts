@@ -63,9 +63,10 @@ export class LoginPage implements OnInit {
   };
 
 
-  login(value) {
-    this.firebase.login(value)
-      .then(res => {
+  async login(value) {
+    await this.firebase.login(value)
+      .then(async (res) => {
+        await this.firebase.getRole();
         this.errorMessage = "";
         this.navCtrl.navigateForward('/app/tabs/home');
       }, err => {

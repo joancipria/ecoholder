@@ -1,7 +1,10 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title data-step="1" data-intro="A hacer fotos!">Photos</ion-title>
-  </ion-toolbar>
+      <ion-buttons *ngIf="sideMenu" slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title data-step="1" data-intro="A hacer fotos!">Photos</ion-title>
+      </ion-toolbar>
 </ion-header>
 <input type="file" (change)="onFileSelected($event)">
 <button type="button" (click)="onUpload()">Subir Foto</button>

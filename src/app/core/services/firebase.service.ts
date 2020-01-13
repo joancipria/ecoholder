@@ -97,7 +97,7 @@ export class Firebase {
 
 
    /**********************************************
-   @description Obtener el rol
+   @description Obtener todos los nodos 
    @author Joan Ciprià Moreno Teodoro
    @date 12/01/2020
    ***********************************************/
@@ -105,27 +105,47 @@ export class Firebase {
       if (this.role > 1) {
          return new Promise<any>((resolve, reject) => {
             let usersRef = this.db.collection('users');
-            let nodes = [];
 
-            let allCities = usersRef.get()
+            let allUsers = usersRef.get()
                .toPromise()
                .then(snapshot => {
+                  let nodes = [];
                   snapshot.forEach(doc => {
-                     console.log(doc.id, '=>', doc.data());
+                     //console.log(doc.id, '=>', doc.data());
+                     let devicesRef = doc.ref.collection('devices');
+                     let user = doc.data().name;
+
+                     let allDevices = devicesRef.get()
+                        .then(snapshot => {
+                           snapshot.forEach(doc => {
+                              //console.log("DEV: "+doc.data());
+                              let node = doc.data();
+                              node.date = new Date(node.date).toString();
+                              node.user = user;
+                              nodes.push(node);
+                           });
+                        })
                   });
+                  return nodes;
+               })
+               .then(nodes => {
+                  console.log(nodes)
+                  resolve(nodes);
                })
                .catch(err => {
                   console.log('Error getting documents', err);
                });
-
-            resolve(nodes);
-
          });
       } else {
          console.log("Permission denied")
       }
    }
 
+   /**********************************************
+   @description Obtener todos los usuarios
+   @author Joan Ciprià Moreno Teodoro
+   @date 12/01/2020
+   ***********************************************/
    public getAllusers() {
       if (this.role > 1) {
          return new Promise<any>((resolve, reject) => {
@@ -139,9 +159,6 @@ export class Firebase {
                      //console.log(doc.id, '=>', doc.data());
                      users.push(doc.data());
                   });
-                  return users;
-               })
-               .then((users)=>{
                   resolve(users);
                })
                .catch(err => {
