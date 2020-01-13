@@ -26,7 +26,7 @@
         "@angular/router": "~8.1.2",
         "@ionic-native/android-permissions": "^5.15.1",
         "@ionic-native/ble": "^5.17.0",
-        "@ionic-native/camera": "^5.15.1",
+        "@ionic-native/camera": "^5.19.1",
         "@ionic-native/core": "^5.0.0",
         "@ionic-native/device": "^5.15.0",
         "@ionic-native/geolocation": "^5.14.0",
@@ -39,7 +39,7 @@
         "@ionic/storage": "^2.2.0",
         "chart.js": "^2.9.1",
         "com.unarin.cordova.beacon": "^3.8.1",
-        "cordova-android": "8.0.0",
+        "cordova-android": "8.1.0",
         "cordova-browser": "6.0.0",
         "cordova-plugin-android-permissions": "^1.0.2",
         "cordova-plugin-badge": "^0.8.8",
@@ -110,9 +110,7 @@
             "cordova-plugin-ionic-keyboard": {},
             "cordova-plugin-geolocation": {},
             "com.unarin.cordova.beacon": {},
-            "cordova-plugin-camera": {
-                "ANDROID_SUPPORT_V4_VERSION": "27.+"
-            },
+            "cordova-plugin-camera": {},
             "cordova-plugin-android-permissions": {},
             "cordova-plugin-request-location-accuracy": {
                 "PLAY_SERVICES_LOCATION_VERSION": "16.+"
@@ -121,8 +119,8 @@
             "cordova-plugin-local-notification": {}
         },
         "platforms": [
-            "android",
-            "browser"
+            "browser",
+            "android"
         ]
     }
 }
