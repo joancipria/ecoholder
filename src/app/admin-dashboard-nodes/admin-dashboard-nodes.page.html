@@ -8,5 +8,35 @@
 </ion-header>
 
 <ion-content>
-
+  <ion-grid>
+    <ion-row class="row">
+      <ion-col class="col-header">
+        <p>Alias</p>
+      </ion-col>
+      <ion-col class="col-header">
+        <p>Date</p>
+      </ion-col>
+      <ion-col class="col-header">
+        <p>MAC</p>
+      </ion-col>
+      <ion-col class="col-header">
+        <p>Status</p>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row" *ngFor="let node of nodes">
+      <ion-col class="col">
+        {{node.alias}}
+      </ion-col>
+      <ion-col class="col">
+        {{node.date}}
+      </ion-col>
+      <ion-col class="col">
+        {{node.id}}
+      </ion-col>
+      <ion-col class="col">
+        <p *ngIf="node.estado == true">Bien</p>
+        <p *ngIf="node.estado == false">Mal</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
