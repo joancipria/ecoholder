@@ -270,6 +270,25 @@ export class Firebase {
       });
    }
 
+   /**********************************************
+   @description Leer de la base de datos los nodos que están en mal estado
+   @author Raquel Perpiñá Clérigues
+   @date 12/01/2020
+   ***********************************************/
+  public rutasFavoritas(){
+   let rutas = [];
+   return new Promise<any>((resolve, reject) => {
+      const snapshot = this.db.doc('users/' + this.uuid).collection('favDestinations').get()
+         .toPromise()
+         .then((snapshot) => {
+            snapshot.forEach(doc => {
+               rutas.push(doc.data());
+            });
+            resolve(rutas);
+         })
+   });
+  }
+
    // -----------------------------------------------------
    // Elimina el dispostivo con el id dado del usuario logueado
    // uuid: string, id: string -> f() -> void

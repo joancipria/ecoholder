@@ -44,10 +44,11 @@
                 </ion-card>
 
                 <ion-card data-step="3"
-                    data-intro=" ¡LIMPIA TU AIRE! Puedes tener un control de tus rutas favoritas para mantener tus zonas limpias. Marca tu ruta y accede a ella siempre que quieras de manera rápida y sencilla">
+                    data-intro=" ¡LIMPIA TU AIRE! Puedes tener un control de tus rutas favoritas para mantener tus zonas limpias. Marca tu ruta y accede a ella siempre que quieras de manera rápida y sencilla" 
+                    *ngFor="let card of cards">
                     <ion-item>
                         <ion-icon name="navigate" slot="start"></ion-icon>
-                        <ion-label>Work</ion-label>
+                        <ion-label>{{card.alias}}</ion-label>
                         <ion-label color="medium">15min</ion-label>
                         <ion-icon color="success" name="happy"></ion-icon>
                         <ion-button fill="outline" slot="end">Go</ion-button>
