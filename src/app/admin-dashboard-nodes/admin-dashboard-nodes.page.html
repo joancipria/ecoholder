@@ -34,8 +34,12 @@
         {{node.id}}
       </ion-col>
       <ion-col class="col">
-        <p *ngIf="node.estado == true">Bien</p>
-        <p *ngIf="node.estado == false">Mal</p>
+        <ion-chip *ngIf="node.estado == true" color="success">
+          <ion-label>Good</ion-label>
+        </ion-chip>
+        <ion-chip *ngIf="node.estado == false" color="danger">
+          <ion-label>Bad</ion-label>
+        </ion-chip>
       </ion-col>
     </ion-row>
   </ion-grid>
