@@ -31,6 +31,7 @@ export class SettingsPage implements OnInit {
   userUuid: string;
   devices: any[] = [];
   newDevices: any[] = [];
+  public sideMenu: boolean = false;
   public userDefaultPic = 'assets/img/userDefaultPic.jpg';
   constructor(
     private navCtrl: NavController,
@@ -44,6 +45,7 @@ export class SettingsPage implements OnInit {
 
   ngOnInit() {
     if (this.firebase.informacionUsuario()) {
+      this.sideMenu = this.helper.comprobarRol();
       const user = this.firebase.informacionUsuario();
       this.userEmail = user.email;
 

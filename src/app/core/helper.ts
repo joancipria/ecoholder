@@ -133,4 +133,13 @@ export class Helper {
         this.storage.get('pruebaClave').then(val => console.log('TLS se ha camabiado el valor de pruebaClave a => ', val));
     }
 
+    public comprobarRol(){
+        let role = this.firebase.role;
+        console.log("Rol del usuario", role);
+    
+        if(role >= 2){
+          return true;
+        }
+      }
+
 }

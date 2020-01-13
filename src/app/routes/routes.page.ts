@@ -38,6 +38,7 @@ export class RoutesPage implements OnInit {
   private cuadricula = false;
   private toggleCuadricula:boolean = false;
   private directionsModal: any;
+  public sideMenu: boolean = false;
 
   constructor(
     private router: Router,
@@ -56,6 +57,7 @@ export class RoutesPage implements OnInit {
   }
 
   ngOnInit() {
+  this.sideMenu = this.helper.comprobarRol();
   // Raquel. Mostrar tutorial si es la primera vez
   //this.helper.MostrarTutorial(this.navCtrl, 'photos');
   }

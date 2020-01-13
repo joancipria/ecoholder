@@ -24,6 +24,7 @@ export class PhotosPage implements OnInit {
   foto: any = "https://amateuraccounts.files.wordpress.com/2011/07/img_8199.jpg";
   fotos: any[] = [];
   selectedFile: File = null;
+  public sideMenu: boolean = false;
   constructor(
     private camera: Camera,
     private navCtrl: NavController,
@@ -34,6 +35,7 @@ export class PhotosPage implements OnInit {
 
   
   ngOnInit() {
+    this.sideMenu = this.helper.comprobarRol();
     // Raquel. Mostrar tutorial si es la primera vez
     //this.helper.MostrarTutorial(this.navCtrl, 'settings', false);
   }
