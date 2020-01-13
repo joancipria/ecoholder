@@ -20,6 +20,9 @@
         <p>MAC</p>
       </ion-col>
       <ion-col class="col-header">
+        <p>User</p>
+      </ion-col>
+      <ion-col class="col-header">
         <p>Status</p>
       </ion-col>
     </ion-row>
@@ -32,6 +35,9 @@
       </ion-col>
       <ion-col class="col">
         {{node.id}}
+      </ion-col>
+      <ion-col class="col">
+        {{node.user}}
       </ion-col>
       <ion-col class="col">
         <ion-chip *ngIf="node.estado == true" color="success">

@@ -113,18 +113,22 @@ export class Firebase {
                   snapshot.forEach(doc => {
                      //console.log(doc.id, '=>', doc.data());
                      let devicesRef = doc.ref.collection('devices');
+                     let user = doc.data().name;
 
                      let allDevices = devicesRef.get()
-                     .then(snapshot => {
-                        snapshot.forEach(doc => {
-                           //console.log("DEV: "+doc.data());
-                           nodes.push(doc.data());
-                        });
-                     })
+                        .then(snapshot => {
+                           snapshot.forEach(doc => {
+                              //console.log("DEV: "+doc.data());
+                              let node = doc.data();
+                              node.date = new Date(node.date).toString();
+                              node.user = user;
+                              nodes.push(node);
+                           });
+                        })
                   });
                   return nodes;
                })
-               .then(nodes=>{
+               .then(nodes => {
                   console.log(nodes)
                   resolve(nodes);
                })
