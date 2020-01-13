@@ -59,8 +59,8 @@ export class HomePage implements OnInit {
     this.showChart();
     this.userImg = this.helper.obtenerImagenGravatar();
     this.notificacion();
-    this.notificarInactividad();
-    this.notificarDesconexionNodos();
+    //this.notificarInactividad();
+    //this.notificarDesconexionNodos();
     // Raquel. Mostrar tutorial si es la primera vez
     //this.helper.MostrarTutorial(this.navCtrl, 'routes');
     // Raquel. Lista de rutas favoritas del usuario
@@ -146,7 +146,11 @@ export class HomePage implements OnInit {
    @date 07/01/2020
    ***********************************************/
   public async notificarInactividad() {
-    var medidasUsuario = this.firebase.obtenerMedidas();
+    var medidasUsuario;
+
+    this.firebase.obtenerMedidas().subscribe((data: any) => {
+         medidasUsuario = data[0];
+   });
 
     if (medidasUsuario[0] < 5000){
       this.localNotifications.schedule({
