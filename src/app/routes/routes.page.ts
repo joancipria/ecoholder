@@ -6,7 +6,7 @@
 @license GPLv3
 *********************************************************************/
 
-import { Component, NgZone, ViewChild, OnInit } from "@angular/core";
+import { Component, NgZone, ViewChild, OnInit, ElementRef } from "@angular/core";
 import { Router } from '@angular/router';
 import { AlertController, ToastController, NavController, Platform, IonSelect } from "@ionic/angular";
 
@@ -175,6 +175,6 @@ export class RoutesPage implements OnInit {
   }
 
   public agregarRutaAfavoritas(){
-    this.firebase.agregarRutaAfavoritas(this.maps.destination, "Casa");
+    this.firebase.agregarRutaAfavoritas(this.maps.destination, this.elementSearch.value);
   }
 }
