@@ -459,9 +459,20 @@ export class Firebase {
    @author Juan Andres Canet Rodriguez
    @date 10/01/2020
    ***********************************************/
-   public calibrarNodo() {
-      var medidasOficiales = this.obtenerUltimasMedidasEstacionOfical();
-      var medidasUsuario = this.obtenerMedidas();
+   public async calibrarNodo() {
+      var medidasOficiales;
+      var medidasUsuario;
+
+        this.obtenerUltimasMedidasEstacionOfical().subscribe((data: any) => {
+         for (var i=0; 0<10; i++){
+            medidasOficiales[i] = data[i];
+         }
+      });
+      this.obtenerMedidas().subscribe((data: any) => {
+         for (var i=0; 0<10; i++){
+            medidasUsuario[i] = data[i];
+         }
+      });
 
       var mediaMedidasOficiales = 0;
       var mediaMedidasUsuario = 0;
