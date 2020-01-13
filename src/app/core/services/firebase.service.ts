@@ -288,7 +288,7 @@ export class Firebase {
    }
 
    /**********************************************
-   @description Leer de la base de datos los nodos que están en mal estado
+   @description Leer de la base de datos las rutas guardadas como favoritas del usuario
    @author Raquel Perpiñá Clérigues
    @date 12/01/2020
    ***********************************************/
