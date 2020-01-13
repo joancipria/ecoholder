@@ -69,6 +69,24 @@ export class Firebase {
       });
    }
 
+   public eliminarUsuario(id: string) {
+      return new Promise<any>((resolve, reject) => {
+         console.log("ID"+id)
+
+         // Comprobamos que se tiene permiso 
+         if (this.role > 1) {
+            const user = this.db.doc('users/' + id).delete();
+            resolve(id);
+
+         } else {
+            reject('Permission denied. Not admin');
+         }
+      })
+         .catch(error => {
+            console.log(error);
+         });
+   }
+
 
    /**********************************************
    @description Obtener el rol
@@ -123,14 +141,16 @@ export class Firebase {
 
                      // Guardamos nombre usuario
                      let user = doc.data().name;
+                     let id = doc.ref.id;
 
-                     // Obtenemos colección devices
+                     // Obtenemos colección devicdoc.data().ides
                      let allDevices = devicesRef.get()
                         .then(snapshot => {
                            snapshot.forEach(doc => {
                               let node = doc.data();
                               node.date = new Date(node.date).toString();
                               node.user = user;
+                              node.id = id;
                               nodes.push(node);
                            });
                         })
@@ -453,24 +473,24 @@ export class Firebase {
       });
    }
 
-   
-    /**********************************************
-   @description Calibra el nodo del usuario
-   @design medidasOficiales, medidasUsuario -> f() -> numero
-   @author Juan Andres Canet Rodriguez
-   @date 10/01/2020
-   ***********************************************/
+
+   /**********************************************
+  @description Calibra el nodo del usuario
+  @design medidasOficiales, medidasUsuario -> f() -> numero
+  @author Juan Andres Canet Rodriguez
+  @date 10/01/2020
+  ***********************************************/
    public async calibrarNodo() {
       var medidasOficiales;
       var medidasUsuario;
 
-        this.obtenerUltimasMedidasEstacionOfical().subscribe((data: any) => {
-         for (var i=0; 0<10; i++){
+      this.obtenerUltimasMedidasEstacionOfical().subscribe((data: any) => {
+         for (var i = 0; 0 < 10; i++) {
             medidasOficiales[i] = data[i];
          }
       });
       this.obtenerMedidas().subscribe((data: any) => {
-         for (var i=0; 0<10; i++){
+         for (var i = 0; 0 < 10; i++) {
             medidasUsuario[i] = data[i];
          }
       });
@@ -478,18 +498,18 @@ export class Firebase {
       var mediaMedidasOficiales = 0;
       var mediaMedidasUsuario = 0;
 
-      for (var i=0; 0<10; i++){
+      for (var i = 0; 0 < 10; i++) {
          mediaMedidasOficiales += medidasOficiales[i];
          mediaMedidasUsuario += medidasUsuario[i];
       }
 
-      mediaMedidasOficiales = mediaMedidasOficiales/10;
-      mediaMedidasUsuario = mediaMedidasUsuario/10;
+      mediaMedidasOficiales = mediaMedidasOficiales / 10;
+      mediaMedidasUsuario = mediaMedidasUsuario / 10;
 
       return mediaMedidasOficiales / mediaMedidasUsuario;
-   }  
+   }
 
- 
+
 
 
 }

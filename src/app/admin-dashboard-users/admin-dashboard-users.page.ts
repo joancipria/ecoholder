@@ -17,4 +17,8 @@ export class AdminDashboardUsersPage implements OnInit {
     console.log(this.users);
   }
 
+  public deleteUser(id){
+    this.firebase.eliminarUsuario(id);
+  }
+
 }

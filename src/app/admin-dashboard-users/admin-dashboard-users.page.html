@@ -19,6 +19,9 @@
       <ion-col class="col-header">
         <p>Role</p>
       </ion-col>
+      <ion-col class="col-header">
+        <p>Actions</p>
+      </ion-col>
     </ion-row>
     <ion-row class="row" *ngFor="let user of users">
       <ion-col class="col">
@@ -30,6 +33,9 @@
       <ion-col class="col">
         <p *ngIf="user.role == 1">Usuario</p>
         <p *ngIf="user.role == 2">Administrador</p>
+      </ion-col>
+      <ion-col class="col">
+        <ion-button (click)="deleteUser(user.id)">Remove</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
