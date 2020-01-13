@@ -55,6 +55,8 @@
         "firebase": "^7.2.0",
         "intro.js": "^2.9.3",
         "node": "^13.6.0",
+        "phonegap-plugin-multidex": "^1.0.0",
+        "phonegap-plugin-push": "^2.3.0",
         "require": "^2.4.20",
         "rxjs": "^6.5.4",
         "tslib": "^1.9.0",
@@ -119,6 +121,11 @@
             "cordova-plugin-android-permissions": {},
             "cordova-plugin-request-location-accuracy": {
                 "PLAY_SERVICES_LOCATION_VERSION": "+"
+            },
+            "phonegap-plugin-push": {
+                "SENDER_ID": "838602587969",
+                "ANDROID_SUPPORT_V13_VERSION": "27.+",
+                "FCM_VERSION": "17.0.+"
             },
             "cordova-sqlite-storage": {}
         },
