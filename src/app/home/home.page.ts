@@ -35,7 +35,8 @@ export class HomePage implements OnInit {
 
   public userImg: string;
   public sideMenu: boolean = false;
-  public Nodo: any[];
+  public nodo: any[];
+  public cards: any[];
 
   constructor(
     private ble: ReceptorBLE,
@@ -50,16 +51,18 @@ export class HomePage implements OnInit {
     if (plt.is('android')) {
       this.ble.inizializar();
     }
-    this.comprobarRol();
   }
 
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.sideMenu = this.helper.comprobarRol();
     this.showChart();
     this.userImg = this.helper.obtenerImagenGravatar();
     this.notificacion();
     // Raquel. Mostrar tutorial si es la primera vez
     //this.helper.MostrarTutorial(this.navCtrl, 'routes');
+    // Raquel. Lista de rutas favoritas del usuario
+    this.cards =  await this.firebase.rutasFavoritas()
   }
 
 
@@ -124,12 +127,12 @@ export class HomePage implements OnInit {
    @date 12/01/2020
    ***********************************************/
   public async notificacion(){
-    let nodo = await this.firebase.estadoNodo()
-    console.log('NODO EN MAL ESTADO' + nodo);
+    this.nodo = await this.firebase.estadoNodo()
+    //console.log('NODO EN MAL ESTADO' + this.nodo);
     this.localNotifications.schedule({
       id: 1,
       title: 'Estado de los nodos',
-      text: 'Los siguientes nodos se encuentran en mal estado: ' + nodo
+      text: 'Los siguientes nodos se encuentran en mal estado: ' + this.nodo
     });
   }
 
@@ -154,14 +157,5 @@ export class HomePage implements OnInit {
       componentProps: {parentRef: this}
     });
     return await modal.present();
-  }
-  
-  private async comprobarRol(){
-    let role = await this.firebase.getRole();
-    console.log("Rol del usuario", role);
-
-    if(role >= 2){
-      this.sideMenu = true;
-    }
   }
 }
