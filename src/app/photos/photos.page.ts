@@ -54,9 +54,20 @@ export class PhotosPage implements OnInit {
 
 
 
-  onFileSelected(event){
+  onFileSelected(fichero){
 
-    this.selectedFile = <File>event.target.files[0];
+    this.selectedFile = <File>fichero.target.files[0];
+
+  }
+
+  getFoto(){
+
+   
+    var storage = new Storage();
+    const filePath = this.firebase.informacionUsuario().uid + '/' + this.selectedFile.name ;
+    const ref = this.store.ref(filePath);
+    this.UploadedFileURL = ref.getDownloadURL();
+    this.foto = this.UploadedFileURL;
 
   }
 
@@ -91,7 +102,7 @@ export class PhotosPage implements OnInit {
       alert.present();
     });
 
-  
+    this.getFoto();
 
   
   }
