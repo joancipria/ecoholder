@@ -429,4 +429,32 @@ export class Firebase {
       });
    }
 
+   
+    /**********************************************
+   @description Calibra el nodo del usuario
+   @design medidasOficiales, medidasUsuario -> f() -> numero
+   @author Juan Andres Canet Rodriguez
+   @date 10/01/2020
+   ***********************************************/
+   public calibrarNodo() {
+      var medidasOficiales = this.obtenerUltimasMedidasEstacionOfical();
+      var medidasUsuario = this.obtenerMedidas();
+
+      var mediaMedidasOficiales = 0;
+      var mediaMedidasUsuario = 0;
+
+      for (var i=0; 0<10; i++){
+         mediaMedidasOficiales += medidasOficiales[i];
+         mediaMedidasUsuario += medidasUsuario[i];
+      }
+
+      mediaMedidasOficiales = mediaMedidasOficiales/10;
+      mediaMedidasUsuario = mediaMedidasUsuario/10;
+
+      return mediaMedidasOficiales / mediaMedidasUsuario;
+   }  
+
+ 
+
+
 }
